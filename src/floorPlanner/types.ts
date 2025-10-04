@@ -8,6 +8,7 @@ export interface Chair {
   id: string;
   tableId: string;
   position: ChairPosition;
+  index: number; // Position index on the side (0, 1, 2, etc.)
   x: number;
   y: number;
 }

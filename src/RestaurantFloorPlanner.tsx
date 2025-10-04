@@ -8,7 +8,7 @@ import {
   hexagonStyle,
   GRID_SIZE
 } from './floorPlanner/constants';
-import { generateId, getNextChairPosition, resolveTableDimensions } from './floorPlanner/utils';
+import { generateId, resolveTableDimensions } from './floorPlanner/utils';
 import type {
   Chair,
   ChairPosition,
@@ -26,7 +26,7 @@ const RestaurantFloorPlanner: React.FC = () => {
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState<number>(1);
+  const zoom = 1; // Fixed zoom level
   const [showGrid, setShowGrid] = useState<boolean>(true);
   
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -65,16 +65,19 @@ const RestaurantFloorPlanner: React.FC = () => {
     const floor = getCurrentFloor();
     if (!floor) return;
     
-    const existingChair = floor.chairs.find(chair => 
+    // Get existing chairs on this side
+    const existingChairsOnSide = floor.chairs.filter(chair => 
       chair.tableId === selectedElement.id && chair.position === position
     );
     
-    if (existingChair) return;
+    // Calculate the next index
+    const nextIndex = existingChairsOnSide.length;
     
     const newChair: Chair = {
       id: generateId(),
       tableId: selectedElement.id,
       position,
+      index: nextIndex,
       x: 0,
       y: 0
     };
@@ -89,47 +92,29 @@ const RestaurantFloorPlanner: React.FC = () => {
   const removeChair = (position: ChairPosition) => {
     if (!selectedElement || selectedElement.type !== 'table') return;
     
+    const floor = getCurrentFloor();
+    if (!floor) return;
+    
+    // Find chairs on this side
+    const chairsOnSide = floor.chairs.filter(chair => 
+      chair.tableId === selectedElement.id && chair.position === position
+    );
+    
+    if (chairsOnSide.length === 0) return;
+    
+    // Remove the last chair (highest index)
+    const chairToRemove = chairsOnSide.reduce((prev, current) => 
+      current.index > prev.index ? current : prev
+    );
+    
     setFloors(prev => prev.map(floor => 
       floor.id === currentFloor 
         ? { 
             ...floor, 
-            chairs: floor.chairs.filter(chair => 
-              !(chair.tableId === selectedElement.id && chair.position === position)
-            )
+            chairs: floor.chairs.filter(chair => chair.id !== chairToRemove.id)
           }
         : floor
     ));
-  };
-
-  const getNextAvailableChairPosition = useCallback((): ChairPosition | null => {
-    if (selectedElement?.type !== 'table') return null;
-
-    const floor = getCurrentFloor();
-    if (!floor) return null;
-
-    const occupied = new Set<ChairPosition>(
-      floor.chairs
-        .filter((chair: Chair) => chair.tableId === selectedElement.id)
-        .map((chair) => chair.position),
-    );
-
-    return getNextChairPosition(occupied);
-  }, [selectedElement, floors, currentFloor]);
-
-  const handleQuickAddChair = () => {
-    if (selectedElement?.type !== 'table') {
-      alert('Select a table first to add a chair.');
-      return;
-    }
-
-    const nextPosition = getNextAvailableChairPosition();
-
-    if (!nextPosition) {
-      alert('All chair positions are already used for this table.');
-      return;
-    }
-
-    addChair(nextPosition);
   };
 
   const removeElement = () => {
@@ -320,6 +305,14 @@ const RestaurantFloorPlanner: React.FC = () => {
     setSelectedElement(null);
   };
 
+  const renameFloor = (floorId: string, newName: string) => {
+    setFloors(prev => prev.map(floor =>
+      floor.id === floorId
+        ? { ...floor, name: newName }
+        : floor
+    ));
+  };
+
   const saveFloorPlan = () => {
     const floorPlanData = {
       floors: floors,
@@ -355,6 +348,7 @@ const RestaurantFloorPlanner: React.FC = () => {
             id: 'chair-1',
             tableId: 'table-1',
             position: 'top',
+            index: 0,
             x: 0,
             y: 0
           }
@@ -385,15 +379,9 @@ const RestaurantFloorPlanner: React.FC = () => {
 
   const currentFloorData = getCurrentFloor();
   const selectedTable = currentFloorData?.tables.find(t => selectedElement?.type === 'table' && t.id === selectedElement.id);
-  const nextAvailableChairPosition = getNextAvailableChairPosition();
-  const canQuickAddChair = Boolean(nextAvailableChairPosition);
-  const nextAvailableChairLabel = nextAvailableChairPosition ? nextAvailableChairPosition.toUpperCase() : '—';
   const selectedTableChairs = selectedTable
     ? (currentFloorData?.chairs.filter(c => c.tableId === selectedTable.id) ?? [])
     : [];
-  const occupiedChairPositions = new Set<ChairPosition>(selectedTableChairs.map(chair => chair.position));
-  const handleZoomIn = useCallback(() => setZoom((value) => Math.min(2, value + 0.1)), []);
-  const handleZoomOut = useCallback(() => setZoom((value) => Math.max(0.5, value - 0.1)), []);
   const toggleGrid = useCallback(() => setShowGrid((prev) => !prev), []);
 
   return (
@@ -406,6 +394,7 @@ const RestaurantFloorPlanner: React.FC = () => {
         onAddFloor={addFloor}
         onRemoveFloor={removeFloor}
         onSwitchFloor={switchFloor}
+        onRenameFloor={renameFloor}
         onAddTable={addTable}
         onRotateTable={rotateTable}
         onDuplicateTable={duplicateTable}
@@ -414,24 +403,18 @@ const RestaurantFloorPlanner: React.FC = () => {
         onLoad={loadFloorPlan}
         selectedTable={selectedTable ?? null}
         selectedTableChairs={selectedTableChairs}
-        occupiedChairPositions={occupiedChairPositions}
       />
 
       <div className="flex-1 flex flex-col">
         <Toolbar
-          zoom={zoom}
           showGrid={showGrid}
-          canQuickAddChair={canQuickAddChair}
-          nextAvailableChairLabel={nextAvailableChairLabel}
           selectedTable={selectedTable ?? null}
-          occupiedChairPositions={occupiedChairPositions}
+          selectedTableChairs={selectedTableChairs}
           tableCount={currentFloorData?.tables.length ?? 0}
           chairCount={currentFloorData?.chairs.length ?? 0}
           selectedElementType={selectedElement?.type ?? null}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
           onToggleGrid={toggleGrid}
-          onQuickAddChair={handleQuickAddChair}
+          onAddChair={addChair}
           onRemoveChair={removeChair}
           onChangeTableSize={handleTableSizeChange}
           onTableNameChange={handleTableNameChange}
@@ -483,11 +466,18 @@ const RestaurantFloorPlanner: React.FC = () => {
             {currentFloorData?.chairs.map(chair => {
               const chairTable = currentFloorData.tables.find(t => t.id === chair.tableId);
               if (!chairTable) return null;
+              
+              // Count total chairs on this side for proper spacing
+              const totalChairsOnSide = currentFloorData.chairs.filter(
+                c => c.tableId === chair.tableId && c.position === chair.position
+              ).length;
+              
               return (
                 <ChairComponent
                   key={chair.id}
                   chair={chair}
                   table={chairTable}
+                  totalChairsOnSide={totalChairsOnSide}
                   isSelected={false}
                   onSelect={() => {}}
                   onDrag={() => {}}

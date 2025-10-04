@@ -1,13 +1,11 @@
 import React from 'react';
 import { Layers, Minus, Plus, RotateCw, Save, Trash2, Upload } from 'lucide-react';
 
-import { CHAIR_POSITIONS, SIZE_LABELS, TABLE_SHAPES } from '../constants';
+import { SIZE_LABELS, TABLE_SHAPES } from '../constants';
 import type {
   Chair,
-  ChairPosition,
   Floor,
-  Table,
-  TableSize
+  Table
 } from '../types';
 
 interface SidebarProps {
@@ -16,6 +14,7 @@ interface SidebarProps {
   onAddFloor: () => void;
   onRemoveFloor: () => void;
   onSwitchFloor: (floorId: string) => void;
+  onRenameFloor: (floorId: string, newName: string) => void;
   onAddTable: (shape: Table['shape']) => void;
   onRotateTable: () => void;
   onDuplicateTable: () => void;
@@ -24,7 +23,6 @@ interface SidebarProps {
   onLoad: () => void;
   selectedTable: Table | null;
   selectedTableChairs: Chair[];
-  occupiedChairPositions: Set<ChairPosition>;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -35,6 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onAddFloor,
   onRemoveFloor,
   onSwitchFloor,
+  onRenameFloor,
   onAddTable,
   onRotateTable,
   onDuplicateTable,
@@ -42,9 +41,42 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSave,
   onLoad,
   selectedTable,
-  selectedTableChairs,
-  occupiedChairPositions
+  selectedTableChairs
 }) => {
+  const [editingFloorId, setEditingFloorId] = React.useState<string | null>(null);
+  const [editingFloorName, setEditingFloorName] = React.useState<string>('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // Focus input when editing starts
+  React.useEffect(() => {
+    if (editingFloorId && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editingFloorId]);
+
+  const handleDoubleClick = (floor: Floor) => {
+    setEditingFloorId(floor.id);
+    setEditingFloorName(floor.name);
+  };
+
+  const handleSaveFloorName = () => {
+    if (editingFloorId && editingFloorName.trim()) {
+      onRenameFloor(editingFloorId, editingFloorName.trim());
+    }
+    setEditingFloorId(null);
+    setEditingFloorName('');
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSaveFloorName();
+    } else if (e.key === 'Escape') {
+      setEditingFloorId(null);
+      setEditingFloorName('');
+    }
+  };
+
   return (
     <div className="w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col">
       <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
@@ -79,23 +111,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="space-y-2 max-h-32 overflow-y-auto">
           {floors.map((floor) => (
-            <button
+            <div
               key={floor.id}
-              onClick={() => onSwitchFloor(floor.id)}
-              className={`w-full p-3 text-left rounded-lg transition-all flex items-center justify-between ${
+              className={`w-full p-3 rounded-lg transition-all flex items-center justify-between ${
                 floor.isActive
                   ? 'bg-blue-100 text-blue-800 border border-blue-200 shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  : 'text-gray-600 hover:bg-gray-100 border border-transparent'
               }`}
+              onClick={() => {
+                if (editingFloorId !== floor.id) {
+                  onSwitchFloor(floor.id);
+                }
+              }}
+              onDoubleClick={() => handleDoubleClick(floor)}
             >
-              <div>
-                <div className="font-medium">{floor.name}</div>
-                <div className="text-xs text-gray-500">
+              <div className="flex-1">
+                {editingFloorId === floor.id ? (
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={editingFloorName}
+                    onChange={(e) => setEditingFloorName(e.target.value)}
+                    onBlur={handleSaveFloorName}
+                    onKeyDown={handleKeyDown}
+                    className="w-full px-2 py-1 text-sm font-medium bg-white border border-blue-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : (
+                  <div className="font-medium cursor-pointer">{floor.name}</div>
+                )}
+                <div className="text-xs text-gray-500 mt-0.5">
                   {floor.tables.length} tables, {floor.chairs.length} chairs
                 </div>
               </div>
               {floor.isActive && <div className="w-2 h-2 bg-blue-500 rounded-full" />}
-            </button>
+            </div>
           ))}
         </div>
       </div>
@@ -165,27 +215,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
 
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-3">
-              <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">Chair Positions</div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                {CHAIR_POSITIONS.map((position) => (
-                  <div
-                    key={position}
-                    className={`flex items-center justify-between rounded-md px-2 py-1 ${
-                      occupiedChairPositions.has(position)
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-gray-100 text-gray-400'
-                    }`}
-                  >
-                    <span className="capitalize">{position}</span>
-                    <span className="text-[10px] font-semibold uppercase">
-                      {occupiedChairPositions.has(position) ? 'Filled' : 'Empty'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-2 text-[10px] text-gray-500">
-                Use the toolbar buttons above to add or remove chairs from each side.
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+              <p className="text-xs text-blue-700">
+                💡 <span className="font-semibold">Tip:</span> Use the <span className="font-semibold">Manage Chairs</span> button in the toolbar above to add or remove chairs from each side of the table.
               </p>
             </div>
           </div>
