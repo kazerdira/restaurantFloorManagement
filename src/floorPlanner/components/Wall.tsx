@@ -49,9 +49,64 @@ export const WallComponent: React.FC<WallProps> = ({
       return 'bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400';
     }
     if (wall.type === 'door') {
-      return 'bg-gradient-to-r from-amber-500 to-amber-700';
+      // Door gets custom rendering, return empty
+      return '';
     }
     return getWallColor();
+  };
+
+  // Render door as two angled panels
+  const renderDoor = () => {
+    const gapSize = length * 0.1; // 10% gap in the middle
+    const panelWidth = (length - gapSize) / 2;
+    
+    return (
+      <div className="w-full h-full relative">
+        {/* Left door panel */}
+        <div
+          className="absolute left-0 bg-gradient-to-r from-amber-600 to-amber-700 shadow-md rounded-sm"
+          style={{
+            width: `${panelWidth}px`,
+            height: `${wall.thickness}px`,
+            borderTop: '1px solid #fbbf24',
+            borderBottom: '1px solid #78350f',
+            borderRight: '2px solid #92400e'
+          }}
+        >
+          {/* Door handle/knob */}
+          <div 
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+          />
+        </div>
+        
+        {/* Gap in the middle */}
+        <div
+          className="absolute bg-transparent"
+          style={{
+            left: `${panelWidth}px`,
+            width: `${gapSize}px`,
+            height: `${wall.thickness}px`
+          }}
+        />
+        
+        {/* Right door panel */}
+        <div
+          className="absolute right-0 bg-gradient-to-r from-amber-700 to-amber-600 shadow-md rounded-sm"
+          style={{
+            width: `${panelWidth}px`,
+            height: `${wall.thickness}px`,
+            borderTop: '1px solid #fbbf24',
+            borderBottom: '1px solid #78350f',
+            borderLeft: '2px solid #92400e'
+          }}
+        >
+          {/* Door handle/knob */}
+          <div 
+            className="absolute left-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+          />
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -82,13 +137,24 @@ export const WallComponent: React.FC<WallProps> = ({
         pointerEvents: 'auto'
       }}
     >
-      <div className={`w-full h-full ${getWallPattern()} shadow-lg hover:opacity-90 transition-opacity rounded-sm`}>
-        {isSelected && (
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30">
-            {WALL_LABELS[wall.type]} - {Math.round(length)}px
-          </div>
-        )}
-      </div>
+      {wall.type === 'door' ? (
+        renderDoor()
+      ) : (
+        <div className={`w-full h-full ${getWallPattern()} shadow-lg hover:opacity-90 transition-opacity rounded-sm`}>
+          {isSelected && (
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30">
+              {WALL_LABELS[wall.type]} - {Math.round(length)}px
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Label for door */}
+      {wall.type === 'door' && isSelected && (
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30">
+          {WALL_LABELS[wall.type]} - {Math.round(length)}px
+        </div>
+      )}
       
       {/* End point handles */}
       {isSelected && (
