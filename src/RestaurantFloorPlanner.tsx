@@ -57,6 +57,12 @@ const RestaurantFloorPlanner: React.FC = () => {
   // Wall resizing state
   const [isResizingWall, setIsResizingWall] = useState<boolean>(false);
   const [resizingWallHandle, setResizingWallHandle] = useState<'start' | 'end' | null>(null);
+  const [wallResizePreview, setWallResizePreview] = useState<{
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+  } | null>(null);
   
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragElementRef = useRef<{ id: string; type: string } | null>(null);
@@ -476,21 +482,34 @@ const RestaurantFloorPlanner: React.FC = () => {
       const snappedY = Math.round(y / GRID_SIZE) * GRID_SIZE;
       
       if (isResizingWall && dragElementRef.current?.type === 'wall') {
-        // Handle wall resizing
-        setFloors(prev => prev.map(floor => 
-          floor.id === currentFloor 
-            ? { 
-                ...floor, 
-                walls: floor.walls.map(wall => 
-                  wall.id === dragElementRef.current?.id 
-                    ? resizingWallHandle === 'start'
-                      ? { ...wall, startX: snappedX, startY: snappedY }
-                      : { ...wall, endX: snappedX, endY: snappedY }
-                    : wall
-                )
-              }
-            : floor
-        ));
+        // Handle wall resizing with snap-to-axis
+        const currentFloorData = floors.find(f => f.id === currentFloor);
+        const currentWall = currentFloorData?.walls.find(w => w.id === dragElementRef.current?.id);
+        
+        if (currentWall) {
+          // Determine which point is fixed and which is moving
+          const fixedPoint = resizingWallHandle === 'start' 
+            ? { x: currentWall.endX, y: currentWall.endY }
+            : { x: currentWall.startX, y: currentWall.startY };
+          
+          // Apply snap to axis based on fixed point
+          const snappedPoint = snapToAxis(fixedPoint, { x: snappedX, y: snappedY });
+          
+          setFloors(prev => prev.map(floor => 
+            floor.id === currentFloor 
+              ? { 
+                  ...floor, 
+                  walls: floor.walls.map(wall => 
+                    wall.id === dragElementRef.current?.id 
+                      ? resizingWallHandle === 'start'
+                        ? { ...wall, startX: snappedPoint.x, startY: snappedPoint.y }
+                        : { ...wall, endX: snappedPoint.x, endY: snappedPoint.y }
+                      : wall
+                  )
+                }
+              : floor
+          ));
+        }
       } else if (dragElementRef.current?.type === 'table') {
         const adjustedX = x - dragOffset.x;
         const adjustedY = y - dragOffset.y;
@@ -561,6 +580,7 @@ const RestaurantFloorPlanner: React.FC = () => {
     // Reset wall resizing state
     setIsResizingWall(false);
     setResizingWallHandle(null);
+    setWallResizePreview(null);
   };
 
   const handleWallHandleDrag = (e: React.MouseEvent, wallId: string, handleType: 'start' | 'end') => {
@@ -720,6 +740,28 @@ const RestaurantFloorPlanner: React.FC = () => {
       // Apply snap to axis
       const snappedPoint = snapToAxis(wallStartPoint, { x, y });
       setTempWallEndPoint(snappedPoint);
+    } else if (isResizingWall && dragElementRef.current?.type === 'wall' && canvasRef.current) {
+      // Show preview while resizing wall
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = Math.round(((e.clientX - rect.left) / zoom) / GRID_SIZE) * GRID_SIZE;
+      const y = Math.round(((e.clientY - rect.top) / zoom) / GRID_SIZE) * GRID_SIZE;
+      
+      const currentFloorData = getCurrentFloor();
+      const currentWall = currentFloorData?.walls.find(w => w.id === dragElementRef.current?.id);
+      
+      if (currentWall) {
+        const fixedPoint = resizingWallHandle === 'start'
+          ? { x: currentWall.endX, y: currentWall.endY }
+          : { x: currentWall.startX, y: currentWall.startY };
+        
+        const snappedPoint = snapToAxis(fixedPoint, { x, y });
+        
+        setWallResizePreview(
+          resizingWallHandle === 'start'
+            ? { startX: snappedPoint.x, startY: snappedPoint.y, endX: currentWall.endX, endY: currentWall.endY }
+            : { startX: currentWall.startX, startY: currentWall.startY, endX: snappedPoint.x, endY: snappedPoint.y }
+        );
+      }
     }
   };
 
@@ -805,29 +847,7 @@ const RestaurantFloorPlanner: React.FC = () => {
           </div>
         )}
 
-        {/* Wall Resizing Mode Banner */}
-        {isResizingWall && (
-          <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 flex items-center justify-between shadow-lg z-50">
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-lg animate-pulse">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-bold text-lg">
-                  Resizing Wall
-                </div>
-                <div className="text-sm text-purple-100">
-                  Drag the handle to adjust the {resizingWallHandle} point
-                </div>
-              </div>
-            </div>
-            <div className="text-sm px-4 py-2 bg-white/10 rounded-lg">
-              Release to finish
-            </div>
-          </div>
-        )}
+        {/* Wall Resizing Mode Banner - Removed for cleaner UX */}
         
         <Toolbar
           showGrid={showGrid}
@@ -941,6 +961,30 @@ const RestaurantFloorPlanner: React.FC = () => {
                 isSelected={false}
                 onSelect={() => {}}
               />
+            )}
+
+            {/* Render wall resize preview */}
+            {wallResizePreview && (
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: `${wallResizePreview.startX}px`,
+                  top: `${wallResizePreview.startY}px`,
+                  width: `${Math.sqrt(
+                    Math.pow(wallResizePreview.endX - wallResizePreview.startX, 2) + 
+                    Math.pow(wallResizePreview.endY - wallResizePreview.startY, 2)
+                  )}px`,
+                  height: '4px',
+                  transform: `rotate(${Math.atan2(
+                    wallResizePreview.endY - wallResizePreview.startY, 
+                    wallResizePreview.endX - wallResizePreview.startX
+                  ) * (180 / Math.PI)}deg)`,
+                  transformOrigin: 'top left',
+                  zIndex: 15
+                }}
+              >
+                <div className="w-full h-full border-2 border-blue-400 border-dashed opacity-70 bg-blue-100 rounded-sm" />
+              </div>
             )}
 
             {/* Render fixed elements */}

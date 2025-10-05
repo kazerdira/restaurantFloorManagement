@@ -20,6 +20,17 @@ export const WallComponent: React.FC<WallProps> = ({
   );
   const angle = Math.atan2(wall.endY - wall.startY, wall.endX - wall.startX) * (180 / Math.PI);
 
+  // Determine cursor based on wall orientation
+  const getCursorStyle = () => {
+    if (!isSelected) return 'pointer';
+    
+    // Calculate if wall is more horizontal or vertical
+    const dx = Math.abs(wall.endX - wall.startX);
+    const dy = Math.abs(wall.endY - wall.startY);
+    
+    return dx > dy ? 'ew-resize' : 'ns-resize';
+  };
+
   const getWallColor = () => {
     switch (wall.type) {
       case 'wall':
@@ -74,7 +85,8 @@ export const WallComponent: React.FC<WallProps> = ({
       {isSelected && (
         <>
           <div 
-            className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white cursor-grab active:cursor-grabbing hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            style={{ cursor: getCursorStyle() }}
             onMouseDown={(e) => {
               e.stopPropagation();
               onDragHandle?.(e, 'start');
@@ -82,7 +94,8 @@ export const WallComponent: React.FC<WallProps> = ({
             title="Drag to resize"
           />
           <div 
-            className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white cursor-grab active:cursor-grabbing hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            style={{ cursor: getCursorStyle() }}
             onMouseDown={(e) => {
               e.stopPropagation();
               onDragHandle?.(e, 'end');
