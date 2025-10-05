@@ -23,9 +23,11 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
   onDragEnd,
   totalChairsOnSide
 }) => {
-  const chairSize = calculateChairSize(table);
-  const spacing = Math.max(8, Math.round(chairSize * 0.3));
-  const iconSize = Math.min(chairSize - 2, Math.max(16, Math.round(chairSize * 0.6)));
+  // Increase chair size by 30%
+  const baseChairSize = calculateChairSize(table);
+  const chairSize = Math.round(baseChairSize * 1.3);
+  const spacing = Math.max(10, Math.round(chairSize * 0.25));
+  const iconSize = Math.min(chairSize - 4, Math.max(20, Math.round(chairSize * 0.65)));
   const tableWidth = getActualTableWidth(table);
   const tableRotation = (table.rotation || 0) * (Math.PI / 180); // Convert to radians
 
@@ -104,7 +106,7 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
   return (
     <div
       className={`absolute cursor-move transition-all duration-150 ${
-        isSelected ? 'ring-2 ring-amber-500 ring-offset-2' : ''
+        isSelected ? 'ring-4 ring-amber-400 ring-offset-2' : ''
       }`}
       style={{
         left: position.x,
@@ -112,7 +114,8 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
         width: chairSize,
         height: chairSize,
         transform: `rotate(${getChairRotation()}deg)`,
-        zIndex: isSelected ? 100 : 50
+        zIndex: isSelected ? 100 : 50,
+        filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2))'
       }}
       onMouseDown={(event) => {
         event.stopPropagation();
@@ -121,8 +124,8 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
       }}
       onMouseUp={onDragEnd}
     >
-      <div className="w-full h-full bg-amber-600 rounded-sm border-2 border-amber-700 flex items-center justify-center shadow-md">
-        <Armchair size={iconSize} strokeWidth={3} className="text-amber-100" />
+      <div className="w-full h-full bg-gradient-to-br from-amber-500 to-amber-700 rounded-lg border-4 border-amber-800 flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
+        <Armchair size={iconSize} strokeWidth={3.5} className="text-amber-50" />
       </div>
     </div>
   );
