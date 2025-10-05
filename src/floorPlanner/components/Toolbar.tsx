@@ -30,6 +30,8 @@ interface ToolbarProps {
   onRemoveFixedElement: () => void;
   onChangeWallThickness?: (thickness: number) => void;
   onConvertWallType?: (type: 'wall' | 'door' | 'window') => void;
+  onFixedElementNameChange?: (name: string) => void;
+  onFixedElementResize?: (width: number, height: number) => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -56,6 +58,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onRemoveFixedElement,
   onChangeWallThickness,
   onConvertWallType,
+  onFixedElementNameChange,
+  onFixedElementResize,
   tableCount,
   chairCount,
   objectCount,
@@ -66,14 +70,18 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   const chairMenuRef = useRef<HTMLDivElement | null>(null);
   const sizeMenuRef = useRef<HTMLDivElement | null>(null);
   const objectSizeMenuRef = useRef<HTMLDivElement | null>(null);
+  const fixedElementSizeMenuRef = useRef<HTMLDivElement | null>(null);
   const [isChairMenuOpen, setIsChairMenuOpen] = useState(false);
   const [isSizeMenuOpen, setIsSizeMenuOpen] = useState(false);
   const [isObjectSizeMenuOpen, setIsObjectSizeMenuOpen] = useState(false);
+  const [isFixedElementSizeMenuOpen, setIsFixedElementSizeMenuOpen] = useState(false);
   const [showProSlider, setShowProSlider] = useState(false);
   const [customWidth, setCustomWidth] = useState(90);
   const [customHeight, setCustomHeight] = useState(90);
   const [objectWidth, setObjectWidth] = useState(120);
   const [objectHeight, setObjectHeight] = useState(80);
+  const [fixedElementWidth, setFixedElementWidth] = useState(60);
+  const [fixedElementHeight, setFixedElementHeight] = useState(60);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -85,6 +93,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       }
       if (objectSizeMenuRef.current && !objectSizeMenuRef.current.contains(event.target as Node)) {
         setIsObjectSizeMenuOpen(false);
+      }
+      if (fixedElementSizeMenuRef.current && !fixedElementSizeMenuRef.current.contains(event.target as Node)) {
+        setIsFixedElementSizeMenuOpen(false);
       }
     };
 
@@ -110,7 +121,15 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       setObjectWidth(selectedObject.width);
       setObjectHeight(selectedObject.height);
     }
-  }, [selectedTable, selectedObject]);
+    
+    if (!selectedFixedElement) {
+      setIsFixedElementSizeMenuOpen(false);
+    } else {
+      // Update fixed element sliders when element changes
+      setFixedElementWidth(selectedFixedElement.width);
+      setFixedElementHeight(selectedFixedElement.height);
+    }
+  }, [selectedTable, selectedObject, selectedFixedElement]);
 
   return (
     <div className="bg-white border-b border-gray-200 shadow-sm min-h-[72px]">
@@ -595,6 +614,81 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                   {FIXED_ELEMENT_LABELS[selectedFixedElement.type]}
                 </span>
               </div>
+
+              {/* Fixed Element Resize Controls */}
+              {onFixedElementResize && (
+                <div ref={fixedElementSizeMenuRef} className="relative">
+                  <button
+                    onClick={() => setIsFixedElementSizeMenuOpen(!isFixedElementSizeMenuOpen)}
+                    className="px-3 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                  >
+                    <Square className="w-4 h-4" />
+                    <span>Resize</span>
+                  </button>
+                  
+                  {isFixedElementSizeMenuOpen && (
+                    <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 min-w-[320px]">
+                      <div className="space-y-4">
+                        {/* Width Slider */}
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="text-sm font-semibold text-gray-700">Width</label>
+                            <span className="text-sm font-bold text-blue-600">{fixedElementWidth}px</span>
+                          </div>
+                          <input
+                            type="range"
+                            min="30"
+                            max="200"
+                            value={fixedElementWidth}
+                            onChange={(e) => {
+                              const newWidth = parseInt(e.target.value);
+                              setFixedElementWidth(newWidth);
+                              onFixedElementResize(newWidth, fixedElementHeight);
+                            }}
+                            className="w-full h-2 bg-gradient-to-r from-blue-200 to-blue-500 rounded-lg appearance-none cursor-pointer slider"
+                          />
+                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>30px</span>
+                            <span>200px</span>
+                          </div>
+                        </div>
+
+                        {/* Height Slider */}
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="text-sm font-semibold text-gray-700">Height</label>
+                            <span className="text-sm font-bold text-blue-600">{fixedElementHeight}px</span>
+                          </div>
+                          <input
+                            type="range"
+                            min="30"
+                            max="200"
+                            value={fixedElementHeight}
+                            onChange={(e) => {
+                              const newHeight = parseInt(e.target.value);
+                              setFixedElementHeight(newHeight);
+                              onFixedElementResize(fixedElementWidth, newHeight);
+                            }}
+                            className="w-full h-2 bg-gradient-to-r from-green-200 to-green-500 rounded-lg appearance-none cursor-pointer slider"
+                          />
+                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>30px</span>
+                            <span>200px</span>
+                          </div>
+                        </div>
+
+                        {/* Current Size Display */}
+                        <div className="pt-3 border-t border-gray-200">
+                          <div className="text-center">
+                            <span className="text-xs text-gray-600">Current Size: </span>
+                            <span className="text-sm font-bold text-gray-800">{fixedElementWidth} × {fixedElementHeight}px</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Delete Fixed Element Button */}
               <button

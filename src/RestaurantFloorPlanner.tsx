@@ -371,6 +371,21 @@ const RestaurantFloorPlanner: React.FC = () => {
     ));
   };
 
+  const handleFixedElementResize = (width: number, height: number) => {
+    if (!selectedElement || selectedElement.type !== 'fixedElement') return;
+    
+    setFloors(prev => prev.map(floor =>
+      floor.id === currentFloor
+        ? {
+            ...floor,
+            fixedElements: floor.fixedElements.map(element =>
+              element.id === selectedElement.id ? { ...element, width, height } : element
+            )
+          }
+        : floor
+    ));
+  };
+
   const handleTableNameChange = (name: string) => {
     updateSelectedTable(table => ({ ...table, name }));
   };
@@ -885,6 +900,7 @@ const RestaurantFloorPlanner: React.FC = () => {
           onRemoveFixedElement={removeElement}
           onChangeWallThickness={changeWallThickness}
           onConvertWallType={convertWallType}
+          onFixedElementResize={handleFixedElementResize}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">
