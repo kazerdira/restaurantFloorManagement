@@ -7,6 +7,7 @@ import { WallComponent } from './floorPlanner/components/Wall';
 import { FixedElementComponent } from './floorPlanner/components/FixedElement';
 import { Sidebar } from './floorPlanner/components/Sidebar';
 import { Toolbar } from './floorPlanner/components/Toolbar';
+import { Preview3DModal } from './floorPlanner/components/Preview3DModal';
 import {
   hexagonStyle,
   GRID_SIZE,
@@ -47,6 +48,7 @@ const RestaurantFloorPlanner: React.FC = () => {
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const zoom = 1; // Fixed zoom level
   const [showGrid, setShowGrid] = useState<boolean>(true);
+  const [show3DPreview, setShow3DPreview] = useState<boolean>(false);
   
   // Wall drawing state
   const [isDrawingWall, setIsDrawingWall] = useState<boolean>(false);
@@ -992,6 +994,7 @@ const RestaurantFloorPlanner: React.FC = () => {
           onFixedElementResize={handleFixedElementResize}
           onChairSizeChange={changeChairSize}
           onResetChairSizes={resetChairSizes}
+          on3DPreview={() => setShow3DPreview(true)}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">
@@ -1186,6 +1189,15 @@ const RestaurantFloorPlanner: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* 3D Preview Modal */}
+      {currentFloorData && (
+        <Preview3DModal 
+          floor={currentFloorData}
+          isOpen={show3DPreview}
+          onClose={() => setShow3DPreview(false)}
+        />
+      )}
     </div>
   );
 };

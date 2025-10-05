@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, RotateCcw, Square, Trash2 } from 'lucide-react';
+import { Armchair, Box, ChevronRight, Eye, EyeOff, Minus, Plus, RotateCcw, Square, Trash2 } from 'lucide-react';
 
 import type { Chair, ChairPosition, Table, TableSize, FloorObject, Wall, FixedElement } from '../types';
 import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS, WALL_LABELS, FIXED_ELEMENT_LABELS } from '../constants';
@@ -34,6 +34,7 @@ interface ToolbarProps {
   onFixedElementResize?: (width: number, height: number) => void;
   onChairSizeChange?: (position: ChairPosition, size: number) => void;
   onResetChairSizes?: () => void;
+  on3DPreview?: () => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -64,6 +65,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onFixedElementResize,
   onChairSizeChange,
   onResetChairSizes,
+  on3DPreview,
   tableCount,
   chairCount,
   objectCount,
@@ -744,6 +746,15 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
         {/* Right Section - Stats */}
         <div className="flex items-center gap-3 flex-wrap">
+          {/* 3D Preview Button */}
+          <button
+            onClick={on3DPreview}
+            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-semibold text-sm"
+          >
+            <Box className="w-4 h-4" />
+            3D Preview
+          </button>
+          
           <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded text-xs">
             <div className="w-2 h-2 bg-emerald-600 rounded-full" />
             <span className="font-medium text-emerald-800">Tables: {tableCount}</span>
