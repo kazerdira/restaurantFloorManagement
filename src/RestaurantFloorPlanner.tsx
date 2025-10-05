@@ -443,22 +443,33 @@ const RestaurantFloorPlanner: React.FC = () => {
     const floor = getCurrentFloor();
     if (!floor) return;
     
-    // Find the element (table, object, or fixedElement) being dragged
+    // Find the element (table, object, fixedElement, or wall) being dragged
     const table = floor.tables.find(t => t.id === id);
     const object = floor.objects.find(o => o.id === id);
     const fixedElement = floor.fixedElements.find(fe => fe.id === id);
-    const element = table || object || fixedElement;
+    const wall = floor.walls.find(w => w.id === id);
     
-    if (element) {
+    if (wall) {
+      // For walls, store offset from startX/startY
       setDragOffset({
-        x: x - element.x,
-        y: y - element.y
+        x: x - wall.startX,
+        y: y - wall.startY
       });
+      dragElementRef.current = { id, type: 'wall' };
+    } else {
+      const element = table || object || fixedElement;
+      if (element) {
+        setDragOffset({
+          x: x - element.x,
+          y: y - element.y
+        });
+      }
+      
+      // Determine the type based on what was found
+      const type = table ? 'table' : object ? 'object' : fixedElement ? 'fixedElement' : 'table';
+      dragElementRef.current = { id, type };
     }
     
-    // Determine the type based on what was found
-    const type = table ? 'table' : object ? 'object' : fixedElement ? 'fixedElement' : 'table';
-    dragElementRef.current = { id, type };
     setIsDragging(true);
   };
 
@@ -564,9 +575,39 @@ const RestaurantFloorPlanner: React.FC = () => {
               }
             : floor
         ));
+      } else if (dragElementRef.current?.type === 'wall' && !isResizingWall) {
+        // Handle wall dragging (move entire wall - both endpoints)
+        const adjustedX = x - dragOffset.x;
+        const adjustedY = y - dragOffset.y;
+        const wallSnappedX = Math.round(adjustedX / GRID_SIZE) * GRID_SIZE;
+        const wallSnappedY = Math.round(adjustedY / GRID_SIZE) * GRID_SIZE;
+        
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                walls: floor.walls.map(wall => {
+                  if (wall.id !== dragElementRef.current?.id) return wall;
+                  
+                  // Calculate delta from original startX/startY
+                  const deltaX = wallSnappedX - wall.startX;
+                  const deltaY = wallSnappedY - wall.startY;
+                  
+                  // Move both endpoints by the same delta
+                  return {
+                    ...wall,
+                    startX: wall.startX + deltaX,
+                    startY: wall.startY + deltaY,
+                    endX: wall.endX + deltaX,
+                    endY: wall.endY + deltaY
+                  };
+                })
+              }
+            : floor
+        ));
       }
     });
-  }, [isDragging, isResizingWall, resizingWallHandle, dragOffset, currentFloor, zoom]);
+  }, [isDragging, isResizingWall, resizingWallHandle, dragOffset, currentFloor, zoom, floors]);
 
   const handleDragEnd = () => {
     // Cancel any pending animation frame
@@ -815,38 +856,7 @@ const RestaurantFloorPlanner: React.FC = () => {
       />
 
       <div className="flex-1 flex flex-col">
-        {/* Wall Drawing Mode Banner */}
-        {isDrawingWall && wallType && (
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 flex items-center justify-between shadow-lg z-50">
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-lg">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-bold text-lg">
-                  Drawing {wallType === 'wall' ? 'Wall' : wallType === 'door' ? 'Door' : 'Window'}
-                </div>
-                <div className="text-sm text-blue-100">
-                  {!wallStartPoint ? 'Click to set start point' : 'Click to set end point'}
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setIsDrawingWall(false);
-                setWallType(null);
-                setWallStartPoint(null);
-                setTempWallEndPoint(null);
-              }}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold transition-colors"
-            >
-              Cancel (ESC)
-            </button>
-          </div>
-        )}
-
+        {/* Wall Drawing Mode Banner - Removed for cleaner UX */}
         {/* Wall Resizing Mode Banner - Removed for cleaner UX */}
         
         <Toolbar
@@ -943,6 +953,7 @@ const RestaurantFloorPlanner: React.FC = () => {
                 isSelected={selectedElement?.type === 'wall' && selectedElement.id === wall.id}
                 onSelect={() => handleElementSelect('wall', wall.id)}
                 onDragHandle={(e, handleType) => handleWallHandleDrag(e, wall.id, handleType)}
+                onDragStart={(e) => handleDragStart(e, wall.id)}
               />
             ))}
 

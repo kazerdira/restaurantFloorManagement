@@ -113,10 +113,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   }, [selectedTable, selectedObject]);
 
   return (
-    <div className="bg-white border-b border-gray-200 shadow-sm">
-      <div className="px-4 py-3 flex items-center justify-between">
+    <div className="bg-white border-b border-gray-200 shadow-sm min-h-[72px]">
+      <div className="px-4 py-3 flex items-center justify-between min-h-[72px]">
         {/* Left Section - Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           {/* Grid Toggle */}
           <button
             onClick={onToggleGrid}
@@ -610,23 +610,23 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         </div>
 
         {/* Right Section - Stats */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-lg">
-            <div className="w-3 h-3 bg-emerald-600 rounded-full" />
-            <span className="text-sm font-medium text-emerald-800">Tables: {tableCount}</span>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded text-xs">
+            <div className="w-2 h-2 bg-emerald-600 rounded-full" />
+            <span className="font-medium text-emerald-800">Tables: {tableCount}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-lg">
-            <div className="w-3 h-3 bg-amber-600 rounded-full" />
-            <span className="text-sm font-medium text-amber-800">Chairs: {chairCount}</span>
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-50 rounded text-xs">
+            <div className="w-2 h-2 bg-amber-600 rounded-full" />
+            <span className="font-medium text-amber-800">Chairs: {chairCount}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-50 rounded-lg">
-            <div className="w-3 h-3 bg-purple-600 rounded-full" />
-            <span className="text-sm font-medium text-purple-800">Objects: {objectCount}</span>
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50 rounded text-xs">
+            <div className="w-2 h-2 bg-purple-600 rounded-full" />
+            <span className="font-medium text-purple-800">Objects: {objectCount}</span>
           </div>
           {selectedElementType && (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-blue-800 capitalize">Selected: {selectedElementType}</span>
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 rounded text-xs">
+              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />
+              <span className="font-medium text-blue-800 capitalize">Selected: {selectedElementType}</span>
             </div>
           )}
         </div>

@@ -7,13 +7,15 @@ interface WallProps {
   isSelected: boolean;
   onSelect: () => void;
   onDragHandle?: (e: React.MouseEvent, handleType: 'start' | 'end') => void;
+  onDragStart?: (e: React.MouseEvent) => void;
 }
 
 export const WallComponent: React.FC<WallProps> = ({
   wall,
   isSelected,
   onSelect,
-  onDragHandle
+  onDragHandle,
+  onDragStart
 }) => {
   const length = Math.sqrt(
     Math.pow(wall.endX - wall.startX, 2) + Math.pow(wall.endY - wall.startY, 2)
@@ -58,8 +60,15 @@ export const WallComponent: React.FC<WallProps> = ({
         e.stopPropagation();
         onSelect();
       }}
+      onMouseDown={(e) => {
+        // Only allow dragging the wall body when selected and not clicking handles
+        if (isSelected && onDragStart) {
+          e.stopPropagation();
+          onDragStart(e);
+        }
+      }}
       className={`absolute transition-all ${
-        isSelected ? 'ring-4 ring-blue-400 ring-opacity-50' : ''
+        isSelected ? 'ring-4 ring-blue-400 ring-opacity-50 hover:ring-6 hover:ring-blue-300' : ''
       }`}
       style={{
         left: `${wall.startX}px`,
@@ -69,7 +78,7 @@ export const WallComponent: React.FC<WallProps> = ({
         transform: `rotate(${angle}deg)`,
         transformOrigin: 'top left',
         zIndex: 10,
-        cursor: isSelected ? 'default' : 'pointer',
+        cursor: isSelected ? 'move' : 'pointer',
         pointerEvents: 'auto'
       }}
     >
