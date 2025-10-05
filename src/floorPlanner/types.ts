@@ -14,6 +14,7 @@ export interface Chair {
   index: number; // Position index on the side (0, 1, 2, etc.)
   x: number;
   y: number;
+  size?: number; // Custom size override (20-60px), if not set uses calculated default
 }
 
 export interface Table {

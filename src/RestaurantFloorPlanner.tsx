@@ -68,6 +68,44 @@ const RestaurantFloorPlanner: React.FC = () => {
   const dragElementRef = useRef<{ id: string; type: string } | null>(null);
   const rafRef = useRef<number | null>(null);
 
+  // Initialize chair sizes for existing chairs without explicit size
+  useEffect(() => {
+    if (selectedElement?.type === 'table') {
+      const floor = getCurrentFloor();
+      if (!floor) return;
+
+      const tableChairs = floor.chairs.filter(c => c.tableId === selectedElement.id);
+      const chairsWithoutSize = tableChairs.filter(c => c.size === undefined);
+      
+      if (chairsWithoutSize.length > 0) {
+        // Group by position to ensure chairs on same side get same size
+        const sizeByPosition: Record<ChairPosition, number> = {} as Record<ChairPosition, number>;
+        
+        tableChairs.forEach(chair => {
+          if (chair.size !== undefined && !sizeByPosition[chair.position]) {
+            sizeByPosition[chair.position] = chair.size;
+          }
+        });
+
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                chairs: floor.chairs.map(chair => {
+                  if (chair.tableId === selectedElement.id && chair.size === undefined) {
+                    // Use existing size from same position, or default to 40px
+                    const defaultSize = sizeByPosition[chair.position] ?? 40;
+                    return { ...chair, size: defaultSize };
+                  }
+                  return chair;
+                })
+              }
+            : floor
+        ));
+      }
+    }
+  }, [selectedElement]); // Only run when selection changes
+
   const getCurrentFloor = (): Floor | undefined => floors.find(floor => floor.id === currentFloor);
 
   const addTable = (shape: Table['shape'], size: TableSize = 'medium') => {
@@ -132,13 +170,20 @@ const RestaurantFloorPlanner: React.FC = () => {
     // Calculate the next index
     const nextIndex = existingChairsOnSide.length;
     
+    // Check if any existing chair on this side has a custom size
+    const existingChairWithSize = existingChairsOnSide.find(c => c.size !== undefined);
+    
+    // Determine initial size: inherit from existing chairs on this side, or use default 40px
+    const initialSize = existingChairWithSize?.size ?? 40;
+    
     const newChair: Chair = {
       id: generateId(),
       tableId: selectedElement.id,
       position,
       index: nextIndex,
       x: 0,
-      y: 0
+      y: 0,
+      size: initialSize // Always set a size to prevent recalculation on table resize
     };
     
     setFloors(prev => prev.map(floor => 
@@ -171,6 +216,50 @@ const RestaurantFloorPlanner: React.FC = () => {
         ? { 
             ...floor, 
             chairs: floor.chairs.filter(chair => chair.id !== chairToRemove.id)
+          }
+        : floor
+    ));
+  };
+
+  const changeChairSize = (position: ChairPosition, size: number) => {
+    if (!selectedElement || selectedElement.type !== 'table') return;
+    
+    const floor = getCurrentFloor();
+    if (!floor) return;
+    
+    // Update all chairs on this side with the new size
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { 
+            ...floor, 
+            chairs: floor.chairs.map(chair => 
+              chair.tableId === selectedElement.id && chair.position === position
+                ? { ...chair, size }
+                : chair
+            )
+          }
+        : floor
+    ));
+  };
+
+  const resetChairSizes = () => {
+    if (!selectedElement || selectedElement.type !== 'table') return;
+    
+    const floor = getCurrentFloor();
+    if (!floor) return;
+    
+    // Remove custom size from all chairs of this table (revert to calculated default)
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { 
+            ...floor, 
+            chairs: floor.chairs.map(chair => {
+              if (chair.tableId === selectedElement.id) {
+                const { size, ...chairWithoutSize } = chair;
+                return chairWithoutSize;
+              }
+              return chair;
+            })
           }
         : floor
     ));
@@ -901,6 +990,8 @@ const RestaurantFloorPlanner: React.FC = () => {
           onChangeWallThickness={changeWallThickness}
           onConvertWallType={convertWallType}
           onFixedElementResize={handleFixedElementResize}
+          onChairSizeChange={changeChairSize}
+          onResetChairSizes={resetChairSizes}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">

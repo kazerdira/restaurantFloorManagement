@@ -8,7 +8,8 @@ export default defineConfig({
     port: 3008,
     host: true, // Listen on all addresses
     allowedHosts: [
-      'bf1576bcc4d9.ngrok-free.app' // your ngrok domain
+      //https://e57922710467.ngrok-free.app 
+      'e57922710467.ngrok-free.app' // your ngrok domain
     ]
   }
 })

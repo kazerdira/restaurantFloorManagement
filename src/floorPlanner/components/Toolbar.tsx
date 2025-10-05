@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, Square, Trash2 } from 'lucide-react';
+import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, RotateCcw, Square, Trash2 } from 'lucide-react';
 
 import type { Chair, ChairPosition, Table, TableSize, FloorObject, Wall, FixedElement } from '../types';
 import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS, WALL_LABELS, FIXED_ELEMENT_LABELS } from '../constants';
@@ -32,6 +32,8 @@ interface ToolbarProps {
   onConvertWallType?: (type: 'wall' | 'door' | 'window') => void;
   onFixedElementNameChange?: (name: string) => void;
   onFixedElementResize?: (width: number, height: number) => void;
+  onChairSizeChange?: (position: ChairPosition, size: number) => void;
+  onResetChairSizes?: () => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -60,6 +62,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onConvertWallType,
   onFixedElementNameChange,
   onFixedElementResize,
+  onChairSizeChange,
+  onResetChairSizes,
   tableCount,
   chairCount,
   objectCount,
@@ -187,40 +191,75 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                     <div className="p-3 space-y-2">
                       {chairPositions.map((position) => {
                         const chairsOnSide = selectedTableChairs.filter(c => c.position === position).length;
+                        const chairSample = selectedTableChairs.find(c => c.position === position);
+                        const currentSize = chairSample?.size || 40; // Default fallback
+                        
                         return (
                           <div
                             key={position}
-                            className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 hover:border-amber-300 transition-all"
+                            className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 hover:border-amber-300 transition-all space-y-2"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-md flex items-center justify-center text-white text-xs font-bold uppercase">
-                                {position[0]}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-md flex items-center justify-center text-white text-xs font-bold uppercase">
+                                  {position[0]}
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-gray-800 capitalize">{position}</div>
+                                  <div className="text-xs text-gray-500">{chairsOnSide} chair{chairsOnSide !== 1 ? 's' : ''}</div>
+                                </div>
                               </div>
-                              <div>
-                                <div className="text-sm font-medium text-gray-800 capitalize">{position}</div>
-                                <div className="text-xs text-gray-500">{chairsOnSide} chair{chairsOnSide !== 1 ? 's' : ''}</div>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => onRemoveChair(position)}
+                                  disabled={chairsOnSide === 0}
+                                  className="w-7 h-7 rounded-md bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                                  title="Remove chair"
+                                >
+                                  <Minus className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => onAddChair(position)}
+                                  className="w-7 h-7 rounded-md bg-green-50 text-green-600 hover:bg-green-100 transition-all flex items-center justify-center"
+                                  title="Add chair"
+                                >
+                                  <Plus className="w-4 h-4" />
+                                </button>
                               </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => onRemoveChair(position)}
-                                disabled={chairsOnSide === 0}
-                                className="w-7 h-7 rounded-md bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center"
-                                title="Remove chair"
-                              >
-                                <Minus className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => onAddChair(position)}
-                                className="w-7 h-7 rounded-md bg-green-50 text-green-600 hover:bg-green-100 transition-all flex items-center justify-center"
-                                title="Add chair"
-                              >
-                                <Plus className="w-4 h-4" />
-                              </button>
-                            </div>
+                            
+                            {/* Size Slider */}
+                            {chairsOnSide > 0 && (
+                              <div className="pt-2 border-t border-gray-200">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-xs font-medium text-gray-600">Chair Size</span>
+                                  <span className="text-xs font-bold text-amber-600">{currentSize}px</span>
+                                </div>
+                                <input
+                                  type="range"
+                                  min="20"
+                                  max="60"
+                                  value={currentSize}
+                                  onChange={(e) => onChairSizeChange?.(position, parseInt(e.target.value))}
+                                  className="w-full h-2 bg-gradient-to-r from-amber-200 to-amber-400 rounded-full appearance-none cursor-pointer slider-thumb"
+                                  style={{
+                                    background: `linear-gradient(to right, rgb(251, 191, 36) 0%, rgb(251, 191, 36) ${((currentSize - 20) / 40) * 100}%, rgb(253, 230, 138) ${((currentSize - 20) / 40) * 100}%, rgb(253, 230, 138) 100%)`
+                                  }}
+                                />
+                              </div>
+                            )}
                           </div>
                         );
                       })}
+                      
+                      {/* Reset Button */}
+                      <button
+                        onClick={() => onResetChairSizes?.()}
+                        className="w-full mt-3 px-3 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all flex items-center justify-center gap-2 text-sm font-medium"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        <span>Reset All Sizes</span>
+                      </button>
                     </div>
                   </div>
                 )}

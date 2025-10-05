@@ -23,9 +23,9 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
   onDragEnd,
   totalChairsOnSide
 }) => {
-  // Increase chair size by 30%
+  // Use custom size if provided, otherwise calculate default and increase by 30%
   const baseChairSize = calculateChairSize(table);
-  const chairSize = Math.round(baseChairSize * 1.3);
+  const chairSize = chair.size ?? Math.round(baseChairSize * 1.3);
   const spacing = Math.max(10, Math.round(chairSize * 0.25));
   const iconSize = Math.min(chairSize - 4, Math.max(20, Math.round(chairSize * 0.65)));
   const tableWidth = getActualTableWidth(table);
