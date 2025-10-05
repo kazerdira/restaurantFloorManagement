@@ -30,7 +30,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const baseClasses =
-    'w-full h-full bg-emerald-600 border-2 border-emerald-700 flex items-center justify-center relative shadow-lg';
+    'w-full h-full flex items-center justify-center relative';
 
   const tableClasses =
     table.shape === 'circle'
@@ -62,9 +62,50 @@ export const TableComponent: React.FC<TableComponentProps> = ({
       onMouseUp={onDragEnd}
     >
       <div className={tableClasses}>
-        <div className="flex flex-col items-center justify-center gap-1 text-emerald-50">
-          <span className="text-xs font-semibold uppercase tracking-wide">N: {tableLabel}</span>
-          <span className="text-xs font-semibold uppercase tracking-wide">S: {seatsCount}</span>
+        {/* 3D Table Effect */}
+        <div 
+          className="absolute inset-0 rounded-[inherit]"
+          style={{
+            background: 'linear-gradient(145deg, #059669 0%, #047857 50%, #065f46 100%)',
+            boxShadow: `
+              0 8px 16px rgba(0, 0, 0, 0.3),
+              0 4px 8px rgba(0, 0, 0, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.2),
+              inset 0 -2px 4px rgba(0, 0, 0, 0.2)
+            `
+          }}
+        />
+        
+        {/* Wood grain effect overlay */}
+        <div 
+          className="absolute inset-0 rounded-[inherit] opacity-20"
+          style={{
+            background: `
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
+              )
+            `
+          }}
+        />
+        
+        {/* Bevel edge highlight */}
+        <div 
+          className="absolute inset-0 rounded-[inherit]"
+          style={{
+            border: '3px solid transparent',
+            borderImage: 'linear-gradient(145deg, rgba(255,255,255,0.4), rgba(0,0,0,0.2)) 1',
+            pointerEvents: 'none'
+          }}
+        />
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center gap-1 text-white drop-shadow-lg">
+          <span className="text-xs font-bold uppercase tracking-wide">N: {tableLabel}</span>
+          <span className="text-xs font-bold uppercase tracking-wide">S: {seatsCount}</span>
         </div>
       </div>
     </div>
