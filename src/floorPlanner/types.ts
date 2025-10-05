@@ -4,6 +4,8 @@ export type TableShape = 'square' | 'circle' | 'rectangle' | 'hexagon';
 export type TableSize = 'small' | 'medium' | 'large';
 export type ChairPosition = 'top' | 'bottom' | 'left' | 'right';
 export type ObjectType = 'bar' | 'kitchen' | 'toilet';
+export type WallType = 'wall' | 'door' | 'window';
+export type FixedElementType = 'pillar' | 'column' | 'stairs';
 
 export interface Chair {
   id: string;
@@ -37,6 +39,27 @@ export interface FloorObject {
   rotation: number;
 }
 
+export interface Wall {
+  id: string;
+  type: WallType;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  thickness: number;
+}
+
+export interface FixedElement {
+  id: string;
+  name: string;
+  type: FixedElementType;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+}
+
 export interface Floor {
   id: string;
   name: string;
@@ -44,10 +67,12 @@ export interface Floor {
   tables: Table[];
   chairs: Chair[];
   objects: FloorObject[];
+  walls: Wall[];
+  fixedElements: FixedElement[];
 }
 
 export interface SelectedElement {
-  type: 'table' | 'chair' | 'object';
+  type: 'table' | 'chair' | 'object' | 'wall' | 'fixedElement';
   id: string;
 }
 

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Layers, Minus, Plus, RotateCw, Save, Trash2, Upload, LayoutGrid, Package } from 'lucide-react';
+import { Layers, Minus, Plus, RotateCw, Save, Trash2, Upload, LayoutGrid, Package, Home } from 'lucide-react';
 
-import { SIZE_LABELS, TABLE_SHAPES, OBJECT_ICONS, OBJECT_LABELS, OBJECT_COLORS } from '../constants';
+import { SIZE_LABELS, TABLE_SHAPES, OBJECT_ICONS, OBJECT_LABELS, OBJECT_COLORS, WALL_ICONS, WALL_LABELS, FIXED_ELEMENT_ICONS, FIXED_ELEMENT_LABELS, FIXED_ELEMENT_COLORS } from '../constants';
 import type {
   Chair,
   Floor,
   Table,
-  ObjectType
+  ObjectType,
+  WallType,
+  FixedElementType
 } from '../types';
 
 interface SidebarProps {
@@ -18,6 +20,8 @@ interface SidebarProps {
   onRenameFloor: (floorId: string, newName: string) => void;
   onAddTable: (shape: Table['shape']) => void;
   onAddObject: (type: ObjectType) => void;
+  onStartWallDrawing: (type: WallType) => void;
+  onAddFixedElement: (type: FixedElementType) => void;
   onRotateTable: () => void;
   onDuplicateTable: () => void;
   onRemoveTable: () => void;
@@ -38,6 +42,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onRenameFloor,
   onAddTable,
   onAddObject,
+  onStartWallDrawing,
+  onAddFixedElement,
   onRotateTable,
   onDuplicateTable,
   onRemoveTable,
@@ -48,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const [editingFloorId, setEditingFloorId] = React.useState<string | null>(null);
   const [editingFloorName, setEditingFloorName] = React.useState<string>('');
-  const [activeTab, setActiveTab] = React.useState<'tables' | 'objects'>('tables');
+  const [activeTab, setActiveTab] = React.useState<'tables' | 'objects' | 'roomLayout'>('tables');
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // Focus input when editing starts
@@ -154,7 +160,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Tabs for Tables and Objects */}
+      {/* Tabs for Tables, Objects, and Room Layout */}
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
@@ -178,6 +184,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <Package className="w-4 h-4" />
             Objects
+          </button>
+          <button
+            onClick={() => setActiveTab('roomLayout')}
+            className={`flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+              activeTab === 'roomLayout'
+                ? 'bg-white text-gray-700 border-b-2 border-gray-700'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <Home className="w-4 h-4" />
+            Room
           </button>
         </div>
       </div>
@@ -227,6 +244,64 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* Room Layout Tab Content */}
+      {activeTab === 'roomLayout' && (
+        <div className="p-4 border-b border-gray-200">
+          {/* Walls Section */}
+          <div className="mb-6">
+            <h3 className="text-md font-semibold text-gray-800 mb-3">Draw Walls</h3>
+            <div className="space-y-2">
+              {(['wall', 'door', 'window'] as WallType[]).map((wallType) => {
+                const Icon = WALL_ICONS[wallType];
+                const label = WALL_LABELS[wallType];
+                
+                const colorClasses = {
+                  wall: 'bg-gradient-to-br from-gray-600 to-gray-800 border-gray-700 text-white hover:from-gray-700 hover:to-gray-900',
+                  door: 'bg-gradient-to-br from-amber-500 to-amber-700 border-amber-600 text-white hover:from-amber-600 hover:to-amber-800',
+                  window: 'bg-gradient-to-br from-blue-500 to-blue-700 border-blue-600 text-white hover:from-blue-600 hover:to-blue-800'
+                };
+                
+                return (
+                  <button
+                    key={wallType}
+                    onClick={() => onStartWallDrawing(wallType)}
+                    className={`w-full p-3 border-2 rounded-lg transition-all flex items-center gap-3 shadow-md hover:shadow-lg ${colorClasses[wallType]}`}
+                  >
+                    <Icon className="w-5 h-5" strokeWidth={2.5} />
+                    <span className="text-sm font-semibold">{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Fixed Elements Section */}
+          <div>
+            <h3 className="text-md font-semibold text-gray-800 mb-3">Add Elements</h3>
+            <div className="space-y-2">
+              {(['pillar', 'column', 'stairs'] as FixedElementType[]).map((elementType) => {
+                const Icon = FIXED_ELEMENT_ICONS[elementType];
+                const colors = FIXED_ELEMENT_COLORS[elementType];
+                const label = FIXED_ELEMENT_LABELS[elementType];
+                
+                return (
+                  <button
+                    key={elementType}
+                    onClick={() => onAddFixedElement(elementType)}
+                    className={`w-full p-3 ${colors.bg} border-2 ${colors.border} rounded-lg hover:scale-105 transition-all flex items-center gap-3 shadow-md hover:shadow-lg`}
+                  >
+                    <div className="bg-white/10 p-1.5 rounded">
+                      <Icon className={`w-5 h-5 ${colors.text}`} strokeWidth={2.5} />
+                    </div>
+                    <span className={`text-sm font-semibold ${colors.text}`}>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

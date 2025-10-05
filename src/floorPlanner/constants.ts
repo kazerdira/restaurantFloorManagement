@@ -1,5 +1,5 @@
-import { Circle, Square, Wine, ChefHat, Bath } from 'lucide-react';
-import type { ChairPosition, TableShapeIconMap, TableSize, TableShape, ObjectType, ObjectIconMap } from './types';
+import { Circle, Square, Wine, ChefHat, Bath, DoorOpen, RectangleVertical, Columns, Rows } from 'lucide-react';
+import type { ChairPosition, TableShapeIconMap, TableSize, TableShape, ObjectType, ObjectIconMap, WallType, FixedElementType } from './types';
 
 export const hexagonStyle = `
   .hexagon-shape {
@@ -64,5 +64,65 @@ export const OBJECT_COLORS: Record<ObjectType, { bg: string; border: string; tex
     bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',
     border: 'border-cyan-600',
     text: 'text-cyan-100'
+  }
+};
+
+export const WALL_LABELS: Record<WallType, string> = {
+  wall: 'Wall',
+  door: 'Door',
+  window: 'Window'
+};
+
+export const WALL_ICONS = {
+  wall: RectangleVertical,
+  door: DoorOpen,
+  window: RectangleVertical
+};
+
+export const WALL_COLORS: Record<WallType, { stroke: string; fill: string; hover: string }> = {
+  wall: {
+    stroke: 'stroke-gray-800',
+    fill: 'fill-gray-700',
+    hover: 'hover:stroke-gray-900'
+  },
+  door: {
+    stroke: 'stroke-amber-600',
+    fill: 'fill-amber-500',
+    hover: 'hover:stroke-amber-700'
+  },
+  window: {
+    stroke: 'stroke-blue-600',
+    fill: 'fill-blue-400',
+    hover: 'hover:stroke-blue-700'
+  }
+};
+
+export const FIXED_ELEMENT_LABELS: Record<FixedElementType, string> = {
+  pillar: 'Pillar',
+  column: 'Column',
+  stairs: 'Stairs'
+};
+
+export const FIXED_ELEMENT_ICONS = {
+  pillar: Columns,
+  column: Columns,
+  stairs: Rows
+};
+
+export const FIXED_ELEMENT_COLORS: Record<FixedElementType, { bg: string; border: string; text: string }> = {
+  pillar: {
+    bg: 'bg-gradient-to-br from-gray-600 to-gray-800',
+    border: 'border-gray-700',
+    text: 'text-gray-100'
+  },
+  column: {
+    bg: 'bg-gradient-to-br from-slate-600 to-slate-800',
+    border: 'border-slate-700',
+    text: 'text-slate-100'
+  },
+  stairs: {
+    bg: 'bg-gradient-to-br from-stone-600 to-stone-800',
+    border: 'border-stone-700',
+    text: 'text-stone-100'
   }
 };

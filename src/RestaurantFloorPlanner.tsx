@@ -3,6 +3,8 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ChairComponent } from './floorPlanner/components/Chair';
 import { TableComponent } from './floorPlanner/components/Table';
 import { FloorObjectComponent } from './floorPlanner/components/FloorObject';
+import { WallComponent } from './floorPlanner/components/Wall';
+import { FixedElementComponent } from './floorPlanner/components/FixedElement';
 import { Sidebar } from './floorPlanner/components/Sidebar';
 import { Toolbar } from './floorPlanner/components/Toolbar';
 import {
@@ -14,17 +16,30 @@ import { generateId, resolveTableDimensions } from './floorPlanner/utils';
 import type {
   Chair,
   ChairPosition,
+  FixedElement,
+  FixedElementType,
   Floor,
   FloorObject,
   ObjectType,
   SelectedElement,
   Table,
-  TableSize
+  TableSize,
+  Wall,
+  WallType
 } from './floorPlanner/types';
 
 const RestaurantFloorPlanner: React.FC = () => {
   const [floors, setFloors] = useState<Floor[]>([
-    { id: 'floor-1', name: 'Ground Floor', isActive: true, tables: [], chairs: [], objects: [] }
+    { 
+      id: 'floor-1', 
+      name: 'Ground Floor', 
+      isActive: true, 
+      tables: [], 
+      chairs: [], 
+      objects: [],
+      walls: [],
+      fixedElements: []
+    }
   ]);
   const [currentFloor, setCurrentFloor] = useState<string>('floor-1');
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
@@ -32,6 +47,16 @@ const RestaurantFloorPlanner: React.FC = () => {
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const zoom = 1; // Fixed zoom level
   const [showGrid, setShowGrid] = useState<boolean>(true);
+  
+  // Wall drawing state
+  const [isDrawingWall, setIsDrawingWall] = useState<boolean>(false);
+  const [wallType, setWallType] = useState<WallType | null>(null);
+  const [wallStartPoint, setWallStartPoint] = useState<{ x: number; y: number } | null>(null);
+  const [tempWallEndPoint, setTempWallEndPoint] = useState<{ x: number; y: number } | null>(null);
+  
+  // Wall resizing state
+  const [isResizingWall, setIsResizingWall] = useState<boolean>(false);
+  const [resizingWallHandle, setResizingWallHandle] = useState<'start' | 'end' | null>(null);
   
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragElementRef = useRef<{ id: string; type: string } | null>(null);
@@ -155,6 +180,33 @@ const RestaurantFloorPlanner: React.FC = () => {
               ...floor, 
               tables: floor.tables.filter(t => t.id !== selectedElement.id),
               chairs: floor.chairs.filter(c => c.tableId !== selectedElement.id)
+            }
+          : floor
+      ));
+    } else if (selectedElement.type === 'object') {
+      setFloors(prev => prev.map(floor => 
+        floor.id === currentFloor 
+          ? { 
+              ...floor, 
+              objects: floor.objects.filter(o => o.id !== selectedElement.id)
+            }
+          : floor
+      ));
+    } else if (selectedElement.type === 'wall') {
+      setFloors(prev => prev.map(floor => 
+        floor.id === currentFloor 
+          ? { 
+              ...floor, 
+              walls: floor.walls.filter(w => w.id !== selectedElement.id)
+            }
+          : floor
+      ));
+    } else if (selectedElement.type === 'fixedElement') {
+      setFloors(prev => prev.map(floor => 
+        floor.id === currentFloor 
+          ? { 
+              ...floor, 
+              fixedElements: floor.fixedElements.filter(fe => fe.id !== selectedElement.id)
             }
           : floor
       ));
@@ -283,11 +335,55 @@ const RestaurantFloorPlanner: React.FC = () => {
     updateSelectedTable(table => ({ ...table, name }));
   };
 
-  const handleCanvasClick = () => {
+  const handleCanvasClick = (e: React.MouseEvent) => {
+    if (!canvasRef.current) return;
+    
+    // Don't do anything if we're resizing
+    if (isResizingWall) return;
+    
+    // If we're in wall drawing mode
+    if (isDrawingWall && wallType) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = Math.round(((e.clientX - rect.left) / zoom) / GRID_SIZE) * GRID_SIZE;
+      const y = Math.round(((e.clientY - rect.top) / zoom) / GRID_SIZE) * GRID_SIZE;
+      
+      if (!wallStartPoint) {
+        // First click - set start point
+        setWallStartPoint({ x, y });
+      } else {
+        // Second click - create the wall
+        const floor = getCurrentFloor();
+        if (!floor) return;
+        
+        const newWall: Wall = {
+          id: generateId(),
+          type: wallType,
+          startX: wallStartPoint.x,
+          startY: wallStartPoint.y,
+          endX: x,
+          endY: y,
+          thickness: 8
+        };
+        
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { ...floor, walls: [...floor.walls, newWall] }
+            : floor
+        ));
+        
+        // Reset wall drawing state
+        setWallStartPoint(null);
+        setTempWallEndPoint(null);
+        setIsDrawingWall(false);
+        setWallType(null);
+      }
+      return;
+    }
+    
     setSelectedElement(null);
   };
 
-  const handleElementSelect = (type: 'table' | 'chair' | 'object', id: string) => {
+  const handleElementSelect = (type: 'table' | 'chair' | 'object' | 'wall' | 'fixedElement', id: string) => {
     setSelectedElement({ type, id });
   };
 
@@ -304,10 +400,11 @@ const RestaurantFloorPlanner: React.FC = () => {
     const floor = getCurrentFloor();
     if (!floor) return;
     
-    // Find the element (table or object) being dragged
+    // Find the element (table, object, or fixedElement) being dragged
     const table = floor.tables.find(t => t.id === id);
     const object = floor.objects.find(o => o.id === id);
-    const element = table || object;
+    const fixedElement = floor.fixedElements.find(fe => fe.id === id);
+    const element = table || object || fixedElement;
     
     if (element) {
       setDragOffset({
@@ -317,13 +414,13 @@ const RestaurantFloorPlanner: React.FC = () => {
     }
     
     // Determine the type based on what was found
-    const type = table ? 'table' : object ? 'object' : selectedElement?.type || 'table';
+    const type = table ? 'table' : object ? 'object' : fixedElement ? 'fixedElement' : 'table';
     dragElementRef.current = { id, type };
     setIsDragging(true);
   };
 
   const handleDrag = useCallback((e: MouseEvent) => {
-    if (!isDragging || !dragElementRef.current || !canvasRef.current) return;
+    if ((!isDragging && !isResizingWall) || !dragElementRef.current || !canvasRef.current) return;
     
     // Cancel any pending animation frame
     if (rafRef.current) {
@@ -335,41 +432,85 @@ const RestaurantFloorPlanner: React.FC = () => {
       if (!canvasRef.current) return;
       
       const canvasRect = canvasRef.current.getBoundingClientRect();
-      const x = (e.clientX - canvasRect.left) / zoom - dragOffset.x;
-      const y = (e.clientY - canvasRect.top) / zoom - dragOffset.y;
+      const x = (e.clientX - canvasRect.left) / zoom;
+      const y = (e.clientY - canvasRect.top) / zoom;
       
       const snappedX = Math.round(x / GRID_SIZE) * GRID_SIZE;
       const snappedY = Math.round(y / GRID_SIZE) * GRID_SIZE;
       
-      if (dragElementRef.current?.type === 'table') {
+      if (isResizingWall && dragElementRef.current?.type === 'wall') {
+        // Handle wall resizing
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                walls: floor.walls.map(wall => 
+                  wall.id === dragElementRef.current?.id 
+                    ? resizingWallHandle === 'start'
+                      ? { ...wall, startX: snappedX, startY: snappedY }
+                      : { ...wall, endX: snappedX, endY: snappedY }
+                    : wall
+                )
+              }
+            : floor
+        ));
+      } else if (dragElementRef.current?.type === 'table') {
+        const adjustedX = x - dragOffset.x;
+        const adjustedY = y - dragOffset.y;
+        const tableSnappedX = Math.round(adjustedX / GRID_SIZE) * GRID_SIZE;
+        const tableSnappedY = Math.round(adjustedY / GRID_SIZE) * GRID_SIZE;
+        
         setFloors(prev => prev.map(floor => 
           floor.id === currentFloor 
             ? { 
                 ...floor, 
                 tables: floor.tables.map(table => 
                   table.id === dragElementRef.current?.id 
-                    ? { ...table, x: snappedX, y: snappedY }
+                    ? { ...table, x: tableSnappedX, y: tableSnappedY }
                     : table
                 )
               }
             : floor
         ));
       } else if (dragElementRef.current?.type === 'object') {
+        const adjustedX = x - dragOffset.x;
+        const adjustedY = y - dragOffset.y;
+        const objectSnappedX = Math.round(adjustedX / GRID_SIZE) * GRID_SIZE;
+        const objectSnappedY = Math.round(adjustedY / GRID_SIZE) * GRID_SIZE;
+        
         setFloors(prev => prev.map(floor => 
           floor.id === currentFloor 
             ? { 
                 ...floor, 
                 objects: floor.objects.map(object => 
                   object.id === dragElementRef.current?.id 
-                    ? { ...object, x: snappedX, y: snappedY }
+                    ? { ...object, x: objectSnappedX, y: objectSnappedY }
                     : object
+                )
+              }
+            : floor
+        ));
+      } else if (dragElementRef.current?.type === 'fixedElement') {
+        const adjustedX = x - dragOffset.x;
+        const adjustedY = y - dragOffset.y;
+        const elementSnappedX = Math.round(adjustedX / GRID_SIZE) * GRID_SIZE;
+        const elementSnappedY = Math.round(adjustedY / GRID_SIZE) * GRID_SIZE;
+        
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                fixedElements: floor.fixedElements.map(element => 
+                  element.id === dragElementRef.current?.id 
+                    ? { ...element, x: elementSnappedX, y: elementSnappedY }
+                    : element
                 )
               }
             : floor
         ));
       }
     });
-  }, [isDragging, dragOffset, currentFloor, zoom]);
+  }, [isDragging, isResizingWall, resizingWallHandle, dragOffset, currentFloor, zoom]);
 
   const handleDragEnd = () => {
     // Cancel any pending animation frame
@@ -379,6 +520,19 @@ const RestaurantFloorPlanner: React.FC = () => {
     }
     setIsDragging(false);
     dragElementRef.current = null;
+    
+    // Reset wall resizing state
+    setIsResizingWall(false);
+    setResizingWallHandle(null);
+  };
+
+  const handleWallHandleDrag = (e: React.MouseEvent, wallId: string, handleType: 'start' | 'end') => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setIsResizingWall(true);
+    setResizingWallHandle(handleType);
+    dragElementRef.current = { id: wallId, type: 'wall' };
   };
 
   const addFloor = () => {
@@ -388,7 +542,9 @@ const RestaurantFloorPlanner: React.FC = () => {
       isActive: false,
       tables: [],
       chairs: [],
-      objects: []
+      objects: [],
+      walls: [],
+      fixedElements: []
     };
     setFloors(prev => [...prev, newFloor]);
     switchFloor(newFloor.id);
@@ -417,6 +573,37 @@ const RestaurantFloorPlanner: React.FC = () => {
         ? { ...floor, name: newName }
         : floor
     ));
+  };
+
+  const startWallDrawing = (type: WallType) => {
+    setIsDrawingWall(true);
+    setWallType(type);
+    setWallStartPoint(null);
+    setTempWallEndPoint(null);
+    setSelectedElement(null);
+  };
+
+  const addFixedElement = (type: FixedElementType) => {
+    const floor = getCurrentFloor();
+    if (!floor) return;
+
+    const newElement: FixedElement = {
+      id: generateId(),
+      name: `${type.charAt(0).toUpperCase() + type.slice(1)} ${floor.fixedElements.length + 1}`,
+      type,
+      x: 400 + floor.fixedElements.length * 30,
+      y: 400 + floor.fixedElements.length * 30,
+      width: 60,
+      height: 60,
+      rotation: 0
+    };
+    
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { ...floor, fixedElements: [...floor.fixedElements, newElement] }
+        : floor
+    ));
+    setSelectedElement({ type: 'fixedElement', id: newElement.id });
   };
 
   const saveFloorPlan = () => {
@@ -459,7 +646,9 @@ const RestaurantFloorPlanner: React.FC = () => {
             y: 0
           }
         ],
-        objects: []
+        objects: [],
+        walls: [],
+        fixedElements: []
       }
     ];
     
@@ -473,7 +662,7 @@ const RestaurantFloorPlanner: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => handleDrag(e);
     const handleMouseUp = () => handleDragEnd();
     
-    if (isDragging) {
+    if (isDragging || isResizingWall) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     }
@@ -482,11 +671,38 @@ const RestaurantFloorPlanner: React.FC = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, handleDrag]);
+  }, [isDragging, isResizingWall, handleDrag]);
+
+  // Handle mouse move for wall drawing preview
+  const handleCanvasMouseMove = (e: React.MouseEvent) => {
+    if (isDrawingWall && wallStartPoint && canvasRef.current) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = Math.round(((e.clientX - rect.left) / zoom) / GRID_SIZE) * GRID_SIZE;
+      const y = Math.round(((e.clientY - rect.top) / zoom) / GRID_SIZE) * GRID_SIZE;
+      setTempWallEndPoint({ x, y });
+    }
+  };
+
+  // Handle ESC key to cancel wall drawing
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isDrawingWall) {
+        setIsDrawingWall(false);
+        setWallType(null);
+        setWallStartPoint(null);
+        setTempWallEndPoint(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isDrawingWall]);
 
   const currentFloorData = getCurrentFloor();
   const selectedTable = currentFloorData?.tables.find(t => selectedElement?.type === 'table' && t.id === selectedElement.id);
   const selectedObject = currentFloorData?.objects.find(o => selectedElement?.type === 'object' && o.id === selectedElement.id);
+  const selectedWall = currentFloorData?.walls.find(w => selectedElement?.type === 'wall' && w.id === selectedElement.id);
+  const selectedFixedElement = currentFloorData?.fixedElements.find(fe => selectedElement?.type === 'fixedElement' && fe.id === selectedElement.id);
   const selectedTableChairs = selectedTable
     ? (currentFloorData?.chairs.filter(c => c.tableId === selectedTable.id) ?? [])
     : [];
@@ -505,6 +721,8 @@ const RestaurantFloorPlanner: React.FC = () => {
         onRenameFloor={renameFloor}
         onAddTable={addTable}
         onAddObject={addObject}
+        onStartWallDrawing={startWallDrawing}
+        onAddFixedElement={addFixedElement}
         onRotateTable={rotateTable}
         onDuplicateTable={duplicateTable}
         onRemoveTable={removeElement}
@@ -515,14 +733,74 @@ const RestaurantFloorPlanner: React.FC = () => {
       />
 
       <div className="flex-1 flex flex-col">
+        {/* Wall Drawing Mode Banner */}
+        {isDrawingWall && wallType && (
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 flex items-center justify-between shadow-lg z-50">
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-lg">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                </svg>
+              </div>
+              <div>
+                <div className="font-bold text-lg">
+                  Drawing {wallType === 'wall' ? 'Wall' : wallType === 'door' ? 'Door' : 'Window'}
+                </div>
+                <div className="text-sm text-blue-100">
+                  {!wallStartPoint ? 'Click to set start point' : 'Click to set end point'}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setIsDrawingWall(false);
+                setWallType(null);
+                setWallStartPoint(null);
+                setTempWallEndPoint(null);
+              }}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold transition-colors"
+            >
+              Cancel (ESC)
+            </button>
+          </div>
+        )}
+
+        {/* Wall Resizing Mode Banner */}
+        {isResizingWall && (
+          <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 flex items-center justify-between shadow-lg z-50">
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-lg animate-pulse">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                </svg>
+              </div>
+              <div>
+                <div className="font-bold text-lg">
+                  Resizing Wall
+                </div>
+                <div className="text-sm text-purple-100">
+                  Drag the handle to adjust the {resizingWallHandle} point
+                </div>
+              </div>
+            </div>
+            <div className="text-sm px-4 py-2 bg-white/10 rounded-lg">
+              Release to finish
+            </div>
+          </div>
+        )}
+        
         <Toolbar
           showGrid={showGrid}
           selectedTable={selectedTable ?? null}
           selectedObject={selectedObject ?? null}
+          selectedWall={selectedWall ?? null}
+          selectedFixedElement={selectedFixedElement ?? null}
           selectedTableChairs={selectedTableChairs}
           tableCount={currentFloorData?.tables.length ?? 0}
           chairCount={currentFloorData?.chairs.length ?? 0}
           objectCount={currentFloorData?.objects.length ?? 0}
+          wallCount={currentFloorData?.walls.length ?? 0}
+          fixedElementCount={currentFloorData?.fixedElements.length ?? 0}
           selectedElementType={selectedElement?.type ?? null}
           onToggleGrid={toggleGrid}
           onAddChair={addChair}
@@ -532,12 +810,19 @@ const RestaurantFloorPlanner: React.FC = () => {
           onTableNameChange={handleTableNameChange}
           onObjectNameChange={handleObjectNameChange}
           onObjectResize={handleObjectResize}
+          onRemoveObject={removeElement}
+          onRemoveWall={removeElement}
+          onRemoveFixedElement={removeElement}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">
           <div
             ref={canvasRef}
-            className="w-full h-full relative cursor-crosshair"
+            className={`w-full h-full relative ${
+              isDrawingWall ? 'cursor-crosshair' : 
+              isResizingWall ? 'cursor-grabbing' : 
+              'cursor-default'
+            }`}
             style={{ 
               transform: `scale(${zoom})`,
               transformOrigin: 'top left',
@@ -547,6 +832,7 @@ const RestaurantFloorPlanner: React.FC = () => {
               backgroundSize: `${GRID_SIZE * zoom}px ${GRID_SIZE * zoom}px`
             }}
             onClick={handleCanvasClick}
+            onMouseMove={handleCanvasMouseMove}
           >
             {currentFloorData?.tables.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -584,6 +870,45 @@ const RestaurantFloorPlanner: React.FC = () => {
                 isSelected={selectedElement?.type === 'object' && selectedElement.id === object.id}
                 onSelect={() => handleElementSelect('object', object.id)}
                 onDragStart={(e) => handleDragStart(e, object.id)}
+              />
+            ))}
+
+            {/* Render walls */}
+            {currentFloorData?.walls.map(wall => (
+              <WallComponent
+                key={wall.id}
+                wall={wall}
+                isSelected={selectedElement?.type === 'wall' && selectedElement.id === wall.id}
+                onSelect={() => handleElementSelect('wall', wall.id)}
+                onDragHandle={(e, handleType) => handleWallHandleDrag(e, wall.id, handleType)}
+              />
+            ))}
+
+            {/* Render temporary wall preview while drawing */}
+            {isDrawingWall && wallStartPoint && tempWallEndPoint && wallType && (
+              <WallComponent
+                wall={{
+                  id: 'temp-wall',
+                  type: wallType,
+                  startX: wallStartPoint.x,
+                  startY: wallStartPoint.y,
+                  endX: tempWallEndPoint.x,
+                  endY: tempWallEndPoint.y,
+                  thickness: 8
+                }}
+                isSelected={false}
+                onSelect={() => {}}
+              />
+            )}
+
+            {/* Render fixed elements */}
+            {currentFloorData?.fixedElements.map(element => (
+              <FixedElementComponent
+                key={element.id}
+                element={element}
+                isSelected={selectedElement?.type === 'fixedElement' && selectedElement.id === element.id}
+                onSelect={() => handleElementSelect('fixedElement', element.id)}
+                onDragStart={(e) => handleDragStart(e, element.id)}
               />
             ))}
 

@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, Square } from 'lucide-react';
+import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, Square, Trash2 } from 'lucide-react';
 
-import type { Chair, ChairPosition, Table, TableSize, FloorObject } from '../types';
-import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS } from '../constants';
+import type { Chair, ChairPosition, Table, TableSize, FloorObject, Wall, FixedElement } from '../types';
+import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS, WALL_LABELS, FIXED_ELEMENT_LABELS } from '../constants';
 
 interface ToolbarProps {
   showGrid: boolean;
   selectedTable: Table | null;
   selectedObject: FloorObject | null;
+  selectedWall: Wall | null;
+  selectedFixedElement: FixedElement | null;
   selectedTableChairs: Chair[];
   tableCount: number;
   chairCount: number;
   objectCount: number;
+  wallCount: number;
+  fixedElementCount: number;
   selectedElementType: string | null;
   onToggleGrid: () => void;
   onAddChair: (position: ChairPosition) => void;
@@ -21,6 +25,9 @@ interface ToolbarProps {
   onCustomTableSize: (width: number, height: number) => void;
   onObjectNameChange: (name: string) => void;
   onObjectResize: (width: number, height: number) => void;
+  onRemoveObject: () => void;
+  onRemoveWall: () => void;
+  onRemoveFixedElement: () => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -31,6 +38,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   showGrid,
   selectedTable,
   selectedObject,
+  selectedWall,
+  selectedFixedElement,
   selectedTableChairs,
   onToggleGrid,
   onAddChair,
@@ -40,9 +49,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onCustomTableSize,
   onObjectNameChange,
   onObjectResize,
+  onRemoveObject,
+  onRemoveWall,
+  onRemoveFixedElement,
   tableCount,
   chairCount,
   objectCount,
+  wallCount,
+  fixedElementCount,
   selectedElementType
 }) => {
   const chairMenuRef = useRef<HTMLDivElement | null>(null);
@@ -456,6 +470,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 )}
               </div>
 
+              {/* Delete Object Button */}
+              <button
+                onClick={onRemoveObject}
+                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                title="Delete Object"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Delete</span>
+              </button>
+
               {/* Object Name Input */}
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">Name:</span>
@@ -467,6 +491,60 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                   placeholder="Object name"
                 />
               </div>
+            </>
+          )}
+
+          {/* Wall Controls */}
+          {selectedWall && (
+            <>
+              <div className="w-px h-8 bg-gray-300" />
+
+              {/* Wall Info */}
+              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  {WALL_LABELS[selectedWall.type]}
+                </span>
+                <span className="text-sm text-gray-600">
+                  {Math.round(Math.sqrt(
+                    Math.pow(selectedWall.endX - selectedWall.startX, 2) + 
+                    Math.pow(selectedWall.endY - selectedWall.startY, 2)
+                  ))}px
+                </span>
+              </div>
+
+              {/* Delete Wall Button */}
+              <button
+                onClick={onRemoveWall}
+                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                title="Delete Wall"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Delete</span>
+              </button>
+            </>
+          )}
+
+          {/* Fixed Element Controls */}
+          {selectedFixedElement && (
+            <>
+              <div className="w-px h-8 bg-gray-300" />
+
+              {/* Fixed Element Info */}
+              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  {FIXED_ELEMENT_LABELS[selectedFixedElement.type]}
+                </span>
+              </div>
+
+              {/* Delete Fixed Element Button */}
+              <button
+                onClick={onRemoveFixedElement}
+                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                title="Delete Element"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Delete</span>
+              </button>
             </>
           )}
         </div>
