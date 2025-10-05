@@ -28,6 +28,8 @@ interface ToolbarProps {
   onRemoveObject: () => void;
   onRemoveWall: () => void;
   onRemoveFixedElement: () => void;
+  onChangeWallThickness?: (thickness: number) => void;
+  onConvertWallType?: (type: 'wall' | 'door' | 'window') => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -52,6 +54,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onRemoveObject,
   onRemoveWall,
   onRemoveFixedElement,
+  onChangeWallThickness,
+  onConvertWallType,
   tableCount,
   chairCount,
   objectCount,
@@ -498,6 +502,62 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           {selectedWall && (
             <>
               <div className="w-px h-8 bg-gray-300" />
+
+              {/* Wall Type Converter */}
+              {onConvertWallType && (
+                <div className="flex items-center gap-1 bg-gray-50 border border-gray-300 rounded-lg p-1">
+                  <button
+                    onClick={() => onConvertWallType('wall')}
+                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+                      selectedWall.type === 'wall'
+                        ? 'bg-gray-600 text-white shadow-md'
+                        : 'text-gray-600 hover:bg-gray-200'
+                    }`}
+                    title="Convert to Wall"
+                  >
+                    Wall
+                  </button>
+                  <button
+                    onClick={() => onConvertWallType('door')}
+                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+                      selectedWall.type === 'door'
+                        ? 'bg-amber-600 text-white shadow-md'
+                        : 'text-gray-600 hover:bg-gray-200'
+                    }`}
+                    title="Convert to Door"
+                  >
+                    Door
+                  </button>
+                  <button
+                    onClick={() => onConvertWallType('window')}
+                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+                      selectedWall.type === 'window'
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'text-gray-600 hover:bg-gray-200'
+                    }`}
+                    title="Convert to Window"
+                  >
+                    Window
+                  </button>
+                </div>
+              )}
+
+              {/* Wall Thickness Selector */}
+              {onChangeWallThickness && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-gray-600">Thickness:</span>
+                  <select
+                    value={selectedWall.thickness}
+                    onChange={(e) => onChangeWallThickness(Number(e.target.value))}
+                    className="px-2 py-1 text-sm border border-gray-300 rounded bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value={4}>Thin (4px)</option>
+                    <option value={8}>Normal (8px)</option>
+                    <option value={12}>Thick (12px)</option>
+                    <option value={16}>Very Thick (16px)</option>
+                  </select>
+                </div>
+              )}
 
               {/* Wall Info */}
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">

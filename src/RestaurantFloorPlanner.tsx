@@ -12,7 +12,7 @@ import {
   GRID_SIZE,
   OBJECT_LABELS
 } from './floorPlanner/constants';
-import { generateId, resolveTableDimensions } from './floorPlanner/utils';
+import { generateId, resolveTableDimensions, snapToAxis } from './floorPlanner/utils';
 import type {
   Chair,
   ChairPosition,
@@ -215,6 +215,40 @@ const RestaurantFloorPlanner: React.FC = () => {
     setSelectedElement(null);
   };
 
+  const changeWallThickness = (thickness: number) => {
+    if (!selectedElement || selectedElement.type !== 'wall') return;
+    
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { 
+            ...floor, 
+            walls: floor.walls.map(wall => 
+              wall.id === selectedElement.id 
+                ? { ...wall, thickness }
+                : wall
+            )
+          }
+        : floor
+    ));
+  };
+
+  const convertWallType = (type: WallType) => {
+    if (!selectedElement || selectedElement.type !== 'wall') return;
+    
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { 
+            ...floor, 
+            walls: floor.walls.map(wall => 
+              wall.id === selectedElement.id 
+                ? { ...wall, type }
+                : wall
+            )
+          }
+        : floor
+    ));
+  };
+
   const rotateTable = () => {
     if (!selectedElement || selectedElement.type !== 'table') return;
     
@@ -351,17 +385,20 @@ const RestaurantFloorPlanner: React.FC = () => {
         // First click - set start point
         setWallStartPoint({ x, y });
       } else {
-        // Second click - create the wall
+        // Second click - create the wall with snapped coordinates
         const floor = getCurrentFloor();
         if (!floor) return;
+        
+        // Apply snap to axis for the final wall
+        const snappedEnd = snapToAxis(wallStartPoint, { x, y });
         
         const newWall: Wall = {
           id: generateId(),
           type: wallType,
           startX: wallStartPoint.x,
           startY: wallStartPoint.y,
-          endX: x,
-          endY: y,
+          endX: snappedEnd.x,
+          endY: snappedEnd.y,
           thickness: 8
         };
         
@@ -679,7 +716,10 @@ const RestaurantFloorPlanner: React.FC = () => {
       const rect = canvasRef.current.getBoundingClientRect();
       const x = Math.round(((e.clientX - rect.left) / zoom) / GRID_SIZE) * GRID_SIZE;
       const y = Math.round(((e.clientY - rect.top) / zoom) / GRID_SIZE) * GRID_SIZE;
-      setTempWallEndPoint({ x, y });
+      
+      // Apply snap to axis
+      const snappedPoint = snapToAxis(wallStartPoint, { x, y });
+      setTempWallEndPoint(snappedPoint);
     }
   };
 
@@ -813,6 +853,8 @@ const RestaurantFloorPlanner: React.FC = () => {
           onRemoveObject={removeElement}
           onRemoveWall={removeElement}
           onRemoveFixedElement={removeElement}
+          onChangeWallThickness={changeWallThickness}
+          onConvertWallType={convertWallType}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">

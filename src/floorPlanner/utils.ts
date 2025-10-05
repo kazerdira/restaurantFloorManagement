@@ -30,3 +30,23 @@ export const getNextChairPosition = (
   const candidates: ChairPosition[] = ['top', 'bottom', 'left', 'right'];
   return candidates.find((position) => !occupied.has(position)) ?? null;
 };
+
+/**
+ * Snap wall endpoint to horizontal or vertical axis
+ * Makes drawing walls much easier and more professional
+ */
+export const snapToAxis = (
+  start: { x: number; y: number },
+  end: { x: number; y: number }
+): { x: number; y: number } => {
+  const dx = Math.abs(end.x - start.x);
+  const dy = Math.abs(end.y - start.y);
+
+  // If closer to horizontal, snap to horizontal
+  if (dx > dy) {
+    return { x: end.x, y: start.y };
+  } else {
+    // Snap to vertical
+    return { x: start.x, y: end.y };
+  }
+};
