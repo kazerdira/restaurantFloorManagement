@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layers, Minus, Plus, RotateCw, Save, Trash2, Upload } from 'lucide-react';
+import { Layers, Minus, Plus, RotateCw, Save, Trash2, Upload, LayoutGrid, Package } from 'lucide-react';
 
-import { SIZE_LABELS, TABLE_SHAPES } from '../constants';
+import { SIZE_LABELS, TABLE_SHAPES, OBJECT_ICONS, OBJECT_LABELS, OBJECT_COLORS } from '../constants';
 import type {
   Chair,
   Floor,
-  Table
+  Table,
+  ObjectType
 } from '../types';
 
 interface SidebarProps {
@@ -16,6 +17,7 @@ interface SidebarProps {
   onSwitchFloor: (floorId: string) => void;
   onRenameFloor: (floorId: string, newName: string) => void;
   onAddTable: (shape: Table['shape']) => void;
+  onAddObject: (type: ObjectType) => void;
   onRotateTable: () => void;
   onDuplicateTable: () => void;
   onRemoveTable: () => void;
@@ -35,6 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSwitchFloor,
   onRenameFloor,
   onAddTable,
+  onAddObject,
   onRotateTable,
   onDuplicateTable,
   onRemoveTable,
@@ -45,6 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const [editingFloorId, setEditingFloorId] = React.useState<string | null>(null);
   const [editingFloorName, setEditingFloorName] = React.useState<string>('');
+  const [activeTab, setActiveTab] = React.useState<'tables' | 'objects'>('tables');
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // Focus input when editing starts
@@ -150,21 +154,82 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="text-md font-semibold text-gray-800 mb-3">Add Tables</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {Object.entries(TABLE_SHAPES).map(([shape, Icon]) => (
-            <button
-              key={shape}
-              onClick={() => onAddTable(shape as Table['shape'])}
-              className="p-3 border-2 border-gray-200 rounded-lg hover:border-emerald-400 hover:bg-emerald-50 transition-all flex flex-col items-center gap-2 hover:shadow-md"
-            >
-              <Icon className="w-6 h-6 text-emerald-600" />
-              <span className="text-xs text-gray-700 capitalize font-medium">{shape}</span>
-            </button>
-          ))}
+      {/* Tabs for Tables and Objects */}
+      <div className="border-b border-gray-200">
+        <div className="flex">
+          <button
+            onClick={() => setActiveTab('tables')}
+            className={`flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+              activeTab === 'tables'
+                ? 'bg-white text-emerald-600 border-b-2 border-emerald-600'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <LayoutGrid className="w-4 h-4" />
+            Tables
+          </button>
+          <button
+            onClick={() => setActiveTab('objects')}
+            className={`flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+              activeTab === 'objects'
+                ? 'bg-white text-purple-600 border-b-2 border-purple-600'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            Objects
+          </button>
         </div>
       </div>
+
+      {/* Tables Tab Content */}
+      {activeTab === 'tables' && (
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-md font-semibold text-gray-800 mb-3">Add Tables</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.entries(TABLE_SHAPES).map(([shape, Icon]) => (
+              <button
+                key={shape}
+                onClick={() => onAddTable(shape as Table['shape'])}
+                className="p-3 border-2 border-gray-200 rounded-lg hover:border-emerald-400 hover:bg-emerald-50 transition-all flex flex-col items-center gap-2 hover:shadow-md"
+              >
+                <Icon className="w-6 h-6 text-emerald-600" />
+                <span className="text-xs text-gray-700 capitalize font-medium">{shape}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Objects Tab Content */}
+      {activeTab === 'objects' && (
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-md font-semibold text-gray-800 mb-3">Add Objects</h3>
+          <div className="space-y-3">
+            {(Object.keys(OBJECT_LABELS) as ObjectType[]).map((objectType) => {
+              const Icon = OBJECT_ICONS[objectType];
+              const colors = OBJECT_COLORS[objectType];
+              const label = OBJECT_LABELS[objectType];
+              
+              return (
+                <button
+                  key={objectType}
+                  onClick={() => onAddObject(objectType)}
+                  className={`w-full p-4 ${colors.bg} border-2 ${colors.border} rounded-xl hover:scale-105 transition-all flex items-center gap-3 shadow-lg hover:shadow-xl`}
+                >
+                  <div className="bg-white/20 p-2 rounded-lg">
+                    <Icon className={`w-6 h-6 ${colors.text}`} strokeWidth={2.5} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <span className={`text-base font-bold ${colors.text}`}>{label}</span>
+                    <div className="text-xs text-white/80 mt-0.5">Click to add to floor</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {selectedTable && (
         <div className="p-4 border-b border-gray-200">
@@ -263,3 +328,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </div>
   );
 };
+

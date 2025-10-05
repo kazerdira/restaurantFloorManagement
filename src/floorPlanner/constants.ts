@@ -1,5 +1,5 @@
-import { Circle, Square } from 'lucide-react';
-import type { ChairPosition, TableShapeIconMap, TableSize, TableShape } from './types';
+import { Circle, Square, Wine, ChefHat, Bath } from 'lucide-react';
+import type { ChairPosition, TableShapeIconMap, TableSize, TableShape, ObjectType, ObjectIconMap } from './types';
 
 export const hexagonStyle = `
   .hexagon-shape {
@@ -35,4 +35,34 @@ export const TABLE_SHAPE_LABELS: Record<TableShape, string> = {
   circle: 'Circle',
   rectangle: 'Rectangle',
   hexagon: 'Hexagon'
+};
+
+export const OBJECT_ICONS: ObjectIconMap = {
+  bar: Wine,
+  kitchen: ChefHat,
+  toilet: Bath
+};
+
+export const OBJECT_LABELS: Record<ObjectType, string> = {
+  bar: 'Bar',
+  kitchen: 'Kitchen',
+  toilet: 'Toilet'
+};
+
+export const OBJECT_COLORS: Record<ObjectType, { bg: string; border: string; text: string }> = {
+  bar: {
+    bg: 'bg-gradient-to-br from-purple-500 to-purple-700',
+    border: 'border-purple-600',
+    text: 'text-purple-100'
+  },
+  kitchen: {
+    bg: 'bg-gradient-to-br from-orange-500 to-orange-700',
+    border: 'border-orange-600',
+    text: 'text-orange-100'
+  },
+  toilet: {
+    bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',
+    border: 'border-cyan-600',
+    text: 'text-cyan-100'
+  }
 };

@@ -2,17 +2,21 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 import { ChairComponent } from './floorPlanner/components/Chair';
 import { TableComponent } from './floorPlanner/components/Table';
+import { FloorObjectComponent } from './floorPlanner/components/FloorObject';
 import { Sidebar } from './floorPlanner/components/Sidebar';
 import { Toolbar } from './floorPlanner/components/Toolbar';
 import {
   hexagonStyle,
-  GRID_SIZE
+  GRID_SIZE,
+  OBJECT_LABELS
 } from './floorPlanner/constants';
 import { generateId, resolveTableDimensions } from './floorPlanner/utils';
 import type {
   Chair,
   ChairPosition,
   Floor,
+  FloorObject,
+  ObjectType,
   SelectedElement,
   Table,
   TableSize
@@ -20,7 +24,7 @@ import type {
 
 const RestaurantFloorPlanner: React.FC = () => {
   const [floors, setFloors] = useState<Floor[]>([
-    { id: 'floor-1', name: 'Ground Floor', isActive: true, tables: [], chairs: [] }
+    { id: 'floor-1', name: 'Ground Floor', isActive: true, tables: [], chairs: [], objects: [] }
   ]);
   const [currentFloor, setCurrentFloor] = useState<string>('floor-1');
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
@@ -31,6 +35,7 @@ const RestaurantFloorPlanner: React.FC = () => {
   
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragElementRef = useRef<{ id: string; type: string } | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   const getCurrentFloor = (): Floor | undefined => floors.find(floor => floor.id === currentFloor);
 
@@ -57,6 +62,29 @@ const RestaurantFloorPlanner: React.FC = () => {
         : floor
     ));
     setSelectedElement({ type: 'table', id: newTable.id });
+  };
+
+  const addObject = (type: ObjectType) => {
+    const floor = getCurrentFloor();
+    if (!floor) return;
+
+    const newObject: FloorObject = {
+      id: generateId(),
+      name: `${OBJECT_LABELS[type]} ${floor.objects.length + 1}`,
+      type,
+      x: 300 + floor.objects.length * 30,
+      y: 300 + floor.objects.length * 30,
+      width: 120,
+      height: 80,
+      rotation: 0
+    };
+    
+    setFloors(prev => prev.map(floor => 
+      floor.id === currentFloor 
+        ? { ...floor, objects: [...floor.objects, newObject] }
+        : floor
+    ));
+    setSelectedElement({ type: 'object', id: newObject.id });
   };
 
   const addChair = (position: ChairPosition) => {
@@ -211,6 +239,46 @@ const RestaurantFloorPlanner: React.FC = () => {
     });
   };
 
+  const handleCustomTableSize = (width: number, height: number) => {
+    updateSelectedTable(table => ({
+      ...table,
+      width,
+      height,
+      // Set size to a custom indicator or keep current
+      size: 'medium' as TableSize // Keep a valid size for the interface
+    }));
+  };
+
+  const handleObjectNameChange = (name: string) => {
+    if (!selectedElement || selectedElement.type !== 'object') return;
+    
+    setFloors(prev => prev.map(floor =>
+      floor.id === currentFloor
+        ? {
+            ...floor,
+            objects: floor.objects.map(obj =>
+              obj.id === selectedElement.id ? { ...obj, name } : obj
+            )
+          }
+        : floor
+    ));
+  };
+
+  const handleObjectResize = (width: number, height: number) => {
+    if (!selectedElement || selectedElement.type !== 'object') return;
+    
+    setFloors(prev => prev.map(floor =>
+      floor.id === currentFloor
+        ? {
+            ...floor,
+            objects: floor.objects.map(obj =>
+              obj.id === selectedElement.id ? { ...obj, width, height } : obj
+            )
+          }
+        : floor
+    ));
+  };
+
   const handleTableNameChange = (name: string) => {
     updateSelectedTable(table => ({ ...table, name }));
   };
@@ -219,7 +287,7 @@ const RestaurantFloorPlanner: React.FC = () => {
     setSelectedElement(null);
   };
 
-  const handleElementSelect = (type: 'table' | 'chair', id: string) => {
+  const handleElementSelect = (type: 'table' | 'chair' | 'object', id: string) => {
     setSelectedElement({ type, id });
   };
 
@@ -233,7 +301,14 @@ const RestaurantFloorPlanner: React.FC = () => {
     const x = (e.clientX - rect.left) / zoom;
     const y = (e.clientY - rect.top) / zoom;
     
-    const element = getCurrentFloor()?.tables.find(t => t.id === id);
+    const floor = getCurrentFloor();
+    if (!floor) return;
+    
+    // Find the element (table or object) being dragged
+    const table = floor.tables.find(t => t.id === id);
+    const object = floor.objects.find(o => o.id === id);
+    const element = table || object;
+    
     if (element) {
       setDragOffset({
         x: x - element.x,
@@ -241,37 +316,67 @@ const RestaurantFloorPlanner: React.FC = () => {
       });
     }
     
-    dragElementRef.current = { id, type: selectedElement?.type || 'table' };
+    // Determine the type based on what was found
+    const type = table ? 'table' : object ? 'object' : selectedElement?.type || 'table';
+    dragElementRef.current = { id, type };
     setIsDragging(true);
   };
 
   const handleDrag = useCallback((e: MouseEvent) => {
     if (!isDragging || !dragElementRef.current || !canvasRef.current) return;
     
-    const canvasRect = canvasRef.current.getBoundingClientRect();
-    const x = (e.clientX - canvasRect.left) / zoom - dragOffset.x;
-    const y = (e.clientY - canvasRect.top) / zoom - dragOffset.y;
-    
-    const snappedX = Math.round(x / GRID_SIZE) * GRID_SIZE;
-    const snappedY = Math.round(y / GRID_SIZE) * GRID_SIZE;
-    
-    if (dragElementRef.current.type === 'table') {
-      setFloors(prev => prev.map(floor => 
-        floor.id === currentFloor 
-          ? { 
-              ...floor, 
-              tables: floor.tables.map(table => 
-                table.id === dragElementRef.current?.id 
-                  ? { ...table, x: snappedX, y: snappedY }
-                  : table
-              )
-            }
-          : floor
-      ));
+    // Cancel any pending animation frame
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
     }
+    
+    // Use requestAnimationFrame for smooth updates
+    rafRef.current = requestAnimationFrame(() => {
+      if (!canvasRef.current) return;
+      
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      const x = (e.clientX - canvasRect.left) / zoom - dragOffset.x;
+      const y = (e.clientY - canvasRect.top) / zoom - dragOffset.y;
+      
+      const snappedX = Math.round(x / GRID_SIZE) * GRID_SIZE;
+      const snappedY = Math.round(y / GRID_SIZE) * GRID_SIZE;
+      
+      if (dragElementRef.current?.type === 'table') {
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                tables: floor.tables.map(table => 
+                  table.id === dragElementRef.current?.id 
+                    ? { ...table, x: snappedX, y: snappedY }
+                    : table
+                )
+              }
+            : floor
+        ));
+      } else if (dragElementRef.current?.type === 'object') {
+        setFloors(prev => prev.map(floor => 
+          floor.id === currentFloor 
+            ? { 
+                ...floor, 
+                objects: floor.objects.map(object => 
+                  object.id === dragElementRef.current?.id 
+                    ? { ...object, x: snappedX, y: snappedY }
+                    : object
+                )
+              }
+            : floor
+        ));
+      }
+    });
   }, [isDragging, dragOffset, currentFloor, zoom]);
 
   const handleDragEnd = () => {
+    // Cancel any pending animation frame
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     setIsDragging(false);
     dragElementRef.current = null;
   };
@@ -282,7 +387,8 @@ const RestaurantFloorPlanner: React.FC = () => {
       name: `Floor ${floors.length + 1}`,
       isActive: false,
       tables: [],
-      chairs: []
+      chairs: [],
+      objects: []
     };
     setFloors(prev => [...prev, newFloor]);
     switchFloor(newFloor.id);
@@ -352,7 +458,8 @@ const RestaurantFloorPlanner: React.FC = () => {
             x: 0,
             y: 0
           }
-        ]
+        ],
+        objects: []
       }
     ];
     
@@ -379,6 +486,7 @@ const RestaurantFloorPlanner: React.FC = () => {
 
   const currentFloorData = getCurrentFloor();
   const selectedTable = currentFloorData?.tables.find(t => selectedElement?.type === 'table' && t.id === selectedElement.id);
+  const selectedObject = currentFloorData?.objects.find(o => selectedElement?.type === 'object' && o.id === selectedElement.id);
   const selectedTableChairs = selectedTable
     ? (currentFloorData?.chairs.filter(c => c.tableId === selectedTable.id) ?? [])
     : [];
@@ -396,6 +504,7 @@ const RestaurantFloorPlanner: React.FC = () => {
         onSwitchFloor={switchFloor}
         onRenameFloor={renameFloor}
         onAddTable={addTable}
+        onAddObject={addObject}
         onRotateTable={rotateTable}
         onDuplicateTable={duplicateTable}
         onRemoveTable={removeElement}
@@ -409,15 +518,20 @@ const RestaurantFloorPlanner: React.FC = () => {
         <Toolbar
           showGrid={showGrid}
           selectedTable={selectedTable ?? null}
+          selectedObject={selectedObject ?? null}
           selectedTableChairs={selectedTableChairs}
           tableCount={currentFloorData?.tables.length ?? 0}
           chairCount={currentFloorData?.chairs.length ?? 0}
+          objectCount={currentFloorData?.objects.length ?? 0}
           selectedElementType={selectedElement?.type ?? null}
           onToggleGrid={toggleGrid}
           onAddChair={addChair}
           onRemoveChair={removeChair}
           onChangeTableSize={handleTableSizeChange}
+          onCustomTableSize={handleCustomTableSize}
           onTableNameChange={handleTableNameChange}
+          onObjectNameChange={handleObjectNameChange}
+          onObjectResize={handleObjectResize}
         />
 
         <div className="flex-1 overflow-hidden bg-gray-100 relative">
@@ -459,6 +573,17 @@ const RestaurantFloorPlanner: React.FC = () => {
                 onSelect={() => handleElementSelect('table', table.id)}
                 onDrag={handleDragStart}
                 onDragEnd={handleDragEnd}
+              />
+            ))}
+
+            {/* Render floor objects */}
+            {currentFloorData?.objects.map(object => (
+              <FloorObjectComponent
+                key={object.id}
+                object={object}
+                isSelected={selectedElement?.type === 'object' && selectedElement.id === object.id}
+                onSelect={() => handleElementSelect('object', object.id)}
+                onDragStart={(e) => handleDragStart(e, object.id)}
               />
             ))}
 

@@ -1,21 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Armchair, Eye, EyeOff, Minus, Plus, Square } from 'lucide-react';
+import { Armchair, ChevronRight, Eye, EyeOff, Minus, Plus, Square } from 'lucide-react';
 
-import type { Chair, ChairPosition, Table, TableSize } from '../types';
-import { SIZE_LABELS } from '../constants';
+import type { Chair, ChairPosition, Table, TableSize, FloorObject } from '../types';
+import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS } from '../constants';
 
 interface ToolbarProps {
   showGrid: boolean;
   selectedTable: Table | null;
+  selectedObject: FloorObject | null;
   selectedTableChairs: Chair[];
   tableCount: number;
   chairCount: number;
+  objectCount: number;
   selectedElementType: string | null;
   onToggleGrid: () => void;
   onAddChair: (position: ChairPosition) => void;
   onRemoveChair: (position: ChairPosition) => void;
   onChangeTableSize: (size: TableSize) => void;
   onTableNameChange: (name: string) => void;
+  onCustomTableSize: (width: number, height: number) => void;
+  onObjectNameChange: (name: string) => void;
+  onObjectResize: (width: number, height: number) => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -25,20 +30,32 @@ const sizeOptions: TableSize[] = ['small', 'medium', 'large'];
 export const Toolbar: React.FC<ToolbarProps> = ({
   showGrid,
   selectedTable,
+  selectedObject,
   selectedTableChairs,
   onToggleGrid,
   onAddChair,
   onRemoveChair,
   onChangeTableSize,
   onTableNameChange,
+  onCustomTableSize,
+  onObjectNameChange,
+  onObjectResize,
   tableCount,
   chairCount,
+  objectCount,
   selectedElementType
 }) => {
   const chairMenuRef = useRef<HTMLDivElement | null>(null);
   const sizeMenuRef = useRef<HTMLDivElement | null>(null);
+  const objectSizeMenuRef = useRef<HTMLDivElement | null>(null);
   const [isChairMenuOpen, setIsChairMenuOpen] = useState(false);
   const [isSizeMenuOpen, setIsSizeMenuOpen] = useState(false);
+  const [isObjectSizeMenuOpen, setIsObjectSizeMenuOpen] = useState(false);
+  const [showProSlider, setShowProSlider] = useState(false);
+  const [customWidth, setCustomWidth] = useState(90);
+  const [customHeight, setCustomHeight] = useState(90);
+  const [objectWidth, setObjectWidth] = useState(120);
+  const [objectHeight, setObjectHeight] = useState(80);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,6 +64,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       }
       if (sizeMenuRef.current && !sizeMenuRef.current.contains(event.target as Node)) {
         setIsSizeMenuOpen(false);
+      }
+      if (objectSizeMenuRef.current && !objectSizeMenuRef.current.contains(event.target as Node)) {
+        setIsObjectSizeMenuOpen(false);
       }
     };
 
@@ -58,8 +78,21 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     if (!selectedTable) {
       setIsChairMenuOpen(false);
       setIsSizeMenuOpen(false);
+      setShowProSlider(false);
+    } else {
+      // Update custom sliders when table changes
+      setCustomWidth(selectedTable.width);
+      setCustomHeight(selectedTable.height);
     }
-  }, [selectedTable]);
+    
+    if (!selectedObject) {
+      setIsObjectSizeMenuOpen(false);
+    } else {
+      // Update object sliders when object changes
+      setObjectWidth(selectedObject.width);
+      setObjectHeight(selectedObject.height);
+    }
+  }, [selectedTable, selectedObject]);
 
   return (
     <div className="bg-white border-b border-gray-200 shadow-sm">
@@ -170,30 +203,118 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 </button>
                 
                 {isSizeMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
                     <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-2 text-white">
                       <span className="font-semibold text-sm">Table Size</span>
                     </div>
-                    <div className="p-2 space-y-1">
-                      {sizeOptions.map((sizeOption) => {
-                        const isActive = selectedTable.size === sizeOption;
-                        return (
-                          <button
-                            key={sizeOption}
-                            onClick={() => {
-                              onChangeTableSize(sizeOption);
-                              setIsSizeMenuOpen(false);
-                            }}
-                            className={`w-full text-left px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-                              isActive
-                                ? 'bg-emerald-500 text-white shadow-sm'
-                                : 'text-gray-700 hover:bg-emerald-50'
-                            }`}
-                          >
-                            {sizeLabels[sizeOption]}
-                          </button>
-                        );
-                      })}
+                    
+                    {/* Size Buttons */}
+                    <div className="p-3 space-y-2">
+                      <div className="flex gap-2">
+                        {sizeOptions.map((sizeOption) => {
+                          const isActive = selectedTable.size === sizeOption;
+                          return (
+                            <button
+                              key={sizeOption}
+                              onClick={() => {
+                                onChangeTableSize(sizeOption);
+                                setShowProSlider(false);
+                              }}
+                              className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                                isActive && !showProSlider
+                                  ? 'bg-emerald-500 text-white shadow-sm'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              {sizeLabels[sizeOption]}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      
+                      {/* Pro Mode Toggle */}
+                      <button
+                        onClick={() => setShowProSlider(!showProSlider)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all ${
+                          showProSlider
+                            ? 'bg-purple-500 text-white shadow-sm'
+                            : 'bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 hover:from-purple-200 hover:to-purple-100'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold">Pro Mode</span>
+                          <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Custom</span>
+                        </div>
+                        <ChevronRight className={`w-4 h-4 transition-transform ${showProSlider ? 'rotate-90' : ''}`} />
+                      </button>
+                      
+                      {/* Pro Sliders - Smooth Reveal */}
+                      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        showProSlider ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+                      }`}>
+                        <div className="pt-2 space-y-3 border-t border-gray-200">
+                          {/* Width Slider */}
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Width
+                              </label>
+                              <span className="text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                                {customWidth}px
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="40"
+                              max="200"
+                              step="5"
+                              value={customWidth}
+                              onChange={(e) => {
+                                const newWidth = parseInt(e.target.value);
+                                setCustomWidth(newWidth);
+                                onCustomTableSize(newWidth, customHeight);
+                              }}
+                              className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                              style={{
+                                background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${((customWidth - 40) / 160) * 100}%, rgb(233, 213, 255) ${((customWidth - 40) / 160) * 100}%, rgb(233, 213, 255) 100%)`
+                              }}
+                            />
+                          </div>
+                          
+                          {/* Height Slider */}
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Height
+                              </label>
+                              <span className="text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                                {customHeight}px
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="40"
+                              max="200"
+                              step="5"
+                              value={customHeight}
+                              onChange={(e) => {
+                                const newHeight = parseInt(e.target.value);
+                                setCustomHeight(newHeight);
+                                onCustomTableSize(customWidth, newHeight);
+                              }}
+                              className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                              style={{
+                                background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${((customHeight - 40) / 160) * 100}%, rgb(233, 213, 255) ${((customHeight - 40) / 160) * 100}%, rgb(233, 213, 255) 100%)`
+                              }}
+                            />
+                          </div>
+                          
+                          {/* Info Text */}
+                          <p className="text-xs text-gray-500 italic pt-1">
+                            Drag sliders for precise sizing
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -212,6 +333,142 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               </div>
             </>
           )}
+          
+          {/* Object Controls */}
+          {selectedObject && (
+            <>
+              <div className="w-px h-8 bg-gray-300" />
+
+              {/* Object Size Control */}
+              <div ref={objectSizeMenuRef} className="relative">
+                <button
+                  onClick={() => setIsObjectSizeMenuOpen(!isObjectSizeMenuOpen)}
+                  className={`px-3 py-2 rounded-lg ${
+                    selectedObject.type === 'bar' ? 'bg-gradient-to-r from-purple-500 to-purple-600' :
+                    selectedObject.type === 'kitchen' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
+                    'bg-gradient-to-r from-cyan-500 to-cyan-600'
+                  } text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`}
+                >
+                  {(() => {
+                    const Icon = OBJECT_ICONS[selectedObject.type];
+                    return <Icon className="w-4 h-4" />;
+                  })()}
+                  <span>Resize {OBJECT_LABELS[selectedObject.type]}</span>
+                </button>
+                
+                {isObjectSizeMenuOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
+                    <div className={`${
+                      selectedObject.type === 'bar' ? 'bg-gradient-to-r from-purple-500 to-purple-600' :
+                      selectedObject.type === 'kitchen' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
+                      'bg-gradient-to-r from-cyan-500 to-cyan-600'
+                    } px-4 py-2 text-white`}>
+                      <span className="font-semibold text-sm">Custom Size</span>
+                    </div>
+                    
+                    <div className="p-3 space-y-3">
+                      {/* Width Slider */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Width
+                          </label>
+                          <span className={`text-xs font-mono px-2 py-0.5 rounded ${
+                            selectedObject.type === 'bar' ? 'bg-purple-100 text-purple-700' :
+                            selectedObject.type === 'kitchen' ? 'bg-orange-100 text-orange-700' :
+                            'bg-cyan-100 text-cyan-700'
+                          }`}>
+                            {objectWidth}px
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="60"
+                          max="1000"
+                          step="10"
+                          value={objectWidth}
+                          onChange={(e) => {
+                            const newWidth = parseInt(e.target.value);
+                            setObjectWidth(newWidth);
+                            onObjectResize(newWidth, objectHeight);
+                          }}
+                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                          style={{
+                            background: `linear-gradient(to right, ${
+                              selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
+                              selectedObject.type === 'kitchen' ? 'rgb(249, 115, 22)' :
+                              'rgb(6, 182, 212)'
+                            } 0%, ${
+                              selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
+                              selectedObject.type === 'kitchen' ? 'rgb(249, 115, 22)' :
+                              'rgb(6, 182, 212)'
+                            } ${((objectWidth - 60) / 940) * 100}%, rgb(229, 231, 235) ${((objectWidth - 60) / 940) * 100}%, rgb(229, 231, 235) 100%)`
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Height Slider */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Height
+                          </label>
+                          <span className={`text-xs font-mono px-2 py-0.5 rounded ${
+                            selectedObject.type === 'bar' ? 'bg-purple-100 text-purple-700' :
+                            selectedObject.type === 'kitchen' ? 'bg-orange-100 text-orange-700' :
+                            'bg-cyan-100 text-cyan-700'
+                          }`}>
+                            {objectHeight}px
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="60"
+                          max="1000"
+                          step="10"
+                          value={objectHeight}
+                          onChange={(e) => {
+                            const newHeight = parseInt(e.target.value);
+                            setObjectHeight(newHeight);
+                            onObjectResize(objectWidth, newHeight);
+                          }}
+                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                          style={{
+                            background: `linear-gradient(to right, ${
+                              selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
+                              selectedObject.type === 'kitchen' ? 'rgb(249, 115, 22)' :
+                              'rgb(6, 182, 212)'
+                            } 0%, ${
+                              selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
+                              selectedObject.type === 'kitchen' ? 'rgb(249, 115, 22)' :
+                              'rgb(6, 182, 212)'
+                            } ${((objectHeight - 60) / 940) * 100}%, rgb(229, 231, 235) ${((objectHeight - 60) / 940) * 100}%, rgb(229, 231, 235) 100%)`
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Info Text */}
+                      <p className="text-xs text-gray-500 italic pt-1">
+                        Drag sliders to resize the object
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Object Name Input */}
+              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">Name:</span>
+                <input
+                  type="text"
+                  value={selectedObject.name}
+                  onChange={(event) => onObjectNameChange(event.target.value)}
+                  className="bg-transparent text-sm text-gray-800 font-medium focus:outline-none w-32"
+                  placeholder="Object name"
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Right Section - Stats */}
@@ -224,6 +481,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             <div className="w-3 h-3 bg-amber-600 rounded-full" />
             <span className="text-sm font-medium text-amber-800">Chairs: {chairCount}</span>
           </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-50 rounded-lg">
+            <div className="w-3 h-3 bg-purple-600 rounded-full" />
+            <span className="text-sm font-medium text-purple-800">Objects: {objectCount}</span>
+          </div>
           {selectedElementType && (
             <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
@@ -235,3 +496,4 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     </div>
   );
 };
+
