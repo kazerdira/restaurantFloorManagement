@@ -521,35 +521,132 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(warmLight);
         
       } else if (obj.type === 'kitchen') {
-        // Stainless steel base
-        const kitchenBase = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width, objHeight, obj.height),
-          new THREE.MeshStandardMaterial({
-            color: 0xe0e0e0,
-            roughness: 0.3,
-            metalness: 0.9
-          })
-        );
-        kitchenBase.position.set(baseX, objHeight / 2, baseZ);
-        kitchenBase.rotation.y = rotation;
-        kitchenBase.castShadow = true;
-        scene.add(kitchenBase);
+        // === PROFESSIONAL COMMERCIAL KITCHEN ===
+        const kitchenGroup = new THREE.Group();
         
-        // Butcher block countertop
-        const kitchenTop = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width + 4, 5, obj.height + 4),
+        // === MATERIALS ===
+        const steelMat = new THREE.MeshPhysicalMaterial({
+          color: 0xb0b0b0,
+          metalness: 1.0,
+          roughness: 0.25,
+          envMapIntensity: 1.0,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.05,
+        });
+
+        const glassMat = new THREE.MeshPhysicalMaterial({
+          color: 0x99ccff,
+          roughness: 0.05,
+          transmission: 0.9,
+          thickness: 0.5,
+          metalness: 0.1,
+          envMapIntensity: 1.2,
+        });
+
+        // === COUNTERTOP (stainless steel base) ===
+        const counter = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width, 50, obj.height),
+          steelMat
+        );
+        counter.position.set(0, 25, 0);
+        counter.castShadow = true;
+        counter.receiveShadow = true;
+        kitchenGroup.add(counter);
+
+        // === GLASS COVER on countertop ===
+        const glassTop = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width, 4, obj.height),
+          glassMat
+        );
+        glassTop.position.set(0, 52, 0);
+        kitchenGroup.add(glassTop);
+
+        // === STOVE AREA (dark cooking surface) ===
+        const stove = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.4, 10, obj.height * 0.6),
+          new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.4 })
+        );
+        stove.position.set(-obj.width * 0.2, 55, 0);
+        kitchenGroup.add(stove);
+
+        // === STOVE BURNERS (4 metal burners) ===
+        const burnerMat = new THREE.MeshStandardMaterial({ 
+          color: 0x333333, 
+          metalness: 0.8, 
+          roughness: 0.2 
+        });
+        const burnerPositions = [
+          [-obj.width * 0.25, obj.height * 0.15],
+          [-obj.width * 0.15, obj.height * 0.15],
+          [-obj.width * 0.25, -obj.height * 0.15],
+          [-obj.width * 0.15, -obj.height * 0.15],
+        ];
+        burnerPositions.forEach(([bx, bz]) => {
+          const burner = new THREE.Mesh(
+            new THREE.CylinderGeometry(6, 6, 2, 32), 
+            burnerMat
+          );
+          burner.rotation.x = Math.PI / 2;
+          burner.position.set(bx, 61, bz);
+          kitchenGroup.add(burner);
+        });
+
+        // === RANGE HOOD (exhaust fan above stove) ===
+        const hood = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.5, 35, obj.height * 0.65),
           new THREE.MeshPhysicalMaterial({
-            color: 0xc85a28,
-            roughness: 0.4,
-            metalness: 0.1,
-            clearcoat: 0.6,
-            clearcoatRoughness: 0.3
+            color: 0xc0c0c0,
+            metalness: 1.0,
+            roughness: 0.2,
+            envMapIntensity: 1.1,
           })
         );
-        kitchenTop.position.set(baseX, objHeight + 2.5, baseZ);
-        kitchenTop.rotation.y = rotation;
-        kitchenTop.castShadow = true;
-        scene.add(kitchenTop);
+        hood.position.set(-obj.width * 0.2, 95, 0);
+        hood.castShadow = true;
+        kitchenGroup.add(hood);
+
+        // === SHELVES (3 wall-mounted shelves) ===
+        const shelfMat = new THREE.MeshPhysicalMaterial({
+          color: 0xdddddd,
+          roughness: 0.3,
+          metalness: 0.5,
+        });
+        for (let i = 0; i < 3; i++) {
+          const shelf = new THREE.Mesh(
+            new THREE.BoxGeometry(obj.width * 0.7, 4, obj.height * 0.2),
+            shelfMat
+          );
+          shelf.position.set(obj.width * 0.15, 75 + i * 22, obj.height * 0.35);
+          shelf.castShadow = true;
+          kitchenGroup.add(shelf);
+        }
+
+        // === CABINET HANDLES ===
+        const handleMat = new THREE.MeshStandardMaterial({ 
+          color: 0x888888, 
+          metalness: 0.9, 
+          roughness: 0.2 
+        });
+        for (let i = -1; i <= 1; i++) {
+          const handle = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.5, 1.5, 15, 16), 
+            handleMat
+          );
+          handle.rotation.z = Math.PI / 2;
+          handle.position.set(i * obj.width * 0.2, 35, obj.height * 0.45);
+          kitchenGroup.add(handle);
+        }
+
+        // === OVERHEAD LIGHTS ===
+        const kitchenLight = new THREE.PointLight(0xffffff, 1.5, 400);
+        kitchenLight.position.set(0, 140, 0);
+        kitchenLight.castShadow = true;
+        kitchenGroup.add(kitchenLight);
+
+        // === Position the entire kitchen ===
+        kitchenGroup.position.set(baseX, 0, baseZ);
+        kitchenGroup.rotation.y = rotation;
+        scene.add(kitchenGroup);
         
       } else if (obj.type === 'toilet') {
         // Ceramic tile base
