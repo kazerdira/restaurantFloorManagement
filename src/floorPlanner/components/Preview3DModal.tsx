@@ -148,39 +148,143 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(handle);
         
       } else if (wall.type === 'window') {
-        // Brushed metal frame (darker)
-        const frame = new THREE.Mesh(
-          new THREE.BoxGeometry(length, wallHeight, wall.thickness + 2),
-          new THREE.MeshStandardMaterial({
-            color: 0x222222,
-            metalness: 0.9,
-            roughness: 0.3
-          })
-        );
-        frame.position.set(baseX, wallHeight / 2, baseZ);
-        frame.rotation.y = -angle;
-        frame.castShadow = true;
-        scene.add(frame);
+        // === REALISTIC ARCHITECTURAL WINDOW (With top wall section) ===
         
-        // Ultra-realistic glass with clearcoat and refraction
-        const glass = new THREE.Mesh(
-          new THREE.BoxGeometry(length * 0.9, wallHeight * 0.7, wall.thickness * 0.5),
-          new THREE.MeshPhysicalMaterial({
-            color: 0xaedcff,
-            metalness: 0.1,
-            roughness: 0.02,
-            transmission: 1.0, // true glass effect
-            thickness: 0.8,
-            envMapIntensity: 1.5,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.05,
-            reflectivity: 1.0,
-            ior: 1.45 // refractive index of glass
-          })
+        // Use standard size if length is too small
+        const windowLength = length > 20 ? length : 120;
+        const windowHeight = wallHeight;
+
+        // HEIGHT RATIOS
+        const h1 = windowHeight * 0.25;  // bottom wall/sill (increased)
+        const h2 = windowHeight * 0.50;  // main window area
+        const h3 = windowHeight * 0.10;  // top transom
+        const h4 = windowHeight * 0.30;  // top wall section
+
+        // === MATERIALS ===
+        const wallMat = new THREE.MeshStandardMaterial({
+          color: 0xe8e8e8,
+          roughness: 0.85,
+          metalness: 0.05
+        });
+
+        // Dark aluminum/black frame for contrast
+        const frameMat = new THREE.MeshPhysicalMaterial({
+          color: 0x2a2a2a,
+          metalness: 0.95,
+          roughness: 0.2,
+          clearcoat: 0.8,
+          clearcoatRoughness: 0.1,
+        });
+
+        // Realistic glass - visible but transparent with subtle blue tint
+        const glassMat = new THREE.MeshPhysicalMaterial({
+          color: 0xe6f2ff,
+          transparent: true,
+          opacity: 0.4,
+          transmission: 0.85,
+          thickness: 1.5,
+          roughness: 0.05,
+          metalness: 0.05,
+          ior: 1.52,
+          envMapIntensity: 1.0,
+          clearcoat: 0.8,
+          clearcoatRoughness: 0.1,
+          reflectivity: 0.5,
+        });
+
+        // === BOTTOM WALL/SILL ===
+        const sill = new THREE.Mesh(
+          new THREE.BoxGeometry(windowLength, h1, wall.thickness),
+          wallMat
         );
-        glass.position.set(baseX, wallHeight / 2, baseZ);
-        glass.rotation.y = -angle;
-        scene.add(glass);
+        sill.position.set(baseX, h1 / 2, baseZ);
+        sill.rotation.y = -angle;
+        sill.receiveShadow = true;
+        sill.castShadow = true;
+        scene.add(sill);
+
+        // === MAIN WINDOW AREA ===
+        const winY = h1 + h2 / 2;
+        const frameThickness = 4;
+        const numPanes = Math.max(2, Math.floor(windowLength / 80)); // At least 2 panes
+        const paneWidth = (windowLength - frameThickness * (numPanes + 1)) / numPanes;
+
+        // Individual glass panes WITH PROPER POSITIONING
+        for (let i = 0; i < numPanes; i++) {
+          const paneX = -windowLength / 2 + frameThickness + paneWidth / 2 + i * (paneWidth + frameThickness);
+          const localX = baseX + paneX * Math.cos(-angle);
+          const localZ = baseZ + paneX * Math.sin(-angle);
+
+          // Glass pane (positioned INSIDE the frame)
+          const glass = new THREE.Mesh(
+            new THREE.BoxGeometry(paneWidth - 2, h2 - frameThickness * 2, 1),
+            glassMat
+          );
+          glass.position.set(localX, winY, localZ);
+          glass.rotation.y = -angle;
+          glass.castShadow = false;
+          glass.receiveShadow = false;
+          scene.add(glass);
+
+          // Vertical divider (except after last pane)
+          if (i < numPanes - 1) {
+            const divX = -windowLength / 2 + frameThickness + (i + 1) * paneWidth + (i + 0.5) * frameThickness;
+            const divLocalX = baseX + divX * Math.cos(-angle);
+            const divLocalZ = baseZ + divX * Math.sin(-angle);
+            
+            const divider = new THREE.Mesh(
+              new THREE.BoxGeometry(frameThickness, h2, wall.thickness + 3),
+              frameMat
+            );
+            divider.position.set(divLocalX, winY, divLocalZ);
+            divider.rotation.y = -angle;
+            divider.castShadow = true;
+            scene.add(divider);
+          }
+        }
+
+        // === TOP TRANSOM WINDOW ===
+        const topY = h1 + h2 + h3 / 2;
+
+        const transomGlass = new THREE.Mesh(
+          new THREE.BoxGeometry(windowLength - frameThickness * 2, h3 - frameThickness, 1),
+          glassMat
+        );
+        transomGlass.position.set(baseX, topY, baseZ);
+        transomGlass.rotation.y = -angle;
+        transomGlass.castShadow = false;
+        scene.add(transomGlass);
+        
+        // Transom frame (between main window and transom)
+        const transomFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(windowLength, frameThickness, wall.thickness + 2),
+          frameMat
+        );
+        transomFrame.position.set(baseX, h1 + h2 + frameThickness / 2, baseZ);
+        transomFrame.rotation.y = -angle;
+        transomFrame.castShadow = true;
+        scene.add(transomFrame);
+
+        // Frame between transom and top wall
+        const transomTopFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(windowLength, frameThickness, wall.thickness + 2),
+          frameMat
+        );
+        transomTopFrame.position.set(baseX, h1 + h2 + h3 + frameThickness / 2, baseZ);
+        transomTopFrame.rotation.y = -angle;
+        transomTopFrame.castShadow = true;
+        scene.add(transomTopFrame);
+
+        // === TOP WALL SECTION (same material as regular wall) ===
+        const topWall = new THREE.Mesh(
+          new THREE.BoxGeometry(windowLength, h4, wall.thickness),
+          wallMat
+        );
+        topWall.position.set(baseX, h1 + h2 + h3 + h4 / 2, baseZ);
+        topWall.rotation.y = -angle;
+        topWall.castShadow = true;
+        topWall.receiveShadow = true;
+        scene.add(topWall);
         
       } else {
         // Light wall
@@ -274,7 +378,6 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
 
     // OBJECTS (Bar, Kitchen, Toilet) - Ultra-realistic materials
     floor.objects.forEach(obj => {
-      const objHeight = 40;
       const baseX = obj.x - 400 + obj.width / 2;
       const baseZ = -(obj.y - 400 + obj.height / 2);
       const rotation = -(obj.rotation * Math.PI / 180);
