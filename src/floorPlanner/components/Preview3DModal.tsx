@@ -93,59 +93,151 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     floor.walls.forEach(wall => {
       const length = Math.sqrt(Math.pow(wall.endX - wall.startX, 2) + Math.pow(wall.endY - wall.startY, 2));
       const angle = Math.atan2(wall.endY - wall.startY, wall.endX - wall.startX);
-      const wallHeight = wall.type === 'wall' ? 120 : 80; // Increased standard wall height from 100 to 120
+      const wallHeight = wall.type === 'window' ? 80 : 120; // Windows are 80, walls and doors are 120
       const baseX = wall.startX + (wall.endX - wall.startX) / 2 - 400;
       const baseZ = -(wall.startY + (wall.endY - wall.startY) / 2 - 400);
       
       if (wall.type === 'door') {
-        // Dark metal door frame
-        const frame = new THREE.Mesh(
-          new THREE.BoxGeometry(length, wallHeight, wall.thickness + 4),
-          new THREE.MeshStandardMaterial({ 
-            color: 0x2a2a2a, 
-            roughness: 0.5, 
-            metalness: 0.6 
-          })
+        // === RESTAURANT DOUBLE GLASS DOOR ===
+        const doorGroup = new THREE.Group();
+        const doorWidth = length; // Full wall width
+        const doorHeight = wallHeight; // Full wall height
+        const doorThickness = wall.thickness * 0.8;
+
+        // === FRAME (dark wood or metal) ===
+        const frameMat = new THREE.MeshStandardMaterial({
+          color: 0x3a2e25, // dark stained wood
+          roughness: 0.9,
+          metalness: 0.0,
+        });
+
+        const frameThickness = 8;
+
+        // Frame sides, top, and bottom - adjusted to fit within wall height
+        const topFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(doorWidth, frameThickness, wall.thickness + 4),
+          frameMat
         );
-        frame.position.set(baseX, wallHeight / 2, baseZ);
-        frame.rotation.y = -angle;
-        frame.castShadow = true;
-        scene.add(frame);
-        
-        // Realistic wood door with clearcoat
-        const door = new THREE.Mesh(
-          new THREE.BoxGeometry(length * 0.9, wallHeight * 0.9, wall.thickness),
-          new THREE.MeshPhysicalMaterial({
-            color: 0x8b5a2b,
-            roughness: 0.6,
-            metalness: 0.1,
-            clearcoat: 0.2,
-            sheen: 0.5,
-            sheenColor: new THREE.Color(0xb67c3a)
-          })
+        topFrame.position.y = doorHeight / 2 - frameThickness / 2;
+        doorGroup.add(topFrame);
+
+        const bottomFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(doorWidth, frameThickness, wall.thickness + 4),
+          frameMat
         );
-        door.position.set(baseX, wallHeight * 0.45, baseZ);
-        door.rotation.y = -angle;
-        door.castShadow = true;
-        scene.add(door);
-        
-        // Chrome cylindrical handle
-        const handle = new THREE.Mesh(
-          new THREE.CylinderGeometry(1, 1, 10, 16),
-          new THREE.MeshStandardMaterial({ 
-            color: 0xd4af37, 
-            metalness: 1.0, 
-            roughness: 0.2 
-          })
+        bottomFrame.position.y = -doorHeight / 2 + frameThickness / 2;
+        doorGroup.add(bottomFrame);
+
+        const leftFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(frameThickness, doorHeight, wall.thickness + 4),
+          frameMat
         );
-        handle.rotation.z = Math.PI / 2;
-        handle.position.set(
-          baseX + Math.cos(-angle) * (length * 0.35),
-          wallHeight * 0.45,
-          baseZ + Math.sin(-angle) * (length * 0.35)
-        );
-        handle.castShadow = true;
-        scene.add(handle);
+        leftFrame.position.x = -doorWidth / 2 + frameThickness / 2;
+        doorGroup.add(leftFrame);
+
+        const rightFrame = leftFrame.clone();
+        rightFrame.position.x = doorWidth / 2 - frameThickness / 2;
+        doorGroup.add(rightFrame);
+
+        // === LEFT + RIGHT DOOR PANELS ===
+        const doorMat = new THREE.MeshStandardMaterial({
+          color: 0x4e342e, // warm brown
+          roughness: 0.85,
+          metalness: 0.0,
+        });
+
+        const glassMat = new THREE.MeshStandardMaterial({
+          color: 0x9eb3b5, // subtle bluish-gray tint
+          transparent: true,
+          opacity: 0.5,     // semi-transparent
+          roughness: 0.95,  // frosted effect
+          metalness: 0.0,   // no mirror reflection
+        });
+
+        const singleDoorWidth = (doorWidth - frameThickness * 2 - 4) / 2;
+        const doorPanelHeight = doorHeight - frameThickness * 2 - 4; // Fit within top and bottom frame
+
+        const makeDoor = (xOffset: number) => {
+          const group = new THREE.Group();
+
+          // Wood border
+          const doorBorder = new THREE.Mesh(
+            new THREE.BoxGeometry(singleDoorWidth, doorPanelHeight, doorThickness),
+            doorMat
+          );
+          group.add(doorBorder);
+
+          // Glass inset (center window)
+          const glass = new THREE.Mesh(
+            new THREE.PlaneGeometry(singleDoorWidth * 0.8, doorPanelHeight * 0.85),
+            glassMat
+          );
+          glass.position.set(0, 0, doorThickness / 2 + 0.1);
+          group.add(glass);
+
+          // Handle (simple vertical metal bar)
+          const handleMat = new THREE.MeshStandardMaterial({
+            color: 0x888888,
+            metalness: 0.4,
+            roughness: 0.7,
+          });
+
+          const handle = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.6, 0.6, 12, 12),
+            handleMat
+          );
+          handle.rotation.z = Math.PI / 2;
+          handle.position.set(xOffset > 0 ? -singleDoorWidth * 0.35 : singleDoorWidth * 0.35, 0, doorThickness / 2 + 1.5);
+          group.add(handle);
+
+          group.position.x = xOffset;
+          return group;
+        };
+
+        // Left & Right doors
+        const leftDoor = makeDoor(-singleDoorWidth / 2);
+        const rightDoor = makeDoor(singleDoorWidth / 2);
+        doorGroup.add(leftDoor);
+        doorGroup.add(rightDoor);
+
+        // === WELCOME SIGN ===
+        const signHeight = 14;
+        const signGeometry = new THREE.PlaneGeometry(doorWidth * 0.9, signHeight);
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+          // Draw wooden background
+          ctx.fillStyle = '#3a2e25';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Draw text
+          ctx.font = 'bold 60px Arial';
+          ctx.fillStyle = '#f5d590'; // warm golden lettering
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('WELCOME', canvas.width / 2, canvas.height / 2);
+        }
+
+        const signTexture = new THREE.CanvasTexture(canvas);
+        const signMaterial = new THREE.MeshStandardMaterial({
+          map: signTexture,
+          roughness: 0.8,
+          metalness: 0.1,
+        });
+
+        const sign = new THREE.Mesh(signGeometry, signMaterial);
+        sign.position.set(0, doorHeight / 2 - frameThickness - signHeight / 2 - 4, wall.thickness / 2 + 2);
+        doorGroup.add(sign);
+
+        // === FINAL POSITIONING ===
+        doorGroup.position.set(baseX, doorHeight / 2, baseZ);
+        doorGroup.rotation.y = -angle;
+        doorGroup.castShadow = true;
+        doorGroup.receiveShadow = true;
+        scene.add(doorGroup);
         
       } else if (wall.type === 'window') {
         // === REALISTIC ARCHITECTURAL WINDOW (With top wall section) ===
@@ -752,30 +844,25 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(kitchenGroup);
         
       } else if (obj.type === 'toilet') {
-        // === LUXURY TOILET ROOM ===
         const toiletGroup = new THREE.Group();
 
-        // === MATERIALS ===
-        const marbleMat = new THREE.MeshPhysicalMaterial({
-          color: 0xd5d5da, // Subtle grey-blue for definition
-          roughness: 0.25,
+        // === MATERIALS (no excessive reflections) ===
+        const marbleMat = new THREE.MeshStandardMaterial({
+          color: 0xd5d5da,
+          roughness: 0.7,
+          metalness: 0.05,
+        });
+
+        const doorMat = new THREE.MeshStandardMaterial({
+          color: 0x3b82f6,
+          roughness: 0.6,
           metalness: 0.1,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.05,
         });
 
-        const doorMat = new THREE.MeshPhysicalMaterial({
-          color: 0x3b82f6, // rich blue tone
-          roughness: 0.35,
-          metalness: 0.2,
-          clearcoat: 0.6,
-        });
-
-        const glassMirrorMat = new THREE.MeshPhysicalMaterial({
-          color: 0xffffff,
-          metalness: 1.0,
-          roughness: 0.05,
-          envMapIntensity: 1.5,
+        const door2Mat = new THREE.MeshStandardMaterial({
+          color: 0xef4444,
+          roughness: 0.6,
+          metalness: 0.1,
         });
 
         const tileFloorMat = new THREE.MeshStandardMaterial({
@@ -784,7 +871,6 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
           metalness: 0.05,
         });
 
-        // === ROOM DIMENSIONS ===
         const roomHeight = 120;
 
         // === FLOOR ===
@@ -796,7 +882,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         floor.receiveShadow = true;
         toiletGroup.add(floor);
 
-        // === WALLS ===
+        // === BACK WALL ===
         const backWall = new THREE.Mesh(
           new THREE.BoxGeometry(obj.width, roomHeight, 6), 
           marbleMat
@@ -805,6 +891,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         backWall.castShadow = true;
         toiletGroup.add(backWall);
 
+        // === SIDE WALLS ===
         const leftWall = new THREE.Mesh(
           new THREE.BoxGeometry(6, roomHeight, obj.height), 
           marbleMat
@@ -821,63 +908,120 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         rightWall.castShadow = true;
         toiletGroup.add(rightWall);
 
-        // === DOOR (Blue) ===
+        // === FRONT WALL STRUCTURE ===
+        // Center divider
+        const centerDivider = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.24, roomHeight, 6), 
+          marbleMat
+        );
+        centerDivider.position.set(0, roomHeight / 2, obj.height / 2);
+        centerDivider.castShadow = true;
+        toiletGroup.add(centerDivider);
+
+        // Left side section
+        const leftSection = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.055, roomHeight, 6), 
+          marbleMat
+        );
+        leftSection.position.set(-obj.width * 0.4725, roomHeight / 2, obj.height / 2);
+        leftSection.castShadow = true;
+        toiletGroup.add(leftSection);
+
+        // Right side section
+        const rightSection = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.055, roomHeight, 6), 
+          marbleMat
+        );
+        rightSection.position.set(obj.width * 0.4725, roomHeight / 2, obj.height / 2);
+        rightSection.castShadow = true;
+        toiletGroup.add(rightSection);
+
+        // Wall above right door (blue) - LARGER DOOR = 95 height, 33% width
+        const rightTopWall = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.33, roomHeight - 95, 6), 
+          marbleMat
+        );
+        rightTopWall.position.set(obj.width * 0.285, 95 + (roomHeight - 95) / 2, obj.height / 2);
+        rightTopWall.castShadow = true;
+        toiletGroup.add(rightTopWall);
+
+        // Wall above left door (red)
+        const leftTopWall = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.33, roomHeight - 95, 6), 
+          marbleMat
+        );
+        leftTopWall.position.set(-obj.width * 0.285, 95 + (roomHeight - 95) / 2, obj.height / 2);
+        leftTopWall.castShadow = true;
+        toiletGroup.add(leftTopWall);
+
+        // === DOORS (LARGER - 33% width, 95 height) ===
+        // Right door (Blue)
         const door = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width * 0.25, 85, 4), 
+          new THREE.BoxGeometry(obj.width * 0.33, 95, 4), 
           doorMat
         );
-        door.position.set(obj.width * 0.3, 42, obj.height / 2 - 2);
+        door.position.set(obj.width * 0.285, 47.5, obj.height / 2 - 2);
         door.castShadow = true;
         toiletGroup.add(door);
 
-        // Door handle (gold)
         const handleMat = new THREE.MeshStandardMaterial({ 
-          color: 0xffd700, 
-          metalness: 1.0, 
-          roughness: 0.2 
+          color: 0xd4af37, 
+          metalness: 0.1, 
+          roughness: 0.8 
         });
         const handle = new THREE.Mesh(
-          new THREE.CylinderGeometry(1.5, 1.5, 10, 16),
+          new THREE.CylinderGeometry(1.5, 1.5, 12, 16),
           handleMat
         );
         handle.rotation.z = Math.PI / 2;
-        handle.position.set(obj.width * 0.2, 42, obj.height / 2 - 4);
+        handle.position.set(obj.width * 0.285 - (obj.width * 0.132), 47.5, obj.height / 2 + 1);
         toiletGroup.add(handle);
 
-        // === SECOND DOOR (Red) ===
-        const door2Mat = new THREE.MeshPhysicalMaterial({
-          color: 0xef4444, // red tone
-          roughness: 0.35,
-          metalness: 0.2,
-          clearcoat: 0.6,
-        });
+        // Left door (Red)
         const door2 = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width * 0.25, 85, 4),
+          new THREE.BoxGeometry(obj.width * 0.33, 95, 4),
           door2Mat
         );
-        door2.position.set(-obj.width * 0.3, 42, obj.height / 2 - 2);
+        door2.position.set(-obj.width * 0.285, 47.5, obj.height / 2 - 2);
         door2.castShadow = true;
         toiletGroup.add(door2);
 
         const handle2 = handle.clone();
-        handle2.position.set(-obj.width * 0.2, 42, obj.height / 2 - 4);
+        handle2.position.set(-obj.width * 0.285 + (obj.width * 0.132), 47.5, obj.height / 2 + 1);
         toiletGroup.add(handle2);
 
-        // === MIRROR ===
-        const mirror = new THREE.Mesh(
-          new THREE.PlaneGeometry(obj.width * 0.4, 40), 
-          glassMirrorMat
+        // === W.C. SIGN ===
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#d5d5da';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#2a2a2a';
+          ctx.font = 'bold 140px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('W.C.', canvas.width / 2, canvas.height / 2);
+        }
+        
+        const wcTexture = new THREE.CanvasTexture(canvas);
+        const wcSign = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.width * 0.4, obj.width * 0.2),
+          new THREE.MeshStandardMaterial({ 
+            map: wcTexture,
+            roughness: 0.5,
+            metalness: 0.05
+          })
         );
-        mirror.position.set(0, 70, -obj.height / 2 + 3);
-        toiletGroup.add(mirror);
+        wcSign.position.set(0, 100, -obj.height / 2 + 3.5);
+        toiletGroup.add(wcSign);
 
         // === SINK COUNTER ===
-        const counterMat = new THREE.MeshPhysicalMaterial({
+        const counterMat = new THREE.MeshStandardMaterial({
           color: 0xf5f5f5,
-          metalness: 0.2,
-          roughness: 0.3,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.1,
+          metalness: 0.1,
+          roughness: 0.5,
         });
         const counter = new THREE.Mesh(
           new THREE.BoxGeometry(obj.width * 0.5, 12, obj.height * 0.25), 
@@ -887,13 +1031,11 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         counter.castShadow = true;
         toiletGroup.add(counter);
 
-        // === SINK BASIN (white ceramic) ===
-        const sinkMat = new THREE.MeshPhysicalMaterial({
+        // === SINK BASIN ===
+        const sinkMat = new THREE.MeshStandardMaterial({
           color: 0xffffff,
-          roughness: 0.2,
+          roughness: 0.3,
           metalness: 0.05,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.05,
         });
         const sink = new THREE.Mesh(
           new THREE.CylinderGeometry(12, 12, 6, 32), 
@@ -902,11 +1044,11 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         sink.position.set(0, 40, -obj.height * 0.3);
         toiletGroup.add(sink);
 
-        // === FAUCET (chrome) ===
-        const faucetMat = new THREE.MeshPhysicalMaterial({
-          color: 0xcccccc,
-          metalness: 1.0,
-          roughness: 0.15,
+        // === FAUCET ===
+        const faucetMat = new THREE.MeshStandardMaterial({
+          color: 0xc0c0c0,
+          metalness: 0.1,
+          roughness: 0.8,
         });
         const faucet = new THREE.Mesh(
           new THREE.TorusGeometry(4, 1, 8, 24, Math.PI),
@@ -916,15 +1058,63 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         faucet.position.set(0, 48, -obj.height * 0.35);
         toiletGroup.add(faucet);
 
-        // === LIGHTING ===
-        const softLight = new THREE.PointLight(0xffffff, 0.8, 300);
-        softLight.position.set(0, roomHeight - 15, 0);
-        softLight.castShadow = true;
-        toiletGroup.add(softLight);
+        // === TOILET BOWL ===
+        const toiletMat = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.25,
+          metalness: 0.05,
+        });
 
-        const warmAccent = new THREE.PointLight(0xffcc88, 0.4, 200);
-        warmAccent.position.set(-obj.width * 0.25, 60, obj.height * 0.25);
-        toiletGroup.add(warmAccent);
+        const toiletBowl = new THREE.Mesh(
+          new THREE.CylinderGeometry(10, 8, 12, 32),
+          toiletMat
+        );
+        toiletBowl.position.set(-obj.width * 0.25, 6, obj.height * 0.25);
+        toiletGroup.add(toiletBowl);
+
+        const toiletSeat = new THREE.Mesh(
+          new THREE.TorusGeometry(9, 2, 16, 32),
+          toiletMat
+        );
+        toiletSeat.rotation.x = Math.PI / 2;
+        toiletSeat.position.set(-obj.width * 0.25, 13, obj.height * 0.25);
+        toiletGroup.add(toiletSeat);
+
+        const toiletTank = new THREE.Mesh(
+          new THREE.BoxGeometry(14, 20, 8),
+          toiletMat
+        );
+        toiletTank.position.set(-obj.width * 0.25, 22, obj.height * 0.25 - 10);
+        toiletGroup.add(toiletTank);
+
+        const flushHandle = new THREE.Mesh(
+          new THREE.BoxGeometry(2, 6, 1),
+          faucetMat
+        );
+        flushHandle.position.set(-obj.width * 0.25 + 8, 25, obj.height * 0.25 - 10);
+        toiletGroup.add(flushHandle);
+
+        // === URINAL ===
+        const urinal = new THREE.Mesh(
+          new THREE.SphereGeometry(7, 32, 32, 0, Math.PI * 2, 0, Math.PI / 1.5),
+          toiletMat
+        );
+        urinal.position.set(obj.width * 0.25, 25, obj.height * 0.25);
+        urinal.rotation.x = Math.PI / 6;
+        toiletGroup.add(urinal);
+
+        const urinalValve = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.5, 1.5, 8, 16),
+          faucetMat
+        );
+        urinalValve.position.set(obj.width * 0.25, 35, obj.height * 0.25 - 5);
+        toiletGroup.add(urinalValve);
+
+        // === LIGHTING (SOFT, NO GLOWING) ===
+        const softLight = new THREE.PointLight(0xffffff, 0.5, 280);
+        softLight.position.set(0, roomHeight - 15, 0);
+        softLight.castShadow = false;
+        toiletGroup.add(softLight);
 
         // === Position the entire toilet room ===
         toiletGroup.position.set(baseX, 0, baseZ);
