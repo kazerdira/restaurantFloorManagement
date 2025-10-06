@@ -35,6 +35,7 @@ interface ToolbarProps {
   onChairSizeChange?: (position: ChairPosition, size: number) => void;
   onResetChairSizes?: () => void;
   on3DPreview?: () => void;
+  onObjectRotate?: (rotation: number) => void;
 }
 
 const sizeLabels = SIZE_LABELS;
@@ -66,6 +67,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onChairSizeChange,
   onResetChairSizes,
   on3DPreview,
+  onObjectRotate,
   tableCount,
   chairCount,
   objectCount,
@@ -533,6 +535,23 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                   </div>
                 )}
               </div>
+
+              {/* Rotate Object Button */}
+              <button
+                onClick={() => {
+                  const newRotation = ((selectedObject.rotation || 0) + 90) % 360;
+                  onObjectRotate?.(newRotation);
+                }}
+                className={`px-3 py-2 rounded-lg ${
+                  selectedObject.type === 'bar' ? 'bg-gradient-to-r from-purple-600 to-purple-700' :
+                  selectedObject.type === 'kitchen' ? 'bg-gradient-to-r from-orange-600 to-orange-700' :
+                  'bg-gradient-to-r from-cyan-600 to-cyan-700'
+                } text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`}
+                title="Rotate 90°"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>Rotate</span>
+              </button>
 
               {/* Delete Object Button */}
               <button

@@ -838,6 +838,86 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         kitchenLight.castShadow = true;
         kitchenGroup.add(kitchenLight);
 
+        // === CHEF SIGN on Left Side (BOLD & CLEAR Design) ===
+        const chefCanvas = document.createElement('canvas');
+        chefCanvas.width = 1024;
+        chefCanvas.height = 768;
+        const chefCtx = chefCanvas.getContext('2d');
+        if (chefCtx) {
+          // Bold red background
+          chefCtx.fillStyle = '#dc2626';
+          chefCtx.fillRect(0, 0, chefCanvas.width, chefCanvas.height);
+          
+          // Thick white border
+          chefCtx.strokeStyle = '#ffffff';
+          chefCtx.lineWidth = 25;
+          chefCtx.strokeRect(30, 30, chefCanvas.width - 60, chefCanvas.height - 60);
+          
+          // Inner black border for contrast
+          chefCtx.strokeStyle = '#000000';
+          chefCtx.lineWidth = 15;
+          chefCtx.strokeRect(50, 50, chefCanvas.width - 100, chefCanvas.height - 100);
+          
+          // Strong text shadow
+          chefCtx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+          chefCtx.shadowBlur = 20;
+          chefCtx.shadowOffsetX = 8;
+          chefCtx.shadowOffsetY = 8;
+          
+          // Large chef hat emoji on top
+          chefCtx.font = 'bold 180px Arial';
+          chefCtx.textAlign = 'center';
+          chefCtx.textBaseline = 'middle';
+          chefCtx.fillStyle = '#ffffff';
+          chefCtx.fillText('👨‍🍳', chefCanvas.width / 2, chefCanvas.height / 2 - 150);
+          
+          // CHEF text - VERY LARGE and WHITE
+          chefCtx.fillStyle = '#ffffff';
+          chefCtx.font = 'bold 220px Impact, Arial Black, sans-serif';
+          chefCtx.fillText('CHEF', chefCanvas.width / 2, chefCanvas.height / 2 + 120);
+          
+          // Black outline for maximum contrast
+          chefCtx.strokeStyle = '#000000';
+          chefCtx.lineWidth = 12;
+          chefCtx.strokeText('CHEF', chefCanvas.width / 2, chefCanvas.height / 2 + 120);
+          
+          // Yellow/Gold inner stroke for style
+          chefCtx.strokeStyle = '#fbbf24';
+          chefCtx.lineWidth = 6;
+          chefCtx.strokeText('CHEF', chefCanvas.width / 2, chefCanvas.height / 2 + 120);
+        }
+        const chefTexture = new THREE.CanvasTexture(chefCanvas);
+        
+        // Left side sign - MUCH LARGER
+        const chefSignLeft = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.height * 0.6, obj.height * 0.45),
+          new THREE.MeshStandardMaterial({ 
+            map: chefTexture,
+            roughness: 0.4,
+            metalness: 0.1,
+            emissive: 0xdc2626,
+            emissiveIntensity: 0.3
+          })
+        );
+        chefSignLeft.position.set(-obj.width / 2 + 3, 50, 0);
+        chefSignLeft.rotation.y = Math.PI / 2;
+        kitchenGroup.add(chefSignLeft);
+        
+        // Right side sign (same design) - MUCH LARGER
+        const chefSignRight = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.height * 0.6, obj.height * 0.45),
+          new THREE.MeshStandardMaterial({ 
+            map: chefTexture,
+            roughness: 0.4,
+            metalness: 0.1,
+            emissive: 0xdc2626,
+            emissiveIntensity: 0.3
+          })
+        );
+        chefSignRight.position.set(obj.width / 2 - 3, 50, 0);
+        chefSignRight.rotation.y = -Math.PI / 2;
+        kitchenGroup.add(chefSignRight);
+
         // === Position the entire kitchen ===
         kitchenGroup.position.set(baseX, 0, baseZ);
         kitchenGroup.rotation.y = rotation;
@@ -977,6 +1057,78 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         handle.position.set(obj.width * 0.285 - (obj.width * 0.132), 47.5, obj.height / 2 + 1);
         toiletGroup.add(handle);
 
+        // === MALE SIGN on Blue Door (Very Stylish Design) ===
+        const maleCanvas = document.createElement('canvas');
+        maleCanvas.width = 512;
+        maleCanvas.height = 768;
+        const maleCtx = maleCanvas.getContext('2d');
+        if (maleCtx) {
+          // Gradient background
+          const gradient = maleCtx.createLinearGradient(0, 0, 0, maleCanvas.height);
+          gradient.addColorStop(0, '#3b82f6');
+          gradient.addColorStop(1, '#1e40af');
+          maleCtx.fillStyle = gradient;
+          maleCtx.fillRect(0, 0, maleCanvas.width, maleCanvas.height);
+          
+          // Border frame
+          maleCtx.strokeStyle = '#ffffff';
+          maleCtx.lineWidth = 12;
+          maleCtx.strokeRect(20, 20, maleCanvas.width - 40, maleCanvas.height - 40);
+          
+          // Inner shadow effect
+          maleCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+          maleCtx.lineWidth = 6;
+          maleCtx.strokeRect(30, 30, maleCanvas.width - 60, maleCanvas.height - 60);
+          
+          // Text shadow
+          maleCtx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          maleCtx.shadowBlur = 15;
+          maleCtx.shadowOffsetX = 4;
+          maleCtx.shadowOffsetY = 4;
+          
+          // W.C. text
+          maleCtx.fillStyle = '#ffffff';
+          maleCtx.font = 'bold 120px Georgia, serif';
+          maleCtx.textAlign = 'center';
+          maleCtx.textBaseline = 'middle';
+          maleCtx.fillText('W.C.', maleCanvas.width / 2, maleCanvas.height / 2 - 100);
+          
+          // Decorative line
+          maleCtx.strokeStyle = '#ffffff';
+          maleCtx.lineWidth = 4;
+          maleCtx.beginPath();
+          maleCtx.moveTo(100, maleCanvas.height / 2);
+          maleCtx.lineTo(maleCanvas.width - 100, maleCanvas.height / 2);
+          maleCtx.stroke();
+          
+          // MALE text with golden color
+          const goldGradient = maleCtx.createLinearGradient(0, maleCanvas.height / 2, 0, maleCanvas.height / 2 + 150);
+          goldGradient.addColorStop(0, '#ffd700');
+          goldGradient.addColorStop(0.5, '#ffed4e');
+          goldGradient.addColorStop(1, '#ffd700');
+          maleCtx.fillStyle = goldGradient;
+          maleCtx.font = 'bold 140px Georgia, serif';
+          maleCtx.fillText('MALE', maleCanvas.width / 2, maleCanvas.height / 2 + 120);
+          
+          // Add stroke to MALE text
+          maleCtx.strokeStyle = '#b8860b';
+          maleCtx.lineWidth = 3;
+          maleCtx.strokeText('MALE', maleCanvas.width / 2, maleCanvas.height / 2 + 120);
+        }
+        const maleTexture = new THREE.CanvasTexture(maleCanvas);
+        const maleSign = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.width * 0.25, obj.width * 0.375),
+          new THREE.MeshStandardMaterial({ 
+            map: maleTexture,
+            roughness: 0.3,
+            metalness: 0.15,
+            emissive: 0x1e40af,
+            emissiveIntensity: 0.1
+          })
+        );
+        maleSign.position.set(obj.width * 0.285, 47.5, obj.height / 2 + 2.5);
+        toiletGroup.add(maleSign);
+
         // Left door (Red)
         const door2 = new THREE.Mesh(
           new THREE.BoxGeometry(obj.width * 0.33, 95, 4),
@@ -989,6 +1141,78 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         const handle2 = handle.clone();
         handle2.position.set(-obj.width * 0.285 + (obj.width * 0.132), 47.5, obj.height / 2 + 1);
         toiletGroup.add(handle2);
+
+        // === FEMALE SIGN on Red Door (Very Stylish Design) ===
+        const femaleCanvas = document.createElement('canvas');
+        femaleCanvas.width = 512;
+        femaleCanvas.height = 768;
+        const femaleCtx = femaleCanvas.getContext('2d');
+        if (femaleCtx) {
+          // Gradient background
+          const gradient = femaleCtx.createLinearGradient(0, 0, 0, femaleCanvas.height);
+          gradient.addColorStop(0, '#ef4444');
+          gradient.addColorStop(1, '#b91c1c');
+          femaleCtx.fillStyle = gradient;
+          femaleCtx.fillRect(0, 0, femaleCanvas.width, femaleCanvas.height);
+          
+          // Border frame
+          femaleCtx.strokeStyle = '#ffffff';
+          femaleCtx.lineWidth = 12;
+          femaleCtx.strokeRect(20, 20, femaleCanvas.width - 40, femaleCanvas.height - 40);
+          
+          // Inner shadow effect
+          femaleCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+          femaleCtx.lineWidth = 6;
+          femaleCtx.strokeRect(30, 30, femaleCanvas.width - 60, femaleCanvas.height - 60);
+          
+          // Text shadow
+          femaleCtx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          femaleCtx.shadowBlur = 15;
+          femaleCtx.shadowOffsetX = 4;
+          femaleCtx.shadowOffsetY = 4;
+          
+          // W.C. text
+          femaleCtx.fillStyle = '#ffffff';
+          femaleCtx.font = 'bold 120px Georgia, serif';
+          femaleCtx.textAlign = 'center';
+          femaleCtx.textBaseline = 'middle';
+          femaleCtx.fillText('W.C.', femaleCanvas.width / 2, femaleCanvas.height / 2 - 100);
+          
+          // Decorative line
+          femaleCtx.strokeStyle = '#ffffff';
+          femaleCtx.lineWidth = 4;
+          femaleCtx.beginPath();
+          femaleCtx.moveTo(100, femaleCanvas.height / 2);
+          femaleCtx.lineTo(femaleCanvas.width - 100, femaleCanvas.height / 2);
+          femaleCtx.stroke();
+          
+          // FEMALE text with rose gold color
+          const roseGoldGradient = femaleCtx.createLinearGradient(0, femaleCanvas.height / 2, 0, femaleCanvas.height / 2 + 150);
+          roseGoldGradient.addColorStop(0, '#ffb6c1');
+          roseGoldGradient.addColorStop(0.5, '#ffd1dc');
+          roseGoldGradient.addColorStop(1, '#ffb6c1');
+          femaleCtx.fillStyle = roseGoldGradient;
+          femaleCtx.font = 'bold 120px Georgia, serif';
+          femaleCtx.fillText('FEMALE', femaleCanvas.width / 2, femaleCanvas.height / 2 + 120);
+          
+          // Add stroke to FEMALE text
+          femaleCtx.strokeStyle = '#dc143c';
+          femaleCtx.lineWidth = 3;
+          femaleCtx.strokeText('FEMALE', femaleCanvas.width / 2, femaleCanvas.height / 2 + 120);
+        }
+        const femaleTexture = new THREE.CanvasTexture(femaleCanvas);
+        const femaleSign = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.width * 0.25, obj.width * 0.375),
+          new THREE.MeshStandardMaterial({ 
+            map: femaleTexture,
+            roughness: 0.3,
+            metalness: 0.15,
+            emissive: 0xb91c1c,
+            emissiveIntensity: 0.1
+          })
+        );
+        femaleSign.position.set(-obj.width * 0.285, 47.5, obj.height / 2 + 2.5);
+        toiletGroup.add(femaleSign);
 
         // === W.C. SIGN ===
         const canvas = document.createElement('canvas');

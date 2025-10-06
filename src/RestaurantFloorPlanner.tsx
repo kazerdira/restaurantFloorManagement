@@ -462,6 +462,21 @@ const RestaurantFloorPlanner: React.FC = () => {
     ));
   };
 
+  const handleObjectRotate = (rotation: number) => {
+    if (!selectedElement || selectedElement.type !== 'object') return;
+    
+    setFloors(prev => prev.map(floor =>
+      floor.id === currentFloor
+        ? {
+            ...floor,
+            objects: floor.objects.map(obj =>
+              obj.id === selectedElement.id ? { ...obj, rotation } : obj
+            )
+          }
+        : floor
+    ));
+  };
+
   const handleFixedElementResize = (width: number, height: number) => {
     if (!selectedElement || selectedElement.type !== 'fixedElement') return;
     
@@ -986,6 +1001,7 @@ const RestaurantFloorPlanner: React.FC = () => {
           onTableNameChange={handleTableNameChange}
           onObjectNameChange={handleObjectNameChange}
           onObjectResize={handleObjectResize}
+          onObjectRotate={handleObjectRotate}
           onRemoveObject={removeElement}
           onRemoveWall={removeElement}
           onRemoveFixedElement={removeElement}
