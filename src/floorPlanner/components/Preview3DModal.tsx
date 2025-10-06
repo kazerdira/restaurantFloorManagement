@@ -649,37 +649,184 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(kitchenGroup);
         
       } else if (obj.type === 'toilet') {
-        // Ceramic tile base
-        const toiletBase = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width, objHeight, obj.height),
-          new THREE.MeshPhysicalMaterial({
-            color: 0xf0f0f0,
-            roughness: 0.2,
-            metalness: 0.1,
-            clearcoat: 0.8,
-            clearcoatRoughness: 0.1
-          })
+        // === LUXURY TOILET ROOM ===
+        const toiletGroup = new THREE.Group();
+
+        // === MATERIALS ===
+        const marbleMat = new THREE.MeshPhysicalMaterial({
+          color: 0xe0e0e0,
+          roughness: 0.25,
+          metalness: 0.1,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.05,
+        });
+
+        const doorMat = new THREE.MeshPhysicalMaterial({
+          color: 0x3b82f6, // rich blue tone
+          roughness: 0.35,
+          metalness: 0.2,
+          clearcoat: 0.6,
+        });
+
+        const glassMirrorMat = new THREE.MeshPhysicalMaterial({
+          color: 0xffffff,
+          metalness: 1.0,
+          roughness: 0.05,
+          envMapIntensity: 1.5,
+        });
+
+        const tileFloorMat = new THREE.MeshStandardMaterial({
+          color: 0xd9d9d9,
+          roughness: 0.7,
+          metalness: 0.05,
+        });
+
+        // === ROOM DIMENSIONS ===
+        const roomHeight = 120;
+
+        // === FLOOR ===
+        const floor = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width, 4, obj.height), 
+          tileFloorMat
         );
-        toiletBase.position.set(baseX, objHeight / 2, baseZ);
-        toiletBase.rotation.y = rotation;
-        toiletBase.castShadow = true;
-        scene.add(toiletBase);
-        
-        // Polished porcelain top
-        const toiletTop = new THREE.Mesh(
-          new THREE.BoxGeometry(obj.width + 4, 4, obj.height + 4),
-          new THREE.MeshPhysicalMaterial({
-            color: 0xfafafa,
-            roughness: 0.05,
-            metalness: 0.0,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.02
-          })
+        floor.position.y = 2;
+        floor.receiveShadow = true;
+        toiletGroup.add(floor);
+
+        // === WALLS ===
+        const backWall = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width, roomHeight, 6), 
+          marbleMat
         );
-        toiletTop.position.set(baseX, objHeight + 2, baseZ);
-        toiletTop.rotation.y = rotation;
-        toiletTop.castShadow = true;
-        scene.add(toiletTop);
+        backWall.position.set(0, roomHeight / 2, -obj.height / 2);
+        backWall.castShadow = true;
+        toiletGroup.add(backWall);
+
+        const leftWall = new THREE.Mesh(
+          new THREE.BoxGeometry(6, roomHeight, obj.height), 
+          marbleMat
+        );
+        leftWall.position.set(-obj.width / 2, roomHeight / 2, 0);
+        leftWall.castShadow = true;
+        toiletGroup.add(leftWall);
+
+        const rightWall = new THREE.Mesh(
+          new THREE.BoxGeometry(6, roomHeight, obj.height), 
+          marbleMat
+        );
+        rightWall.position.set(obj.width / 2, roomHeight / 2, 0);
+        rightWall.castShadow = true;
+        toiletGroup.add(rightWall);
+
+        // === DOOR (Blue) ===
+        const door = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.25, 85, 4), 
+          doorMat
+        );
+        door.position.set(obj.width * 0.3, 42, obj.height / 2 - 2);
+        door.castShadow = true;
+        toiletGroup.add(door);
+
+        // Door handle (gold)
+        const handleMat = new THREE.MeshStandardMaterial({ 
+          color: 0xffd700, 
+          metalness: 1.0, 
+          roughness: 0.2 
+        });
+        const handle = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.5, 1.5, 10, 16),
+          handleMat
+        );
+        handle.rotation.z = Math.PI / 2;
+        handle.position.set(obj.width * 0.2, 42, obj.height / 2 - 4);
+        toiletGroup.add(handle);
+
+        // === SECOND DOOR (Red) ===
+        const door2Mat = new THREE.MeshPhysicalMaterial({
+          color: 0xef4444, // red tone
+          roughness: 0.35,
+          metalness: 0.2,
+          clearcoat: 0.6,
+        });
+        const door2 = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.25, 85, 4),
+          door2Mat
+        );
+        door2.position.set(-obj.width * 0.3, 42, obj.height / 2 - 2);
+        door2.castShadow = true;
+        toiletGroup.add(door2);
+
+        const handle2 = handle.clone();
+        handle2.position.set(-obj.width * 0.2, 42, obj.height / 2 - 4);
+        toiletGroup.add(handle2);
+
+        // === MIRROR ===
+        const mirror = new THREE.Mesh(
+          new THREE.PlaneGeometry(obj.width * 0.4, 40), 
+          glassMirrorMat
+        );
+        mirror.position.set(0, 70, -obj.height / 2 + 3);
+        toiletGroup.add(mirror);
+
+        // === SINK COUNTER ===
+        const counterMat = new THREE.MeshPhysicalMaterial({
+          color: 0xf5f5f5,
+          metalness: 0.2,
+          roughness: 0.3,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.1,
+        });
+        const counter = new THREE.Mesh(
+          new THREE.BoxGeometry(obj.width * 0.5, 12, obj.height * 0.25), 
+          counterMat
+        );
+        counter.position.set(0, 32, -obj.height * 0.3);
+        counter.castShadow = true;
+        toiletGroup.add(counter);
+
+        // === SINK BASIN (white ceramic) ===
+        const sinkMat = new THREE.MeshPhysicalMaterial({
+          color: 0xffffff,
+          roughness: 0.2,
+          metalness: 0.05,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.05,
+        });
+        const sink = new THREE.Mesh(
+          new THREE.CylinderGeometry(12, 12, 6, 32), 
+          sinkMat
+        );
+        sink.position.set(0, 40, -obj.height * 0.3);
+        toiletGroup.add(sink);
+
+        // === FAUCET (chrome) ===
+        const faucetMat = new THREE.MeshPhysicalMaterial({
+          color: 0xcccccc,
+          metalness: 1.0,
+          roughness: 0.15,
+        });
+        const faucet = new THREE.Mesh(
+          new THREE.TorusGeometry(4, 1, 8, 24, Math.PI),
+          faucetMat
+        );
+        faucet.rotation.z = Math.PI / 2;
+        faucet.position.set(0, 48, -obj.height * 0.35);
+        toiletGroup.add(faucet);
+
+        // === LIGHTING ===
+        const softLight = new THREE.PointLight(0xffffff, 0.8, 300);
+        softLight.position.set(0, roomHeight - 15, 0);
+        softLight.castShadow = true;
+        toiletGroup.add(softLight);
+
+        const warmAccent = new THREE.PointLight(0xffcc88, 0.4, 200);
+        warmAccent.position.set(-obj.width * 0.25, 60, obj.height * 0.25);
+        toiletGroup.add(warmAccent);
+
+        // === Position the entire toilet room ===
+        toiletGroup.position.set(baseX, 0, baseZ);
+        toiletGroup.rotation.y = rotation;
+        scene.add(toiletGroup);
       }
     });
 
