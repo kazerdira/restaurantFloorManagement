@@ -23,7 +23,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
 
     // Scene setup with light modern theme
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f4f8);
+    scene.background = new THREE.Color(0xdee6ef); // Soft blue-grey for pleasant atmosphere
     sceneRef.current = scene;
 
     // Camera
@@ -79,13 +79,13 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     // Modern floor
     const floorMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(1200, 1200),
-      new THREE.MeshStandardMaterial({ color: 0xe8e8e8, roughness: 0.8, metalness: 0.2 })
+      new THREE.MeshStandardMaterial({ color: 0xd0d0d5, roughness: 0.8, metalness: 0.2 }) // Medium grey
     );
     floorMesh.rotation.x = -Math.PI / 2;
     floorMesh.receiveShadow = true;
     scene.add(floorMesh);
 
-    const grid = new THREE.GridHelper(1200, 60, 0xcccccc, 0xe0e0e0);
+    const grid = new THREE.GridHelper(1200, 60, 0xa0a0a8, 0xb8b8c0); // Darker grid lines
     grid.position.y = 1;
     scene.add(grid);
 
@@ -93,7 +93,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     floor.walls.forEach(wall => {
       const length = Math.sqrt(Math.pow(wall.endX - wall.startX, 2) + Math.pow(wall.endY - wall.startY, 2));
       const angle = Math.atan2(wall.endY - wall.startY, wall.endX - wall.startX);
-      const wallHeight = wall.type === 'wall' ? 100 : 80;
+      const wallHeight = wall.type === 'wall' ? 120 : 80; // Increased standard wall height from 100 to 120
       const baseX = wall.startX + (wall.endX - wall.startX) / 2 - 400;
       const baseZ = -(wall.startY + (wall.endY - wall.startY) / 2 - 400);
       
@@ -155,14 +155,14 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         const windowHeight = wallHeight;
 
         // HEIGHT RATIOS
-        const h1 = windowHeight * 0.25;  // bottom wall/sill (increased)
-        const h2 = windowHeight * 0.50;  // main window area
+        const h1 = windowHeight * 0.45;  // bottom wall/sill (increased)
+        const h2 = windowHeight * 0.65;  // main window area
         const h3 = windowHeight * 0.10;  // top transom
         const h4 = windowHeight * 0.30;  // top wall section
 
         // === MATERIALS ===
         const wallMat = new THREE.MeshStandardMaterial({
-          color: 0xe8e8e8,
+          color: 0xc8c8d0, // Grey-blue for window sills and wall sections
           roughness: 0.85,
           metalness: 0.05
         });
@@ -287,10 +287,10 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(topWall);
         
       } else {
-        // Light wall
+        // Regular walls - warmer grey-blue for better definition
         const wallMesh = new THREE.Mesh(
           new THREE.BoxGeometry(length, wallHeight, wall.thickness),
-          new THREE.MeshStandardMaterial({ color: 0xd4d4d8, roughness: 0.9, metalness: 0.05 })
+          new THREE.MeshStandardMaterial({ color: 0xb8b8c0, roughness: 0.9, metalness: 0.05 })
         );
         wallMesh.position.set(baseX, wallHeight / 2, baseZ);
         wallMesh.rotation.y = -angle;
@@ -487,11 +487,11 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
 
         // === Optional: Light reflection simulation (point light above the bar) ===
         const barLight = new THREE.PointLight(glassColor, 0.4, 600);
-        barLight.position.set(baseX, barHeight + 120, baseZ);
+        barLight.position.set(baseX, barHeight + 70, baseZ); // Adjusted for lower canopy
         scene.add(barLight);
 
         // === PREMIUM MODERN BAR CANOPY ===
-        const canopyHeight = 160;
+        const canopyHeight = 120; // Lowered from 160 to 120
         const canopyOuter = new THREE.Group();
 
         // === Outer frame (brushed dark metal) ===
@@ -757,7 +757,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
 
         // === MATERIALS ===
         const marbleMat = new THREE.MeshPhysicalMaterial({
-          color: 0xe0e0e0,
+          color: 0xd5d5da, // Subtle grey-blue for definition
           roughness: 0.25,
           metalness: 0.1,
           clearcoat: 1.0,
@@ -936,7 +936,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     // TABLES - Realistic polished wood with subtle reflections
     floor.tables.forEach(table => {
       const tableTopHeight = 4; // Thin tabletop
-      const legHeight = 30; // Tall legs
+      const legHeight = 33; // Tall legs (increased from 30)
       const actualWidth = table.shape === 'rectangle' ? table.width * 1.5 : table.width;
       const tableX = table.x - 400 + actualWidth / 2;
       const tableZ = -(table.y - 400 + table.height / 2);
@@ -996,7 +996,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         roughness: 0.2,
       });
 
-      const legRadius = 3;
+      const legRadius = 3.2; // Increased from 3 for better visibility
       const legOffsets =
         table.shape === 'circle'
           ? [
@@ -1031,7 +1031,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
       
       tableChairs.forEach(chair => {
         const chairSize = chair.size || 40;
-        const chairHeight = 35;
+        const chairHeight = 38; // Increased from 35
         
         // Materials
         const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.5, metalness: 0.1 });
@@ -1069,7 +1069,8 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
           new THREE.BoxGeometry(chairSize * 0.75, 4, chairSize * 0.75),
           cushionMaterial
         );
-        seat.position.set(tableX + rotX, chairHeight * 0.4, tableZ - rotZ);
+        const seatHeight = chairHeight * 0.4; // Seat position
+        seat.position.set(tableX + rotX, seatHeight, tableZ - rotZ);
         
         // FIXED ROTATION - chair faces table
         const baseRot = { 
@@ -1098,7 +1099,9 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         scene.add(back);
         
         // 4 Chair legs (cylindrical, wood)
-        const legGeo = new THREE.CylinderGeometry(1.5, 1.5, chairHeight * 0.4, 8);
+        const seatThickness = 4;
+        const legHeight = seatHeight - seatThickness / 2; // Legs reach from floor to bottom of seat
+        const legGeo = new THREE.CylinderGeometry(2, 2, legHeight, 8);
         const legMat = new THREE.MeshStandardMaterial({ color: 0x654321, roughness: 0.6, metalness: 0.2 });
         
         [[chairSize * 0.3, chairSize * 0.3], [chairSize * 0.3, -chairSize * 0.3],
@@ -1109,7 +1112,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
           const sin = Math.sin(seat.rotation.y);
           leg.position.set(
             seat.position.x + lx * cos - lz * sin,
-            chairHeight * 0.2,
+            legHeight / 2, // Position legs so they sit on the floor
             seat.position.z + lx * sin + lz * cos
           );
           leg.castShadow = true;
