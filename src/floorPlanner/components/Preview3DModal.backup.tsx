@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { X, RotateCcw, ZoomIn, ZoomOut, Maximize2, Move3d, Eye, Grid, Layers } from 'lucide-react';
+import { X, RotateCcw, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import type { Floor } from '../types';
 
 interface Preview3DModalProps {
@@ -9,113 +9,14 @@ interface Preview3DModalProps {
   onClose: () => void;
 }
 
-// Predefined camera positions for smooth transitions
-const CAMERA_VIEWS = {
-  default: { 
-    position: { x: 900, y: 700, z: 900 }, // More zoomed out
-    target: { x: 0, y: 100, z: 0 },
-    name: 'Default',
-    icon: '🏠'
-  },
-  top: { 
-    position: { x: 0, y: 1200, z: 1 }, // Higher for better top view
-    target: { x: 0, y: 0, z: 0 },
-    name: 'Top View',
-    icon: '⬇'
-  },
-  front: { 
-    position: { x: 0, y: 300, z: 1000 }, // Further back
-    target: { x: 0, y: 100, z: 0 },
-    name: 'Front',
-    icon: '⬆'
-  },
-  side: { 
-    position: { x: 1000, y: 300, z: 0 }, // Further to the side
-    target: { x: 0, y: 100, z: 0 },
-    name: 'Side',
-    icon: '➡'
-  },
-  corner: { 
-    position: { x: -900, y: 700, z: -900 }, // More zoomed out corner
-    target: { x: 0, y: 100, z: 0 },
-    name: 'Corner',
-    icon: '↖'
-  }
-};
-
 export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, onClose }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const [autoRotate, setAutoRotate] = useState(false);
-  const [currentView, setCurrentView] = useState<keyof typeof CAMERA_VIEWS>('default');
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const rotationSpeedRef = useRef(0.003);
-  const transitionRef = useRef<{ 
-    startPos: THREE.Vector3; 
-    endPos: THREE.Vector3;
-    startTarget: THREE.Vector3;
-    endTarget: THREE.Vector3;
-    progress: number;
-  } | null>(null);
-
-  // Smooth camera transition function
-  const smoothCameraTransition = (viewKey: keyof typeof CAMERA_VIEWS) => {
-    if (!cameraRef.current || isTransitioning) return;
-    
-    const view = CAMERA_VIEWS[viewKey];
-    const camera = cameraRef.current;
-    
-    transitionRef.current = {
-      startPos: camera.position.clone(),
-      endPos: new THREE.Vector3(view.position.x, view.position.y, view.position.z),
-      startTarget: new THREE.Vector3(0, 100, 0),
-      endTarget: new THREE.Vector3(view.target.x, view.target.y, view.target.z),
-      progress: 0
-    };
-    
-    setIsTransitioning(true);
-    setCurrentView(viewKey);
-    setAutoRotate(false);
-  };
-
-  // Manual rotation controls
-  const rotateCamera = (direction: 'left' | 'right' | 'up' | 'down') => {
-    if (!cameraRef.current || isTransitioning) return;
-    
-    const camera = cameraRef.current;
-    const radius = Math.sqrt(camera.position.x ** 2 + camera.position.z ** 2);
-    const currentAngle = Math.atan2(camera.position.z, camera.position.x);
-    
-    switch(direction) {
-      case 'left':
-        const leftAngle = currentAngle + 0.2;
-        camera.position.x = radius * Math.cos(leftAngle);
-        camera.position.z = radius * Math.sin(leftAngle);
-        break;
-      case 'right':
-        const rightAngle = currentAngle - 0.2;
-        camera.position.x = radius * Math.cos(rightAngle);
-        camera.position.z = radius * Math.sin(rightAngle);
-        break;
-      case 'up':
-        camera.position.y = Math.min(camera.position.y + 50, 900);
-        break;
-      case 'down':
-        camera.position.y = Math.max(camera.position.y - 50, 100);
-        break;
-    }
-    
-    camera.lookAt(0, 100, 0);
-  };
-
-  const zoomCamera = (factor: number) => {
-    if (!cameraRef.current || isTransitioning) return;
-    cameraRef.current.position.multiplyScalar(factor);
-    cameraRef.current.lookAt(0, 100, 0);
-  };
+  const [autoRotate, setAutoRotate] = useState(true);
+  const rotationSpeedRef = useRef(0.005);
 
   useEffect(() => {
     if (!isOpen || !containerRef.current) return;
@@ -132,7 +33,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
       0.1,
       10000
     );
-    camera.position.set(900, 700, 900); // More zoomed out default view
+    camera.position.set(600, 450, 600); // Balanced height to see both floor and canopy
     camera.lookAt(0, 100, 0); // Looking at mid-level
     cameraRef.current = camera;
 
@@ -1638,39 +1539,12 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       
-      // Handle smooth camera transitions
-      if (transitionRef.current && transitionRef.current.progress < 1) {
-        const t = transitionRef.current;
-        t.progress += 0.05;
-        
-        if (t.progress >= 1) {
-          t.progress = 1;
-          setIsTransitioning(false);
-          transitionRef.current = null;
-        }
-        
-        // Smooth easing function
-        const easeInOutCubic = (x: number): number => {
-          return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-        };
-        
-        const easedProgress = easeInOutCubic(t.progress);
-        
-        if (cameraRef.current) {
-          cameraRef.current.position.lerpVectors(t.startPos, t.endPos, easedProgress);
-          const currentTarget = new THREE.Vector3();
-          currentTarget.lerpVectors(t.startTarget, t.endTarget, easedProgress);
-          cameraRef.current.lookAt(currentTarget);
-        }
-      }
-      
-      // Auto-rotation (only when enabled and not transitioning)
-      if (autoRotate && cameraRef.current && !isTransitioning) {
+      if (autoRotate && cameraRef.current) {
         const r = Math.sqrt(cameraRef.current.position.x ** 2 + cameraRef.current.position.z ** 2);
         const a = Math.atan2(cameraRef.current.position.z, cameraRef.current.position.x) + rotationSpeedRef.current;
         cameraRef.current.position.x = r * Math.cos(a);
         cameraRef.current.position.z = r * Math.sin(a);
-        cameraRef.current.lookAt(0, 100, 0);
+        cameraRef.current.lookAt(0, 0, 0);
       }
       
       rendererRef.current?.render(scene, camera);
@@ -1694,238 +1568,68 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         rendererRef.current.dispose();
       }
     };
-  }, [isOpen, floor, autoRotate, isTransitioning]);
+  }, [isOpen, floor, autoRotate]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-2">
-      <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl w-full h-full max-w-[98vw] max-h-[98vh] flex flex-col overflow-hidden border border-gray-800">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-1">
-          <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
-                  <Move3d className="w-5 h-5" />
-                </div>
-                3D Floor Plan Visualization
-              </h2>
-              <p className="text-gray-400 text-sm mt-1">Professional Camera Controls • {floor.name}</p>
-            </div>
-            <button 
-              onClick={onClose} 
-              className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all hover:scale-110"
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[200] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">3D Floor Plan Preview</h2>
+            <p className="text-blue-100 text-sm">Interactive 3D Visualization</p>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div ref={containerRef} className="flex-1 relative bg-gradient-to-br from-gray-100 to-gray-200" />
+
+        <div className="bg-gray-50 border-t border-gray-200 p-4 flex items-center justify-between flex-wrap gap-2">
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setAutoRotate(!autoRotate)}
+              className={`px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all ${
+                autoRotate ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
             >
-              <X className="w-5 h-5" />
+              <RotateCcw className="w-4 h-4" />
+              Auto Rotate
+            </button>
+            <button
+              onClick={() => cameraRef.current?.position.multiplyScalar(0.9)}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+            >
+              <ZoomIn className="w-4 h-4" />
+              Zoom In
+            </button>
+            <button
+              onClick={() => cameraRef.current?.position.multiplyScalar(1.1)}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+            >
+              <ZoomOut className="w-4 h-4" />
+              Zoom Out
+            </button>
+            <button
+              onClick={() => {
+                if (cameraRef.current) {
+                  cameraRef.current.position.set(600, 700, 600);
+                  cameraRef.current.lookAt(0, 0, 0);
+                }
+              }}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+            >
+              <Maximize2 className="w-4 h-4" />
+              Reset View
             </button>
           </div>
-        </div>
-
-        {/* Main Content Area with Sidebar */}
-        <div className="flex-1 flex gap-3 p-3 min-h-0">
-          {/* Smart Sidebar - Left */}
-          <div className="w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700 p-5 flex flex-col gap-5 overflow-y-auto flex-shrink-0">
-            {/* Camera Views Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <Eye className="w-5 h-5 text-blue-400" />
-                Camera Presets
-              </div>
-              
-              <div className="flex flex-col gap-2">
-                {Object.entries(CAMERA_VIEWS).map(([key, view]) => (
-                  <button
-                    key={key}
-                    onClick={() => smoothCameraTransition(key as keyof typeof CAMERA_VIEWS)}
-                    className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 ${
-                      currentView === key 
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105' 
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
-                    } ${isTransitioning ? 'opacity-50 cursor-wait' : ''}`}
-                    disabled={isTransitioning}
-                  >
-                    <span className="text-xl">{view.icon}</span>
-                    <span className="flex-1 text-left">{view.name}</span>
-                    {currentView === key && (
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Manual Controls Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <Move3d className="w-5 h-5 text-purple-400" />
-                Manual Control
-              </div>
-              
-              {/* Directional Controls */}
-              <div className="flex justify-center">
-                <div className="flex flex-col gap-1">
-                  <button
-                    onClick={() => rotateCamera('up')}
-                    className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto"
-                    disabled={isTransitioning}
-                    title="Rotate Up"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                    </svg>
-                  </button>
-                  <div className="flex gap-1 justify-center">
-                    <button
-                      onClick={() => rotateCamera('left')}
-                      className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30"
-                      disabled={isTransitioning}
-                      title="Rotate Left"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                      <Move3d className="w-6 h-6 text-white" />
-                    </div>
-                    <button
-                      onClick={() => rotateCamera('right')}
-                      className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30"
-                      disabled={isTransitioning}
-                      title="Rotate Right"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => rotateCamera('down')}
-                    className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto"
-                    disabled={isTransitioning}
-                    title="Rotate Down"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Zoom Controls Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <ZoomIn className="w-5 h-5 text-green-400" />
-                Zoom & Rotation
-              </div>
-              
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => zoomCamera(0.85)}
-                  className="px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30"
-                  disabled={isTransitioning}
-                >
-                  <ZoomIn className="w-5 h-5" />
-                  Zoom In
-                </button>
-                <button
-                  onClick={() => zoomCamera(1.15)}
-                  className="px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30"
-                  disabled={isTransitioning}
-                >
-                  <ZoomOut className="w-5 h-5" />
-                  Zoom Out
-                </button>
-                <button
-                  onClick={() => setAutoRotate(!autoRotate)}
-                  className={`px-4 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold ${
-                    autoRotate 
-                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg' 
-                      : 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white'
-                  }`}
-                >
-                  <RotateCcw className={`w-5 h-5 ${autoRotate ? 'animate-spin' : ''}`} />
-                  {autoRotate ? 'Auto-Rotating' : 'Auto-Rotate'}
-                </button>
-              </div>
-            </div>
-
-            {/* Reset & Stats Section */}
-            <div className="flex flex-col gap-3 mt-auto">
-              <button
-                onClick={() => smoothCameraTransition('default')}
-                className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2 font-bold"
-              >
-                <Maximize2 className="w-5 h-5" />
-                Reset View
-              </button>
-
-              {/* Scene Stats */}
-              <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                <div className="flex items-center gap-2 text-gray-400 mb-3">
-                  <Grid className="w-4 h-4" />
-                  <span className="font-medium text-sm">Scene Statistics</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.tables.length} Tables</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.chairs.length} Chairs</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.objects.length} Objects</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.walls.length} Walls</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 3D Viewport - Right */}
-          <div className="flex-1 relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl overflow-hidden shadow-2xl border border-gray-300">
-            <div ref={containerRef} className="w-full h-full" />
-
-            {/* Transition Indicator */}
-            {isTransitioning && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="bg-black/80 backdrop-blur-xl rounded-xl px-6 py-3 shadow-2xl border border-gray-700">
-                  <div className="flex items-center gap-3">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-white" />
-                    <span className="text-white text-sm font-medium">Transitioning Camera...</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Bottom Status Bar */}
-        <div className="bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 px-6 py-3 border-t border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-400">
-                  Viewing: <span className="text-white font-semibold">{floor.name}</span>
-                </span>
-              </div>
-              <div className="text-sm text-gray-400">
-                Camera: <span className="text-white font-semibold">{CAMERA_VIEWS[currentView].name}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <span>High Performance Mode</span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            </div>
+          
+          <div className="text-sm text-gray-600">
+            <span className="font-semibold">{floor.tables.length}</span> tables • 
+            <span className="font-semibold ml-1">{floor.chairs.length}</span> chairs • 
+            <span className="font-semibold ml-1">{floor.objects.length}</span> objects
           </div>
         </div>
       </div>
