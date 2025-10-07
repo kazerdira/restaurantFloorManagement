@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { X, RotateCcw, ZoomIn, ZoomOut, Maximize2, Move3d, Eye, Grid, Layers } from 'lucide-react';
+import { X, RotateCcw, ZoomIn, ZoomOut, Maximize2, Move3d, Grid, Layers } from 'lucide-react';
 import type { Floor } from '../types';
 
 interface Preview3DModalProps {
@@ -12,7 +12,7 @@ interface Preview3DModalProps {
 // Predefined camera positions for smooth transitions
 const CAMERA_VIEWS = {
   default: { 
-    position: { x: 900, y: 700, z: 900 }, // More zoomed out
+    position: { x: 1050, y: 800, z: 1050 }, // Slightly more zoomed out
     target: { x: 0, y: 100, z: 0 },
     name: 'Default',
     icon: '🏠'
@@ -132,7 +132,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
       0.1,
       10000
     );
-    camera.position.set(900, 700, 900); // More zoomed out default view
+    camera.position.set(1050, 800, 1050); // Slightly more zoomed out default view
     camera.lookAt(0, 100, 0); // Looking at mid-level
     cameraRef.current = camera;
 
@@ -184,7 +184,7 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
     floorMesh.receiveShadow = true;
     scene.add(floorMesh);
 
-    const grid = new THREE.GridHelper(1200, 60, 0xa0a0a8, 0xb8b8c0); // Darker grid lines
+    const grid = new THREE.GridHelper(3000, 150, 0xa0a0a8, 0xb8b8c0); // Much larger grid (3000x3000)
     grid.position.y = 1;
     scene.add(grid);
 
@@ -1726,34 +1726,13 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         <div className="flex-1 flex gap-3 p-3 min-h-0">
           {/* Smart Sidebar - Left */}
           <div className="w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700 p-5 flex flex-col gap-5 overflow-y-auto flex-shrink-0">
-            {/* Camera Views Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <Eye className="w-5 h-5 text-blue-400" />
-                Camera Presets
-              </div>
-              
-              <div className="flex flex-col gap-2">
-                {Object.entries(CAMERA_VIEWS).map(([key, view]) => (
-                  <button
-                    key={key}
-                    onClick={() => smoothCameraTransition(key as keyof typeof CAMERA_VIEWS)}
-                    className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 ${
-                      currentView === key 
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105' 
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
-                    } ${isTransitioning ? 'opacity-50 cursor-wait' : ''}`}
-                    disabled={isTransitioning}
-                  >
-                    <span className="text-xl">{view.icon}</span>
-                    <span className="flex-1 text-left">{view.name}</span>
-                    {currentView === key && (
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Default View Button */}
+            <button
+              onClick={() => smoothCameraTransition('default')}
+              className="px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+            >
+              🏠 Default View
+            </button>
 
             {/* Manual Controls Section */}
             <div className="flex flex-col gap-3">

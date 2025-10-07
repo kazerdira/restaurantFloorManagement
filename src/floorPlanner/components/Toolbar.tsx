@@ -765,13 +765,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
         {/* Right Section - Stats */}
         <div className="flex items-center gap-3 flex-wrap">
-          {/* 3D Preview Button */}
+          {/* 3D Button */}
           <button
             onClick={on3DPreview}
             className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-semibold text-sm"
           >
             <Box className="w-4 h-4" />
-            3D Preview
+            3D
           </button>
           
           <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded text-xs">
