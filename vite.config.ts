@@ -19,11 +19,20 @@ export default defineConfig(({ mode }) => {
           fileName: (format) => `restaurant-floor-planner.${format}.js`
         },
         rollupOptions: {
-          external: ['react', 'react-dom'],
+          external: [
+            'react',
+            'react-dom',
+            'react/jsx-runtime',
+            'three',
+            'lucide-react'
+          ],
           output: {
             globals: {
               react: 'React',
-              'react-dom': 'ReactDOM'
+              'react-dom': 'ReactDOM',
+              'react/jsx-runtime': 'react/jsx-runtime',
+              three: 'THREE',
+              'lucide-react': 'LucideReact'
             }
           }
         },
