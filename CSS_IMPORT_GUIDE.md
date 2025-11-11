@@ -1,8 +1,12 @@
 # 🎨 How to Import CSS in Your App
 
-## ✅ CSS File is Now Available!
+## ✅ Minimal CSS - No Tailwind Conflicts!
 
-The package now includes `dist/style.css` with all the Tailwind styles and custom colors.
+The package now includes `dist/style.css` (only **0.95KB**) with component-specific styles only.
+
+**✅ No Tailwind CSS bundled** - Won't conflict with your app's styling!  
+**✅ No global resets** - Won't affect your app's layout!  
+**✅ Only component styles** - Slider animations and hexagon shapes!
 
 ---
 
@@ -80,12 +84,17 @@ export default function CreateRestaurantPage() {
 
 ## 🎨 What the CSS Includes:
 
-- ✅ **Tailwind CSS** base styles
-- ✅ **Purple/gradient colors** for UI elements
-- ✅ **Custom slider styles** 
-- ✅ **Proper spacing and layouts**
-- ✅ **3D viewer styles**
-- ✅ **Button and input styles**
+- ✅ **Custom slider styles** with purple gradient (0.3KB)
+- ✅ **Hexagon shape utility** for hexagonal tables (0.1KB)
+- ✅ **Hover and active animations** for sliders (0.5KB)
+
+**Total: 0.95KB minified!**
+
+**What's NOT included (your app provides these):**
+- ❌ No Tailwind CSS (use your app's Tailwind)
+- ❌ No global resets
+- ❌ No color utilities
+- ❌ No layout utilities
 
 ---
 
