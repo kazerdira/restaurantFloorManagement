@@ -1,3 +1,6 @@
+// Import styles
+import './index.css';
+
 // Main Components - These are the ones you'll use in your projects
 export { default as RestaurantFloorPlanner } from './RestaurantFloorPlanner';
 export { Preview3DModal } from './floorPlanner/components/Preview3DModal';
