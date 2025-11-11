@@ -1,5 +1,5 @@
-// Import styles
-import './index.css';
+// Import component-specific styles only (no Tailwind to avoid conflicts)
+import './components.css';
 
 // Main Components - These are the ones you'll use in your projects
 export { default as RestaurantFloorPlanner } from './RestaurantFloorPlanner';
