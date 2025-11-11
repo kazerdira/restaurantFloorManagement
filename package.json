@@ -2,19 +2,37 @@
   "name": "restaurant-floor-planner",
   "version": "1.0.0",
   "type": "module",
+  "main": "./dist/restaurant-floor-planner.umd.js",
+  "module": "./dist/restaurant-floor-planner.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/restaurant-floor-planner.es.js",
+      "require": "./dist/restaurant-floor-planner.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:lib": "vite build --mode library",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   "dependencies": {
     "lucide-react": "^0.263.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "three": "^0.160.0"
   },
   "devDependencies": {
+    "@types/node": "^24.10.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/three": "^0.180.0",
