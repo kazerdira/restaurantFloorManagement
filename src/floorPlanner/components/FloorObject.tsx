@@ -51,7 +51,7 @@ export const FloorObjectComponent: React.FC<FloorObjectProps> = ({
       }}
       onMouseDown={handleMouseDown}
     >
-      <div className="flex flex-col items-center justify-center gap-2 pointer-events-none">
+      <div className="rfp-flex rfp-flex-col rfp-items-center rfp-justify-center rfp-gap-2 rfp-pointer-events-none">
         <Icon className={`w-8 h-8 ${colors.text}`} strokeWidth={2} />
         <span className={`text-sm font-bold ${colors.text} uppercase tracking-wide`}>
           {object.name}
@@ -62,10 +62,10 @@ export const FloorObjectComponent: React.FC<FloorObjectProps> = ({
       {isSelected && (
         <>
           {/* Corner resize handles */}
-          <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-nw-resize" />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-ne-resize" />
-          <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-sw-resize" />
-          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-se-resize" />
+          <div className="rfp-absolute -top-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-nw-resize" />
+          <div className="rfp-absolute -top-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-ne-resize" />
+          <div className="rfp-absolute -bottom-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-sw-resize" />
+          <div className="rfp-absolute -bottom-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-se-resize" />
         </>
       )}
     </div>

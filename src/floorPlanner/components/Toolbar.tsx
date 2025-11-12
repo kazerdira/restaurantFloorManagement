@@ -140,10 +140,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   }, [selectedTable, selectedObject, selectedFixedElement]);
 
   return (
-    <div className="bg-white border-b border-gray-200 shadow-sm min-h-[72px]">
-      <div className="px-4 py-3 flex items-center justify-between min-h-[72px]">
+    <div className="rfp-bg-white rfp-border-b rfp-border-gray-200 rfp-shadow-sm min-h-[72px]">
+      <div className="rfp-px-4 rfp-py-3 rfp-flex rfp-items-center rfp-justify-between min-h-[72px]">
         {/* Left Section - Controls */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="rfp-flex rfp-items-center rfp-gap-3 rfp-flex-wrap">
           {/* Grid Toggle */}
           <button
             onClick={onToggleGrid}
@@ -154,45 +154,45 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             }`}
             title={showGrid ? 'Hide Grid' : 'Show Grid'}
           >
-            {showGrid ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+            {showGrid ? <Eye className="rfp-w-4 rfp-h-4" /> : <EyeOff className="rfp-w-4 rfp-h-4" />}
             <span>Grid</span>
           </button>
 
           {selectedTable && (
             <>
-              <div className="w-px h-8 bg-gray-300" />
+              <div className="w-px rfp-h-8 rfp-bg-gray-300" />
 
               {/* Chair Management Dropdown */}
-              <div ref={chairMenuRef} className="relative">
+              <div ref={chairMenuRef} className="rfp-relative">
                 <button
                   onClick={() => {
                     setIsChairMenuOpen(!isChairMenuOpen);
                     setIsSizeMenuOpen(false);
                   }}
-                  className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                  className="rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                 >
-                  <Armchair className="w-4 h-4" />
+                  <Armchair className="rfp-w-4 rfp-h-4" />
                   <span>Manage Chairs</span>
-                  <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded text-xs">
+                  <span className="rfp-ml-1 px-1.5 py-0.5 bg-white/20 rfp-rounded rfp-text-xs">
                     {selectedTableChairs.length}
                   </span>
                 </button>
                 
                 {isChairMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
-                    <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3 text-white">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Armchair className="w-4 h-4" />
-                          <span className="font-semibold text-sm">Chair Positions</span>
+                  <div className="rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-72 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden">
+                    <div className="bg-gradient-to-r from-amber-500 to-amber-600 rfp-px-4 rfp-py-3 rfp-text-white">
+                      <div className="rfp-flex rfp-items-center rfp-justify-between">
+                        <div className="rfp-flex rfp-items-center rfp-gap-2">
+                          <Armchair className="rfp-w-4 rfp-h-4" />
+                          <span className="rfp-font-semibold rfp-text-sm">Chair Positions</span>
                         </div>
-                        <span className="text-xs bg-white/20 px-2 py-1 rounded">
+                        <span className="rfp-text-xs bg-white/20 rfp-px-2 rfp-py-1 rfp-rounded">
                           Total: {selectedTableChairs.length}
                         </span>
                       </div>
                     </div>
                     
-                    <div className="p-3 space-y-2">
+                    <div className="rfp-p-3 rfp-space-y-2">
                       {chairPositions.map((position) => {
                         const chairsOnSide = selectedTableChairs.filter(c => c.position === position).length;
                         const chairSample = selectedTableChairs.find(c => c.position === position);
@@ -201,43 +201,43 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                         return (
                           <div
                             key={position}
-                            className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 hover:border-amber-300 transition-all space-y-2"
+                            className="rfp-bg-gray-50 rfp-rounded-lg rfp-px-3 rfp-py-2 rfp-border rfp-border-gray-200 hover:border-amber-300 rfp-transition-all rfp-space-y-2"
                           >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-md flex items-center justify-center text-white text-xs font-bold uppercase">
+                            <div className="rfp-flex rfp-items-center rfp-justify-between">
+                              <div className="rfp-flex rfp-items-center rfp-gap-3">
+                                <div className="rfp-w-8 rfp-h-8 bg-gradient-to-br from-gray-600 to-gray-700 rfp-rounded-md rfp-flex rfp-items-center rfp-justify-center rfp-text-white rfp-text-xs rfp-font-bold rfp-uppercase">
                                   {position[0]}
                                 </div>
                                 <div>
-                                  <div className="text-sm font-medium text-gray-800 capitalize">{position}</div>
-                                  <div className="text-xs text-gray-500">{chairsOnSide} chair{chairsOnSide !== 1 ? 's' : ''}</div>
+                                  <div className="rfp-text-sm rfp-font-medium rfp-text-gray-800 rfp-capitalize">{position}</div>
+                                  <div className="rfp-text-xs rfp-text-gray-500">{chairsOnSide} chair{chairsOnSide !== 1 ? 's' : ''}</div>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1">
+                              <div className="rfp-flex rfp-items-center rfp-gap-1">
                                 <button
                                   onClick={() => onRemoveChair(position)}
                                   disabled={chairsOnSide === 0}
-                                  className="w-7 h-7 rounded-md bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                                  className="rfp-w-7 rfp-h-7 rfp-rounded-md rfp-bg-red-50 rfp-text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed rfp-transition-all rfp-flex rfp-items-center rfp-justify-center"
                                   title="Remove chair"
                                 >
-                                  <Minus className="w-4 h-4" />
+                                  <Minus className="rfp-w-4 rfp-h-4" />
                                 </button>
                                 <button
                                   onClick={() => onAddChair(position)}
-                                  className="w-7 h-7 rounded-md bg-green-50 text-green-600 hover:bg-green-100 transition-all flex items-center justify-center"
+                                  className="rfp-w-7 rfp-h-7 rfp-rounded-md rfp-bg-green-50 rfp-text-green-600 hover:bg-green-100 rfp-transition-all rfp-flex rfp-items-center rfp-justify-center"
                                   title="Add chair"
                                 >
-                                  <Plus className="w-4 h-4" />
+                                  <Plus className="rfp-w-4 rfp-h-4" />
                                 </button>
                               </div>
                             </div>
                             
                             {/* Size Slider */}
                             {chairsOnSide > 0 && (
-                              <div className="pt-2 border-t border-gray-200">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs font-medium text-gray-600">Chair Size</span>
-                                  <span className="text-xs font-bold text-amber-600">{currentSize}px</span>
+                              <div className="rfp-pt-2 rfp-border-t rfp-border-gray-200">
+                                <div className="rfp-flex rfp-items-center rfp-justify-between rfp-mb-1">
+                                  <span className="rfp-text-xs rfp-font-medium rfp-text-gray-600">Chair Size</span>
+                                  <span className="rfp-text-xs rfp-font-bold text-amber-600">{currentSize}px</span>
                                 </div>
                                 <input
                                   type="range"
@@ -245,7 +245,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                                   max="60"
                                   value={currentSize}
                                   onChange={(e) => onChairSizeChange?.(position, parseInt(e.target.value))}
-                                  className="w-full h-2 bg-gradient-to-r from-amber-200 to-amber-400 rounded-full appearance-none cursor-pointer slider-thumb"
+                                  className="rfp-w-full rfp-h-2 bg-gradient-to-r from-amber-200 to-amber-400 rfp-rounded-full appearance-none rfp-cursor-pointer slider-thumb"
                                   style={{
                                     background: `linear-gradient(to right, rgb(251, 191, 36) 0%, rgb(251, 191, 36) ${((currentSize - 20) / 40) * 100}%, rgb(253, 230, 138) ${((currentSize - 20) / 40) * 100}%, rgb(253, 230, 138) 100%)`
                                   }}
@@ -259,9 +259,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                       {/* Reset Button */}
                       <button
                         onClick={() => onResetChairSizes?.()}
-                        className="w-full mt-3 px-3 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all flex items-center justify-center gap-2 text-sm font-medium"
+                        className="rfp-w-full rfp-mt-3 rfp-px-3 rfp-py-2 bg-gradient-to-r from-gray-500 to-gray-600 rfp-text-white rfp-rounded-lg hover:from-gray-600 hover:to-gray-700 rfp-transition-all rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-text-sm rfp-font-medium"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <RotateCcw className="rfp-w-4 rfp-h-4" />
                         <span>Reset All Sizes</span>
                       </button>
                     </div>
@@ -270,27 +270,27 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               </div>
 
               {/* Table Size Dropdown */}
-              <div ref={sizeMenuRef} className="relative">
+              <div ref={sizeMenuRef} className="rfp-relative">
                 <button
                   onClick={() => {
                     setIsSizeMenuOpen(!isSizeMenuOpen);
                     setIsChairMenuOpen(false);
                   }}
-                  className="px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                  className="rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                 >
-                  <Square className="w-4 h-4" />
+                  <Square className="rfp-w-4 rfp-h-4" />
                   <span>Size: {sizeLabels[selectedTable.size]}</span>
                 </button>
                 
                 {isSizeMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
-                    <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-2 text-white">
-                      <span className="font-semibold text-sm">Table Size</span>
+                  <div className="rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-64 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden">
+                    <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rfp-px-4 rfp-py-2 rfp-text-white">
+                      <span className="rfp-font-semibold rfp-text-sm">Table Size</span>
                     </div>
                     
                     {/* Size Buttons */}
-                    <div className="p-3 space-y-2">
-                      <div className="flex gap-2">
+                    <div className="rfp-p-3 rfp-space-y-2">
+                      <div className="rfp-flex rfp-gap-2">
                         {sizeOptions.map((sizeOption) => {
                           const isActive = selectedTable.size === sizeOption;
                           return (
@@ -321,9 +321,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                             : 'bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 hover:from-purple-200 hover:to-purple-100'
                         }`}
                       >
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold">Pro Mode</span>
-                          <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Custom</span>
+                        <div className="rfp-flex rfp-items-center rfp-gap-2">
+                          <span className="rfp-text-sm rfp-font-semibold">Pro Mode</span>
+                          <span className="rfp-text-xs bg-white/20 px-1.5 py-0.5 rfp-rounded">Custom</span>
                         </div>
                         <ChevronRight className={`w-4 h-4 transition-transform ${showProSlider ? 'rotate-90' : ''}`} />
                       </button>
@@ -332,14 +332,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                       <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
                         showProSlider ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                       }`}>
-                        <div className="pt-2 space-y-3 border-t border-gray-200">
+                        <div className="rfp-pt-2 rfp-space-y-3 rfp-border-t rfp-border-gray-200">
                           {/* Width Slider */}
-                          <div className="space-y-1">
-                            <div className="flex items-center justify-between">
-                              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          <div className="rfp-space-y-1">
+                            <div className="rfp-flex rfp-items-center rfp-justify-between">
+                              <label className="rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide">
                                 Width
                               </label>
-                              <span className="text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                              <span className="rfp-text-xs font-mono rfp-bg-purple-100 rfp-text-purple-700 rfp-px-2 py-0.5 rfp-rounded">
                                 {customWidth}px
                               </span>
                             </div>
@@ -354,7 +354,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                                 setCustomWidth(newWidth);
                                 onCustomTableSize(newWidth, customHeight);
                               }}
-                              className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                              className="rfp-w-full rfp-h-2 rfp-bg-purple-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb"
                               style={{
                                 background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${((customWidth - 40) / 160) * 100}%, rgb(233, 213, 255) ${((customWidth - 40) / 160) * 100}%, rgb(233, 213, 255) 100%)`
                               }}
@@ -362,12 +362,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                           </div>
                           
                           {/* Height Slider */}
-                          <div className="space-y-1">
-                            <div className="flex items-center justify-between">
-                              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                          <div className="rfp-space-y-1">
+                            <div className="rfp-flex rfp-items-center rfp-justify-between">
+                              <label className="rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide">
                                 Height
                               </label>
-                              <span className="text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                              <span className="rfp-text-xs font-mono rfp-bg-purple-100 rfp-text-purple-700 rfp-px-2 py-0.5 rfp-rounded">
                                 {customHeight}px
                               </span>
                             </div>
@@ -382,7 +382,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                                 setCustomHeight(newHeight);
                                 onCustomTableSize(customWidth, newHeight);
                               }}
-                              className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                              className="rfp-w-full rfp-h-2 rfp-bg-purple-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb"
                               style={{
                                 background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${((customHeight - 40) / 160) * 100}%, rgb(233, 213, 255) ${((customHeight - 40) / 160) * 100}%, rgb(233, 213, 255) 100%)`
                               }}
@@ -390,7 +390,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                           </div>
                           
                           {/* Info Text */}
-                          <p className="text-xs text-gray-500 italic pt-1">
+                          <p className="rfp-text-xs rfp-text-gray-500 italic rfp-pt-1">
                             Drag sliders for precise sizing
                           </p>
                         </div>
@@ -401,13 +401,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               </div>
 
               {/* Table Name Input */}
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">Name:</span>
+              <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2">
+                <span className="rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500">Name:</span>
                 <input
                   type="text"
                   value={selectedTable.name}
                   onChange={(event) => onTableNameChange(event.target.value)}
-                  className="bg-transparent text-sm text-gray-800 font-medium focus:outline-none w-32"
+                  className="rfp-bg-transparent rfp-text-sm rfp-text-gray-800 rfp-font-medium focus:outline-none rfp-w-32"
                   placeholder="Table name"
                 />
               </div>
@@ -417,10 +417,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           {/* Object Controls */}
           {selectedObject && (
             <>
-              <div className="w-px h-8 bg-gray-300" />
+              <div className="w-px rfp-h-8 rfp-bg-gray-300" />
 
               {/* Object Size Control */}
-              <div ref={objectSizeMenuRef} className="relative">
+              <div ref={objectSizeMenuRef} className="rfp-relative">
                 <button
                   onClick={() => setIsObjectSizeMenuOpen(!isObjectSizeMenuOpen)}
                   className={`px-3 py-2 rounded-lg ${
@@ -431,26 +431,26 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 >
                   {(() => {
                     const Icon = OBJECT_ICONS[selectedObject.type];
-                    return <Icon className="w-4 h-4" />;
+                    return <Icon className="rfp-w-4 rfp-h-4" />;
                   })()}
                   <span>Resize {OBJECT_LABELS[selectedObject.type]}</span>
                 </button>
                 
                 {isObjectSizeMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden">
+                  <div className="rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-64 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden">
                     <div className={`${
                       selectedObject.type === 'bar' ? 'bg-gradient-to-r from-purple-500 to-purple-600' :
                       selectedObject.type === 'kitchen' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
                       'bg-gradient-to-r from-cyan-500 to-cyan-600'
                     } px-4 py-2 text-white`}>
-                      <span className="font-semibold text-sm">Custom Size</span>
+                      <span className="rfp-font-semibold rfp-text-sm">Custom Size</span>
                     </div>
                     
-                    <div className="p-3 space-y-3">
+                    <div className="rfp-p-3 rfp-space-y-3">
                       {/* Width Slider */}
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      <div className="rfp-space-y-1">
+                        <div className="rfp-flex rfp-items-center rfp-justify-between">
+                          <label className="rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide">
                             Width
                           </label>
                           <span className={`text-xs font-mono px-2 py-0.5 rounded ${
@@ -472,7 +472,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                             setObjectWidth(newWidth);
                             onObjectResize(newWidth, objectHeight);
                           }}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                          className="rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb"
                           style={{
                             background: `linear-gradient(to right, ${
                               selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
@@ -488,9 +488,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                       </div>
                       
                       {/* Height Slider */}
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      <div className="rfp-space-y-1">
+                        <div className="rfp-flex rfp-items-center rfp-justify-between">
+                          <label className="rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide">
                             Height
                           </label>
                           <span className={`text-xs font-mono px-2 py-0.5 rounded ${
@@ -512,7 +512,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                             setObjectHeight(newHeight);
                             onObjectResize(objectWidth, newHeight);
                           }}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
+                          className="rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb"
                           style={{
                             background: `linear-gradient(to right, ${
                               selectedObject.type === 'bar' ? 'rgb(168, 85, 247)' :
@@ -528,7 +528,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                       </div>
                       
                       {/* Info Text */}
-                      <p className="text-xs text-gray-500 italic pt-1">
+                      <p className="rfp-text-xs rfp-text-gray-500 italic rfp-pt-1">
                         Drag sliders to resize the object
                       </p>
                     </div>
@@ -549,28 +549,28 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 } text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`}
                 title="Rotate 90°"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="rfp-w-4 rfp-h-4" />
                 <span>Rotate</span>
               </button>
 
               {/* Delete Object Button */}
               <button
                 onClick={onRemoveObject}
-                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                className="rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                 title="Delete Object"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="rfp-w-4 rfp-h-4" />
                 <span>Delete</span>
               </button>
 
               {/* Object Name Input */}
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">Name:</span>
+              <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2">
+                <span className="rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500">Name:</span>
                 <input
                   type="text"
                   value={selectedObject.name}
                   onChange={(event) => onObjectNameChange(event.target.value)}
-                  className="bg-transparent text-sm text-gray-800 font-medium focus:outline-none w-32"
+                  className="rfp-bg-transparent rfp-text-sm rfp-text-gray-800 rfp-font-medium focus:outline-none rfp-w-32"
                   placeholder="Object name"
                 />
               </div>
@@ -580,11 +580,11 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           {/* Wall Controls */}
           {selectedWall && (
             <>
-              <div className="w-px h-8 bg-gray-300" />
+              <div className="w-px rfp-h-8 rfp-bg-gray-300" />
 
               {/* Wall Type Converter */}
               {onConvertWallType && (
-                <div className="flex items-center gap-1 bg-gray-50 border border-gray-300 rounded-lg p-1">
+                <div className="rfp-flex rfp-items-center rfp-gap-1 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-p-1">
                   <button
                     onClick={() => onConvertWallType('wall')}
                     className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
@@ -623,12 +623,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
               {/* Wall Thickness Selector */}
               {onChangeWallThickness && (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-gray-600">Thickness:</span>
+                <div className="rfp-flex rfp-items-center rfp-gap-2">
+                  <span className="rfp-text-xs rfp-font-semibold rfp-text-gray-600">Thickness:</span>
                   <select
                     value={selectedWall.thickness}
                     onChange={(e) => onChangeWallThickness(Number(e.target.value))}
-                    className="px-2 py-1 text-sm border border-gray-300 rounded bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="rfp-px-2 rfp-py-1 rfp-text-sm rfp-border rfp-border-gray-300 rfp-rounded rfp-bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value={4}>Thin (4px)</option>
                     <option value={8}>Normal (8px)</option>
@@ -639,11 +639,11 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               )}
 
               {/* Wall Info */}
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2">
+                <span className="rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500">
                   {WALL_LABELS[selectedWall.type]}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="rfp-text-sm rfp-text-gray-600">
                   {Math.round(Math.sqrt(
                     Math.pow(selectedWall.endX - selectedWall.startX, 2) + 
                     Math.pow(selectedWall.endY - selectedWall.startY, 2)
@@ -654,10 +654,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               {/* Delete Wall Button */}
               <button
                 onClick={onRemoveWall}
-                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                className="rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                 title="Delete Wall"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="rfp-w-4 rfp-h-4" />
                 <span>Delete</span>
               </button>
             </>
@@ -666,34 +666,34 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           {/* Fixed Element Controls */}
           {selectedFixedElement && (
             <>
-              <div className="w-px h-8 bg-gray-300" />
+              <div className="w-px rfp-h-8 rfp-bg-gray-300" />
 
               {/* Fixed Element Info */}
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2">
+                <span className="rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500">
                   {FIXED_ELEMENT_LABELS[selectedFixedElement.type]}
                 </span>
               </div>
 
               {/* Fixed Element Resize Controls */}
               {onFixedElementResize && (
-                <div ref={fixedElementSizeMenuRef} className="relative">
+                <div ref={fixedElementSizeMenuRef} className="rfp-relative">
                   <button
                     onClick={() => setIsFixedElementSizeMenuOpen(!isFixedElementSizeMenuOpen)}
-                    className="px-3 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                    className="rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-gray-600 hover:bg-gray-700 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                   >
-                    <Square className="w-4 h-4" />
+                    <Square className="rfp-w-4 rfp-h-4" />
                     <span>Resize</span>
                   </button>
                   
                   {isFixedElementSizeMenuOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 min-w-[320px]">
-                      <div className="space-y-4">
+                    <div className="rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-bg-white rfp-rounded-xl shadow-2xl rfp-border rfp-border-gray-200 rfp-p-4 z-50 min-w-[320px]">
+                      <div className="rfp-space-y-4">
                         {/* Width Slider */}
                         <div>
-                          <div className="flex justify-between items-center mb-2">
-                            <label className="text-sm font-semibold text-gray-700">Width</label>
-                            <span className="text-sm font-bold text-blue-600">{fixedElementWidth}px</span>
+                          <div className="rfp-flex rfp-justify-between rfp-items-center rfp-mb-2">
+                            <label className="rfp-text-sm rfp-font-semibold rfp-text-gray-700">Width</label>
+                            <span className="rfp-text-sm rfp-font-bold rfp-text-blue-600">{fixedElementWidth}px</span>
                           </div>
                           <input
                             type="range"
@@ -705,9 +705,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                               setFixedElementWidth(newWidth);
                               onFixedElementResize(newWidth, fixedElementHeight);
                             }}
-                            className="w-full h-2 bg-gradient-to-r from-blue-200 to-blue-500 rounded-lg appearance-none cursor-pointer slider"
+                            className="rfp-w-full rfp-h-2 bg-gradient-to-r from-blue-200 to-blue-500 rfp-rounded-lg appearance-none rfp-cursor-pointer slider"
                           />
-                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                          <div className="rfp-flex rfp-justify-between rfp-text-xs rfp-text-gray-500 rfp-mt-1">
                             <span>30px</span>
                             <span>200px</span>
                           </div>
@@ -715,9 +715,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
                         {/* Height Slider */}
                         <div>
-                          <div className="flex justify-between items-center mb-2">
-                            <label className="text-sm font-semibold text-gray-700">Height</label>
-                            <span className="text-sm font-bold text-blue-600">{fixedElementHeight}px</span>
+                          <div className="rfp-flex rfp-justify-between rfp-items-center rfp-mb-2">
+                            <label className="rfp-text-sm rfp-font-semibold rfp-text-gray-700">Height</label>
+                            <span className="rfp-text-sm rfp-font-bold rfp-text-blue-600">{fixedElementHeight}px</span>
                           </div>
                           <input
                             type="range"
@@ -729,19 +729,19 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                               setFixedElementHeight(newHeight);
                               onFixedElementResize(fixedElementWidth, newHeight);
                             }}
-                            className="w-full h-2 bg-gradient-to-r from-green-200 to-green-500 rounded-lg appearance-none cursor-pointer slider"
+                            className="rfp-w-full rfp-h-2 bg-gradient-to-r from-green-200 to-green-500 rfp-rounded-lg appearance-none rfp-cursor-pointer slider"
                           />
-                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                          <div className="rfp-flex rfp-justify-between rfp-text-xs rfp-text-gray-500 rfp-mt-1">
                             <span>30px</span>
                             <span>200px</span>
                           </div>
                         </div>
 
                         {/* Current Size Display */}
-                        <div className="pt-3 border-t border-gray-200">
-                          <div className="text-center">
-                            <span className="text-xs text-gray-600">Current Size: </span>
-                            <span className="text-sm font-bold text-gray-800">{fixedElementWidth} × {fixedElementHeight}px</span>
+                        <div className="rfp-pt-3 rfp-border-t rfp-border-gray-200">
+                          <div className="rfp-text-center">
+                            <span className="rfp-text-xs rfp-text-gray-600">Current Size: </span>
+                            <span className="rfp-text-sm rfp-font-bold rfp-text-gray-800">{fixedElementWidth} × {fixedElementHeight}px</span>
                           </div>
                         </div>
                       </div>
@@ -753,10 +753,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               {/* Delete Fixed Element Button */}
               <button
                 onClick={onRemoveFixedElement}
-                className="px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold"
+                className="rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold"
                 title="Delete Element"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="rfp-w-4 rfp-h-4" />
                 <span>Delete</span>
               </button>
             </>
@@ -764,32 +764,32 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         </div>
 
         {/* Right Section - Stats */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="rfp-flex rfp-items-center rfp-gap-3 rfp-flex-wrap">
           {/* 3D Button */}
           <button
             onClick={on3DPreview}
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-semibold text-sm"
+            className="rfp-px-4 rfp-py-2 bg-gradient-to-r from-purple-600 to-blue-600 rfp-text-white rfp-rounded-lg hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-font-semibold rfp-text-sm"
           >
-            <Box className="w-4 h-4" />
+            <Box className="rfp-w-4 rfp-h-4" />
             3D
           </button>
           
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded text-xs">
-            <div className="w-2 h-2 bg-emerald-600 rounded-full" />
-            <span className="font-medium text-emerald-800">Tables: {tableCount}</span>
+          <div className="rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 bg-emerald-50 rfp-rounded rfp-text-xs">
+            <div className="rfp-w-2 rfp-h-2 bg-emerald-600 rfp-rounded-full" />
+            <span className="rfp-font-medium text-emerald-800">Tables: {tableCount}</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-50 rounded text-xs">
-            <div className="w-2 h-2 bg-amber-600 rounded-full" />
-            <span className="font-medium text-amber-800">Chairs: {chairCount}</span>
+          <div className="rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 bg-amber-50 rfp-rounded rfp-text-xs">
+            <div className="rfp-w-2 rfp-h-2 bg-amber-600 rfp-rounded-full" />
+            <span className="rfp-font-medium text-amber-800">Chairs: {chairCount}</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50 rounded text-xs">
-            <div className="w-2 h-2 bg-purple-600 rounded-full" />
-            <span className="font-medium text-purple-800">Objects: {objectCount}</span>
+          <div className="rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-purple-50 rfp-rounded rfp-text-xs">
+            <div className="rfp-w-2 rfp-h-2 rfp-bg-purple-600 rfp-rounded-full" />
+            <span className="rfp-font-medium rfp-text-purple-800">Objects: {objectCount}</span>
           </div>
           {selectedElementType && (
-            <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 rounded text-xs">
-              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />
-              <span className="font-medium text-blue-800 capitalize">Selected: {selectedElementType}</span>
+            <div className="rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-blue-50 rfp-rounded rfp-text-xs">
+              <div className="w-1.5 h-1.5 rfp-bg-blue-600 rfp-rounded-full rfp-animate-pulse" />
+              <span className="rfp-font-medium rfp-text-blue-800 rfp-capitalize">Selected: {selectedElementType}</span>
             </div>
           )}
         </div>

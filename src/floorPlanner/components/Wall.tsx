@@ -61,10 +61,10 @@ export const WallComponent: React.FC<WallProps> = ({
     const panelWidth = (length - gapSize) / 2;
     
     return (
-      <div className="w-full h-full relative">
+      <div className="rfp-w-full rfp-h-full rfp-relative">
         {/* Left door panel */}
         <div
-          className="absolute left-0 bg-gradient-to-r from-amber-600 to-amber-700 shadow-md rounded-sm"
+          className="rfp-absolute rfp-left-0 bg-gradient-to-r from-amber-600 to-amber-700 rfp-shadow-md rfp-rounded-sm"
           style={{
             width: `${panelWidth}px`,
             height: `${wall.thickness}px`,
@@ -75,13 +75,13 @@ export const WallComponent: React.FC<WallProps> = ({
         >
           {/* Door handle/knob */}
           <div 
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+            className="rfp-absolute right-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rfp-rounded-full rfp-shadow-sm"
           />
         </div>
         
         {/* Gap in the middle */}
         <div
-          className="absolute bg-transparent"
+          className="rfp-absolute rfp-bg-transparent"
           style={{
             left: `${panelWidth}px`,
             width: `${gapSize}px`,
@@ -91,7 +91,7 @@ export const WallComponent: React.FC<WallProps> = ({
         
         {/* Right door panel */}
         <div
-          className="absolute right-0 bg-gradient-to-r from-amber-700 to-amber-600 shadow-md rounded-sm"
+          className="rfp-absolute rfp-right-0 bg-gradient-to-r from-amber-700 to-amber-600 rfp-shadow-md rfp-rounded-sm"
           style={{
             width: `${panelWidth}px`,
             height: `${wall.thickness}px`,
@@ -102,7 +102,7 @@ export const WallComponent: React.FC<WallProps> = ({
         >
           {/* Door handle/knob */}
           <div 
-            className="absolute left-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+            className="rfp-absolute left-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rfp-rounded-full rfp-shadow-sm"
           />
         </div>
       </div>
@@ -142,7 +142,7 @@ export const WallComponent: React.FC<WallProps> = ({
       ) : (
         <div className={`w-full h-full ${getWallPattern()} shadow-lg hover:opacity-90 transition-opacity rounded-sm`}>
           {isSelected && (
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30">
+            <div className="rfp-absolute -top-8 left-1/2 transform -translate-x-1/2 rfp-bg-gray-900 rfp-text-white rfp-text-xs rfp-px-2 rfp-py-1 rfp-rounded whitespace-nowrap rfp-shadow-lg z-30">
               {WALL_LABELS[wall.type]} - {Math.round(length)}px
             </div>
           )}
@@ -151,7 +151,7 @@ export const WallComponent: React.FC<WallProps> = ({
       
       {/* Label for door */}
       {wall.type === 'door' && isSelected && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30">
+        <div className="rfp-absolute -top-8 left-1/2 transform -translate-x-1/2 rfp-bg-gray-900 rfp-text-white rfp-text-xs rfp-px-2 rfp-py-1 rfp-rounded whitespace-nowrap rfp-shadow-lg z-30">
           {WALL_LABELS[wall.type]} - {Math.round(length)}px
         </div>
       )}
@@ -160,7 +160,7 @@ export const WallComponent: React.FC<WallProps> = ({
       {isSelected && (
         <>
           <div 
-            className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            className="rfp-absolute -left-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30"
             style={{ cursor: getCursorStyle() }}
             onMouseDown={(e) => {
               e.stopPropagation();
@@ -169,7 +169,7 @@ export const WallComponent: React.FC<WallProps> = ({
             title="Drag to resize"
           />
           <div 
-            className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30"
+            className="rfp-absolute -right-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30"
             style={{ cursor: getCursorStyle() }}
             onMouseDown={(e) => {
               e.stopPropagation();

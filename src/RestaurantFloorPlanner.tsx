@@ -953,7 +953,7 @@ const RestaurantFloorPlanner: React.FC = () => {
   const toggleGrid = useCallback(() => setShowGrid((prev) => !prev), []);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="restaurant-floor-planner rfp-flex rfp-h-screen rfp-bg-gray-50">
       <style dangerouslySetInnerHTML={{ __html: hexagonStyle }} />
       
       <Sidebar
@@ -971,7 +971,6 @@ const RestaurantFloorPlanner: React.FC = () => {
         onDuplicateTable={duplicateTable}
         onRemoveTable={removeElement}
         onSave={saveFloorPlan}
-        onLoad={loadFloorPlan}
         selectedTable={selectedTable ?? null}
         selectedTableChairs={selectedTableChairs}
       />

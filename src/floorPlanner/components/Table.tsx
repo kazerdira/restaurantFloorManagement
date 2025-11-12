@@ -64,7 +64,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
       <div className={tableClasses}>
         {/* 3D Table Effect */}
         <div 
-          className="absolute inset-0 rounded-[inherit]"
+          className="rfp-absolute rfp-inset-0 rounded-[inherit]"
           style={{
             background: 'linear-gradient(145deg, #059669 0%, #047857 50%, #065f46 100%)',
             boxShadow: `
@@ -78,7 +78,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
         
         {/* Wood grain effect overlay */}
         <div 
-          className="absolute inset-0 rounded-[inherit] opacity-20"
+          className="rfp-absolute rfp-inset-0 rounded-[inherit] rfp-opacity-20"
           style={{
             background: `
               repeating-linear-gradient(
@@ -94,7 +94,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({
         
         {/* Bevel edge highlight */}
         <div 
-          className="absolute inset-0 rounded-[inherit]"
+          className="rfp-absolute rfp-inset-0 rounded-[inherit]"
           style={{
             border: '3px solid transparent',
             borderImage: 'linear-gradient(145deg, rgba(255,255,255,0.4), rgba(0,0,0,0.2)) 1',
@@ -103,9 +103,9 @@ export const TableComponent: React.FC<TableComponentProps> = ({
         />
         
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center gap-1 text-white drop-shadow-lg">
-          <span className="text-xs font-bold uppercase tracking-wide">N: {tableLabel}</span>
-          <span className="text-xs font-bold uppercase tracking-wide">S: {seatsCount}</span>
+        <div className="rfp-relative z-10 rfp-flex rfp-flex-col rfp-items-center rfp-justify-center rfp-gap-1 rfp-text-white rfp-drop-shadow-lg">
+          <span className="rfp-text-xs rfp-font-bold rfp-uppercase rfp-tracking-wide">N: {tableLabel}</span>
+          <span className="rfp-text-xs rfp-font-bold rfp-uppercase rfp-tracking-wide">S: {seatsCount}</span>
         </div>
       </div>
     </div>

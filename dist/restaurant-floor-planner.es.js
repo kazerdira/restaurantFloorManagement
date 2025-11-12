@@ -1,33 +1,33 @@
-import { jsx as e, jsxs as s, Fragment as _e } from "react/jsx-runtime";
-import qe, { useState as J, useRef as Te, useEffect as Ve, useCallback as et } from "react";
-import { Square as Ue, Circle as vt, Wine as Nt, ChefHat as Mt, Bath as St, RectangleVertical as lt, DoorOpen as Ct, Columns as dt, Rows as kt, Armchair as nt, Layers as ut, Plus as st, Minus as xt, LayoutGrid as Et, Package as Gt, Home as zt, RotateCw as Pt, Trash2 as Ke, Save as It, Upload as Rt, Eye as Tt, EyeOff as $t, RotateCcw as at, ChevronRight as Lt, Box as Wt, Move3d as tt, X as Bt, ZoomIn as ct, ZoomOut as Xt, Maximize2 as At, Grid as Yt } from "lucide-react";
+import { jsx as e, jsxs as n, Fragment as Ze } from "react/jsx-runtime";
+import Ve, { useState as U, useRef as Te, useEffect as _e, useCallback as je } from "react";
+import { Square as qe, Circle as yt, Wine as vt, ChefHat as Nt, Bath as Mt, RectangleVertical as ot, DoorOpen as St, Columns as lt, Rows as Ct, Armchair as tt, Layers as mt, Plus as rt, Minus as gt, LayoutGrid as kt, Package as Et, Home as Gt, RotateCw as zt, Trash2 as Je, Save as Pt, Upload as It, Eye as Rt, EyeOff as Tt, RotateCcw as nt, ChevronRight as $t, Box as Lt, Move3d as et, X as Wt, ZoomIn as dt, ZoomOut as Bt, Maximize2 as Xt, Grid as At } from "lucide-react";
 import * as t from "three";
-const Ht = `
+const Yt = `
   .hexagon-shape {
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
-`, Y = 20, Dt = {
+`, Y = 20, Ht = {
   small: { width: 50, height: 50 },
   medium: { width: 90, height: 90 },
   large: { width: 130, height: 130 }
-}, Ot = {
-  square: Ue,
-  circle: vt,
-  rectangle: Ue,
-  hexagon: Ue
-}, ft = {
+}, Dt = {
+  square: qe,
+  circle: yt,
+  rectangle: qe,
+  hexagon: qe
+}, ut = {
   small: "Small",
   medium: "Medium",
   large: "Big"
-}, rt = {
-  bar: Nt,
-  kitchen: Mt,
-  toilet: St
-}, Qe = {
+}, st = {
+  bar: vt,
+  kitchen: Nt,
+  toilet: Mt
+}, Ke = {
   bar: "Bar",
   kitchen: "Kitchen",
   toilet: "Toilet"
-}, wt = {
+}, xt = {
   bar: {
     bg: "bg-gradient-to-br from-purple-500 to-purple-700",
     border: "border-purple-600",
@@ -43,23 +43,23 @@ const Ht = `
     border: "border-cyan-600",
     text: "text-cyan-100"
   }
-}, je = {
+}, Qe = {
   wall: "Wall",
   door: "Door",
   window: "Window"
-}, Ft = {
-  wall: lt,
-  door: Ct,
-  window: lt
-}, bt = {
+}, Ot = {
+  wall: ot,
+  door: St,
+  window: ot
+}, wt = {
   pillar: "Pillar",
   column: "Column",
   stairs: "Stairs"
+}, Ft = {
+  pillar: lt,
+  column: lt,
+  stairs: Ct
 }, Zt = {
-  pillar: dt,
-  column: dt,
-  stairs: kt
-}, _t = {
   pillar: {
     bg: "bg-gradient-to-br from-gray-600 to-gray-800",
     border: "border-gray-700",
@@ -75,120 +75,120 @@ const Ht = `
     border: "border-stone-700",
     text: "text-stone-100"
   }
-}, Ze = () => Math.random().toString(36).slice(2, 11), Vt = (o) => {
-  const d = o.shape === "rectangle" ? o.width * 1.5 : o.width, m = Math.min(d, o.height), C = Math.round(m * 0.35);
+}, Oe = () => Math.random().toString(36).slice(2, 11), _t = (o) => {
+  const p = o.shape === "rectangle" ? o.width * 1.5 : o.width, f = Math.min(p, o.height), C = Math.round(f * 0.35);
   return Math.max(18, Math.min(48, C));
-}, yt = (o) => o.shape === "rectangle" ? o.width * 1.5 : o.width, ht = (o, d) => {
-  const { width: m, height: C } = Dt[d];
+}, bt = (o) => o.shape === "rectangle" ? o.width * 1.5 : o.width, pt = (o, p) => {
+  const { width: f, height: C } = Ht[p];
   return {
-    width: o === "rectangle" ? m * 1.5 : m,
+    width: o === "rectangle" ? f * 1.5 : f,
     height: C
   };
-}, Je = (o, d) => {
-  const m = Math.abs(d.x - o.x), C = Math.abs(d.y - o.y);
-  return m > C ? { x: d.x, y: o.y } : { x: o.x, y: d.y };
-}, qt = ({
+}, Ue = (o, p) => {
+  const f = Math.abs(p.x - o.x), C = Math.abs(p.y - o.y);
+  return f > C ? { x: p.x, y: o.y } : { x: o.x, y: p.y };
+}, Vt = ({
   chair: o,
-  table: d,
-  isSelected: m,
+  table: p,
+  isSelected: f,
   onSelect: C,
   onDrag: i,
   onDragEnd: v,
-  totalChairsOnSide: q
+  totalChairsOnSide: V
 }) => {
-  const ie = Vt(d), P = o.size ?? Math.round(ie * 1.3), oe = Math.max(10, Math.round(P * 0.25)), U = Math.min(P - 4, Math.max(20, Math.round(P * 0.65))), A = yt(d), _ = (d.rotation || 0) * (Math.PI / 180), ve = (() => {
-    const $e = (o.position === "top" || o.position === "bottom" ? A : d.height) - P * q, ge = q > 1 ? $e / (q + 1) : $e / 2, be = ge + o.index * (P + ge) + P / 2;
-    let g = 0, I = 0;
+  const oe = _t(p), P = o.size ?? Math.round(oe * 1.3), le = Math.max(10, Math.round(P * 0.25)), q = Math.min(P - 4, Math.max(20, Math.round(P * 0.65))), A = bt(p), _ = (p.rotation || 0) * (Math.PI / 180), Ne = (() => {
+    const $e = (o.position === "top" || o.position === "bottom" ? A : p.height) - P * V, ge = V > 1 ? $e / (V + 1) : $e / 2, be = ge + o.index * (P + ge) + P / 2;
+    let h = 0, I = 0;
     switch (o.position) {
       case "top":
-        g = be - A / 2, I = -(d.height / 2 + oe + P / 2);
+        h = be - A / 2, I = -(p.height / 2 + le + P / 2);
         break;
       case "bottom":
-        g = be - A / 2, I = d.height / 2 + oe + P / 2;
+        h = be - A / 2, I = p.height / 2 + le + P / 2;
         break;
       case "left":
-        g = -(A / 2 + oe + P / 2), I = be - d.height / 2;
+        h = -(A / 2 + le + P / 2), I = be - p.height / 2;
         break;
       case "right":
-        g = A / 2 + oe + P / 2, I = be - d.height / 2;
+        h = A / 2 + le + P / 2, I = be - p.height / 2;
         break;
     }
-    const F = g * Math.cos(_) - I * Math.sin(_), ye = g * Math.sin(_) + I * Math.cos(_), le = d.x + A / 2, ze = d.y + d.height / 2;
+    const F = h * Math.cos(_) - I * Math.sin(_), ye = h * Math.sin(_) + I * Math.cos(_), de = p.x + A / 2, ze = p.y + p.height / 2;
     return {
-      x: le + F - P / 2,
+      x: de + F - P / 2,
       y: ze + ye - P / 2
     };
-  })(), Ye = () => {
-    let K = 0;
+  })(), Ae = () => {
+    let J = 0;
     switch (o.position) {
       case "top":
-        K = 0;
+        J = 0;
         break;
       case "right":
-        K = 90;
+        J = 90;
         break;
       case "bottom":
-        K = 180;
+        J = 180;
         break;
       case "left":
-        K = 270;
+        J = 270;
         break;
     }
-    return K + (d.rotation || 0);
+    return J + (p.rotation || 0);
   };
   return /* @__PURE__ */ e(
     "div",
     {
-      className: `absolute cursor-move transition-all duration-150 ${m ? "ring-4 ring-amber-400 ring-offset-2" : ""}`,
+      className: `absolute cursor-move transition-all duration-150 ${f ? "ring-4 ring-amber-400 ring-offset-2" : ""}`,
       style: {
-        left: ve.x,
-        top: ve.y,
+        left: Ne.x,
+        top: Ne.y,
         width: P,
         height: P,
-        transform: `rotate(${Ye()}deg)`,
-        zIndex: m ? 100 : 50,
+        transform: `rotate(${Ae()}deg)`,
+        zIndex: f ? 100 : 50,
         filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2))"
       },
-      onMouseDown: (K) => {
-        K.stopPropagation(), C(), i(K, o.id);
+      onMouseDown: (J) => {
+        J.stopPropagation(), C(), i(J, o.id);
       },
       onMouseUp: v,
-      children: /* @__PURE__ */ e("div", { className: "w-full h-full bg-gradient-to-br from-amber-500 to-amber-700 rounded-lg border-4 border-amber-800 flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-105 transition-all", children: /* @__PURE__ */ e(nt, { size: U, strokeWidth: 3.5, className: "text-amber-50" }) })
+      children: /* @__PURE__ */ e("div", { className: "rfp-w-full rfp-h-full bg-gradient-to-br from-amber-500 to-amber-700 rfp-rounded-lg rfp-border-4 border-amber-800 rfp-flex rfp-items-center rfp-justify-center rfp-shadow-xl hover:shadow-2xl hover:scale-105 rfp-transition-all", children: /* @__PURE__ */ e(tt, { size: q, strokeWidth: 3.5, className: "text-amber-50" }) })
     }
   );
-}, Ut = ({
+}, qt = ({
   table: o,
-  chairs: d,
-  isSelected: m,
+  chairs: p,
+  isSelected: f,
   onSelect: C,
   onDrag: i,
   onDragEnd: v
 }) => {
-  const q = {
+  const V = {
     left: o.x,
     top: o.y,
-    width: yt(o),
+    width: bt(o),
     height: o.height,
-    zIndex: m ? 100 : 50,
+    zIndex: f ? 100 : 50,
     transform: `rotate(${o.rotation || 0}deg)`
-  }, ie = "w-full h-full flex items-center justify-center relative", P = o.shape === "circle" ? `${ie} rounded-full` : o.shape === "hexagon" ? `${ie} hexagon-shape` : ie, U = d.filter((ve) => ve.tableId === o.id).length, A = o.name.match(/\d+/), _ = A ? A[0] : o.name;
+  }, oe = "w-full h-full flex items-center justify-center relative", P = o.shape === "circle" ? `${oe} rounded-full` : o.shape === "hexagon" ? `${oe} hexagon-shape` : oe, q = p.filter((Ne) => Ne.tableId === o.id).length, A = o.name.match(/\d+/), _ = A ? A[0] : o.name;
   return /* @__PURE__ */ e(
     "div",
     {
-      className: `absolute cursor-move transition-all duration-150 ${m ? "ring-2 ring-emerald-500 ring-offset-2" : ""}`,
-      style: q,
-      onMouseDown: (ve) => {
-        ve.stopPropagation(), C(), i(ve, o.id);
+      className: `absolute cursor-move transition-all duration-150 ${f ? "ring-2 ring-emerald-500 ring-offset-2" : ""}`,
+      style: V,
+      onMouseDown: (Ne) => {
+        Ne.stopPropagation(), C(), i(Ne, o.id);
       },
-      onClick: (ve) => {
-        ve.stopPropagation(), C();
+      onClick: (Ne) => {
+        Ne.stopPropagation(), C();
       },
       onMouseUp: v,
-      children: /* @__PURE__ */ s("div", { className: P, children: [
+      children: /* @__PURE__ */ n("div", { className: P, children: [
         /* @__PURE__ */ e(
           "div",
           {
-            className: "absolute inset-0 rounded-[inherit]",
+            className: "rfp-absolute rfp-inset-0 rounded-[inherit]",
             style: {
               background: "linear-gradient(145deg, #059669 0%, #047857 50%, #065f46 100%)",
               boxShadow: `
@@ -203,7 +203,7 @@ const Ht = `
         /* @__PURE__ */ e(
           "div",
           {
-            className: "absolute inset-0 rounded-[inherit] opacity-20",
+            className: "rfp-absolute rfp-inset-0 rounded-[inherit] rfp-opacity-20",
             style: {
               background: `
               repeating-linear-gradient(
@@ -220,7 +220,7 @@ const Ht = `
         /* @__PURE__ */ e(
           "div",
           {
-            className: "absolute inset-0 rounded-[inherit]",
+            className: "rfp-absolute rfp-inset-0 rounded-[inherit]",
             style: {
               border: "3px solid transparent",
               borderImage: "linear-gradient(145deg, rgba(255,255,255,0.4), rgba(0,0,0,0.2)) 1",
@@ -228,36 +228,36 @@ const Ht = `
             }
           }
         ),
-        /* @__PURE__ */ s("div", { className: "relative z-10 flex flex-col items-center justify-center gap-1 text-white drop-shadow-lg", children: [
-          /* @__PURE__ */ s("span", { className: "text-xs font-bold uppercase tracking-wide", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-relative z-10 rfp-flex rfp-flex-col rfp-items-center rfp-justify-center rfp-gap-1 rfp-text-white rfp-drop-shadow-lg", children: [
+          /* @__PURE__ */ n("span", { className: "rfp-text-xs rfp-font-bold rfp-uppercase rfp-tracking-wide", children: [
             "N: ",
             _
           ] }),
-          /* @__PURE__ */ s("span", { className: "text-xs font-bold uppercase tracking-wide", children: [
+          /* @__PURE__ */ n("span", { className: "rfp-text-xs rfp-font-bold rfp-uppercase rfp-tracking-wide", children: [
             "S: ",
-            U
+            q
           ] })
         ] })
       ] })
     }
   );
-}, Jt = ({
+}, Ut = ({
   object: o,
-  isSelected: d,
-  onSelect: m,
+  isSelected: p,
+  onSelect: f,
   onDragStart: C
 }) => {
-  const i = rt[o.type], v = wt[o.type], [q, ie] = J(!1), P = (oe) => {
-    ie(!0), C(oe);
-    const U = () => {
-      ie(!1), document.removeEventListener("mouseup", U);
+  const i = st[o.type], v = xt[o.type], [V, oe] = U(!1), P = (le) => {
+    oe(!0), C(le);
+    const q = () => {
+      oe(!1), document.removeEventListener("mouseup", q);
     };
-    document.addEventListener("mouseup", U);
+    document.addEventListener("mouseup", q);
   };
-  return /* @__PURE__ */ s(
+  return /* @__PURE__ */ n(
     "div",
     {
-      className: `absolute cursor-move select-none ${q ? "" : "transition-all duration-75"} ${v.bg} ${v.border} border-2 rounded-lg shadow-lg flex items-center justify-center ${d ? "ring-4 ring-blue-400 ring-opacity-50 scale-105" : "hover:scale-102"}`,
+      className: `absolute cursor-move select-none ${V ? "" : "transition-all duration-75"} ${v.bg} ${v.border} border-2 rounded-lg shadow-lg flex items-center justify-center ${p ? "ring-4 ring-blue-400 ring-opacity-50 scale-105" : "hover:scale-102"}`,
       style: {
         left: `${o.x}px`,
         top: `${o.y}px`,
@@ -265,37 +265,37 @@ const Ht = `
         height: `${o.height}px`,
         transform: `rotate(${o.rotation}deg)`,
         transformOrigin: "center",
-        willChange: q ? "transform" : "auto"
+        willChange: V ? "transform" : "auto"
       },
-      onClick: (oe) => {
-        oe.stopPropagation(), m();
+      onClick: (le) => {
+        le.stopPropagation(), f();
       },
       onMouseDown: P,
       children: [
-        /* @__PURE__ */ s("div", { className: "flex flex-col items-center justify-center gap-2 pointer-events-none", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-items-center rfp-justify-center rfp-gap-2 rfp-pointer-events-none", children: [
           /* @__PURE__ */ e(i, { className: `w-8 h-8 ${v.text}`, strokeWidth: 2 }),
           /* @__PURE__ */ e("span", { className: `text-sm font-bold ${v.text} uppercase tracking-wide`, children: o.name })
         ] }),
-        d && /* @__PURE__ */ s(_e, { children: [
-          /* @__PURE__ */ e("div", { className: "absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-nw-resize" }),
-          /* @__PURE__ */ e("div", { className: "absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-ne-resize" }),
-          /* @__PURE__ */ e("div", { className: "absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-sw-resize" }),
-          /* @__PURE__ */ e("div", { className: "absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white cursor-se-resize" })
+        p && /* @__PURE__ */ n(Ze, { children: [
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -top-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-nw-resize" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -top-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-ne-resize" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -bottom-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-sw-resize" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -bottom-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white cursor-se-resize" })
         ] })
       ]
     }
   );
-}, mt = ({
+}, ct = ({
   wall: o,
-  isSelected: d,
-  onSelect: m,
+  isSelected: p,
+  onSelect: f,
   onDragHandle: C,
   onDragStart: i
 }) => {
   const v = Math.sqrt(
     Math.pow(o.endX - o.startX, 2) + Math.pow(o.endY - o.startY, 2)
-  ), q = Math.atan2(o.endY - o.startY, o.endX - o.startX) * (180 / Math.PI), ie = () => {
-    if (!d)
+  ), V = Math.atan2(o.endY - o.startY, o.endX - o.startX) * (180 / Math.PI), oe = () => {
+    if (!p)
       return "pointer";
     const A = Math.abs(o.endX - o.startX), _ = Math.abs(o.endY - o.startY);
     return A > _ ? "ew-resize" : "ns-resize";
@@ -308,13 +308,13 @@ const Ht = `
       case "window":
         return "bg-blue-500";
     }
-  }, oe = () => o.type === "window" ? "bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400" : o.type === "door" ? "" : P(), U = () => {
+  }, le = () => o.type === "window" ? "bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400" : o.type === "door" ? "" : P(), q = () => {
     const A = v * 0.1, _ = (v - A) / 2;
-    return /* @__PURE__ */ s("div", { className: "w-full h-full relative", children: [
+    return /* @__PURE__ */ n("div", { className: "rfp-w-full rfp-h-full rfp-relative", children: [
       /* @__PURE__ */ e(
         "div",
         {
-          className: "absolute left-0 bg-gradient-to-r from-amber-600 to-amber-700 shadow-md rounded-sm",
+          className: "rfp-absolute rfp-left-0 bg-gradient-to-r from-amber-600 to-amber-700 rfp-shadow-md rfp-rounded-sm",
           style: {
             width: `${_}px`,
             height: `${o.thickness}px`,
@@ -325,7 +325,7 @@ const Ht = `
           children: /* @__PURE__ */ e(
             "div",
             {
-              className: "absolute right-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+              className: "rfp-absolute right-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rfp-rounded-full rfp-shadow-sm"
             }
           )
         }
@@ -333,7 +333,7 @@ const Ht = `
       /* @__PURE__ */ e(
         "div",
         {
-          className: "absolute bg-transparent",
+          className: "rfp-absolute rfp-bg-transparent",
           style: {
             left: `${_}px`,
             width: `${A}px`,
@@ -344,7 +344,7 @@ const Ht = `
       /* @__PURE__ */ e(
         "div",
         {
-          className: "absolute right-0 bg-gradient-to-r from-amber-700 to-amber-600 shadow-md rounded-sm",
+          className: "rfp-absolute rfp-right-0 bg-gradient-to-r from-amber-700 to-amber-600 rfp-shadow-md rfp-rounded-sm",
           style: {
             width: `${_}px`,
             height: `${o.thickness}px`,
@@ -355,53 +355,53 @@ const Ht = `
           children: /* @__PURE__ */ e(
             "div",
             {
-              className: "absolute left-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-sm"
+              className: "rfp-absolute left-1 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-yellow-500 rfp-rounded-full rfp-shadow-sm"
             }
           )
         }
       )
     ] });
   };
-  return /* @__PURE__ */ s(
+  return /* @__PURE__ */ n(
     "div",
     {
       onClick: (A) => {
-        A.stopPropagation(), m();
+        A.stopPropagation(), f();
       },
       onMouseDown: (A) => {
-        d && i && (A.stopPropagation(), i(A));
+        p && i && (A.stopPropagation(), i(A));
       },
-      className: `absolute transition-all ${d ? "ring-4 ring-blue-400 ring-opacity-50 hover:ring-6 hover:ring-blue-300" : ""}`,
+      className: `absolute transition-all ${p ? "ring-4 ring-blue-400 ring-opacity-50 hover:ring-6 hover:ring-blue-300" : ""}`,
       style: {
         left: `${o.startX}px`,
         top: `${o.startY}px`,
         width: `${v}px`,
         height: `${o.thickness}px`,
-        transform: `rotate(${q}deg)`,
+        transform: `rotate(${V}deg)`,
         transformOrigin: "top left",
         zIndex: 10,
-        cursor: d ? "move" : "pointer",
+        cursor: p ? "move" : "pointer",
         pointerEvents: "auto"
       },
       children: [
-        o.type === "door" ? U() : /* @__PURE__ */ e("div", { className: `w-full h-full ${oe()} shadow-lg hover:opacity-90 transition-opacity rounded-sm`, children: d && /* @__PURE__ */ s("div", { className: "absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30", children: [
-          je[o.type],
+        o.type === "door" ? q() : /* @__PURE__ */ e("div", { className: `w-full h-full ${le()} shadow-lg hover:opacity-90 transition-opacity rounded-sm`, children: p && /* @__PURE__ */ n("div", { className: "rfp-absolute -top-8 left-1/2 transform -translate-x-1/2 rfp-bg-gray-900 rfp-text-white rfp-text-xs rfp-px-2 rfp-py-1 rfp-rounded whitespace-nowrap rfp-shadow-lg z-30", children: [
+          Qe[o.type],
           " - ",
           Math.round(v),
           "px"
         ] }) }),
-        o.type === "door" && d && /* @__PURE__ */ s("div", { className: "absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30", children: [
-          je[o.type],
+        o.type === "door" && p && /* @__PURE__ */ n("div", { className: "rfp-absolute -top-8 left-1/2 transform -translate-x-1/2 rfp-bg-gray-900 rfp-text-white rfp-text-xs rfp-px-2 rfp-py-1 rfp-rounded whitespace-nowrap rfp-shadow-lg z-30", children: [
+          Qe[o.type],
           " - ",
           Math.round(v),
           "px"
         ] }),
-        d && /* @__PURE__ */ s(_e, { children: [
+        p && /* @__PURE__ */ n(Ze, { children: [
           /* @__PURE__ */ e(
             "div",
             {
-              className: "absolute -left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30",
-              style: { cursor: ie() },
+              className: "rfp-absolute -left-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30",
+              style: { cursor: oe() },
               onMouseDown: (A) => {
                 A.stopPropagation(), C == null || C(A, "start");
               },
@@ -411,8 +411,8 @@ const Ht = `
           /* @__PURE__ */ e(
             "div",
             {
-              className: "absolute -right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white hover:bg-blue-600 hover:scale-125 transition-all shadow-xl z-30",
-              style: { cursor: ie() },
+              className: "rfp-absolute -right-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30",
+              style: { cursor: oe() },
               onMouseDown: (A) => {
                 A.stopPropagation(), C == null || C(A, "end");
               },
@@ -423,55 +423,55 @@ const Ht = `
       ]
     }
   );
-}, Kt = ({
+}, Jt = ({
   element: o,
-  isSelected: d,
-  onSelect: m,
+  isSelected: p,
+  onSelect: f,
   onDragStart: C
 }) => {
-  const [i, v] = J(!1), q = (P) => {
+  const [i, v] = U(!1), V = (P) => {
     v(!0), C(P);
-    const oe = () => {
-      v(!1), document.removeEventListener("mouseup", oe);
+    const le = () => {
+      v(!1), document.removeEventListener("mouseup", le);
     };
-    document.addEventListener("mouseup", oe);
-  }, ie = () => o.type === "pillar" ? /* @__PURE__ */ s("div", { className: "w-full h-full relative", children: [
-    /* @__PURE__ */ s("div", { className: "absolute inset-2 bg-gradient-to-br from-gray-400 via-gray-600 to-gray-800 rounded-full shadow-2xl", children: [
-      /* @__PURE__ */ e("div", { className: "absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/10 to-white/20" }),
-      /* @__PURE__ */ e("div", { className: "absolute inset-0 rounded-full shadow-inner", style: { boxShadow: "inset -4px -4px 12px rgba(0,0,0,0.5), inset 4px 4px 12px rgba(255,255,255,0.2)" } })
+    document.addEventListener("mouseup", le);
+  }, oe = () => o.type === "pillar" ? /* @__PURE__ */ n("div", { className: "rfp-w-full rfp-h-full rfp-relative", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-absolute inset-2 bg-gradient-to-br from-gray-400 via-gray-600 to-gray-800 rfp-rounded-full shadow-2xl", children: [
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-rounded-full bg-gradient-to-tr from-transparent via-white/10 to-white/20" }),
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-rounded-full shadow-inner", style: { boxShadow: "inset -4px -4px 12px rgba(0,0,0,0.5), inset 4px 4px 12px rgba(255,255,255,0.2)" } })
     ] }),
-    /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center", children: /* @__PURE__ */ e("div", { className: "w-1/3 h-1/3 bg-white/10 rounded-full blur-sm" }) })
-  ] }) : o.type === "column" ? /* @__PURE__ */ s("div", { className: "w-full h-full relative", children: [
-    /* @__PURE__ */ s("div", { className: "absolute inset-2 bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800 rounded-lg shadow-2xl", children: [
-      /* @__PURE__ */ e("div", { className: "absolute inset-0 rounded-lg bg-gradient-to-br from-white/20 via-transparent to-black/30" }),
-      /* @__PURE__ */ e("div", { className: "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-t-lg" }),
-      /* @__PURE__ */ e("div", { className: "absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-transparent via-white/30 to-transparent rounded-l-lg" }),
-      /* @__PURE__ */ e("div", { className: "absolute inset-0 rounded-lg", style: { boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)" } })
+    /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-flex rfp-items-center rfp-justify-center", children: /* @__PURE__ */ e("div", { className: "w-1/3 h-1/3 bg-white/10 rfp-rounded-full blur-sm" }) })
+  ] }) : o.type === "column" ? /* @__PURE__ */ n("div", { className: "rfp-w-full rfp-h-full rfp-relative", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-absolute inset-2 bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800 rfp-rounded-lg shadow-2xl", children: [
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-rounded-lg bg-gradient-to-br from-white/20 via-transparent to-black/30" }),
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-top-0 rfp-left-0 rfp-right-0 rfp-h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-t-lg" }),
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-top-0 rfp-bottom-0 rfp-left-0 rfp-w-1 bg-gradient-to-b from-transparent via-white/30 to-transparent rounded-l-lg" }),
+      /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-rounded-lg", style: { boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)" } })
     ] }),
-    /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none", children: /* @__PURE__ */ e("div", { className: "w-0.5 h-2/3 bg-white/20" }) })
-  ] }) : o.type === "stairs" ? /* @__PURE__ */ s("div", { className: "w-full h-full relative bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 rounded-lg shadow-xl overflow-hidden", children: [
-    [0, 1, 2, 3, 4, 5].map((P) => /* @__PURE__ */ s(
+    /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-flex rfp-items-center rfp-justify-center rfp-pointer-events-none", children: /* @__PURE__ */ e("div", { className: "w-0.5 h-2/3 bg-white/20" }) })
+  ] }) : o.type === "stairs" ? /* @__PURE__ */ n("div", { className: "rfp-w-full rfp-h-full rfp-relative bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 rfp-rounded-lg rfp-shadow-xl rfp-overflow-hidden", children: [
+    [0, 1, 2, 3, 4, 5].map((P) => /* @__PURE__ */ n(
       "div",
       {
-        className: "absolute left-0 right-0 bg-gradient-to-r from-amber-400 to-amber-500 border-t border-amber-600",
+        className: "rfp-absolute rfp-left-0 rfp-right-0 bg-gradient-to-r from-amber-400 to-amber-500 rfp-border-t border-amber-600",
         style: {
           top: `${P * 16.66}%`,
           height: "16.66%",
           boxShadow: "0 2px 4px rgba(0,0,0,0.3)"
         },
         children: [
-          /* @__PURE__ */ e("div", { className: "absolute inset-0 bg-gradient-to-b from-white/20 to-transparent h-1/2" }),
-          /* @__PURE__ */ e("div", { className: "absolute bottom-0 left-0 right-0 h-px bg-black/30" })
+          /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 bg-gradient-to-b from-white/20 to-transparent h-1/2" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-bottom-0 rfp-left-0 rfp-right-0 h-px bg-black/30" })
         ]
       },
       P
     )),
-    /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none", children: /* @__PURE__ */ e("div", { className: "bg-white/80 rounded-full p-2 shadow-lg", children: /* @__PURE__ */ e("svg", { className: "w-6 h-6 text-amber-800", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 3, d: "M5 15l7-7 7 7" }) }) }) })
+    /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-flex rfp-items-center rfp-justify-center rfp-pointer-events-none", children: /* @__PURE__ */ e("div", { className: "bg-white/80 rfp-rounded-full rfp-p-2 rfp-shadow-lg", children: /* @__PURE__ */ e("svg", { className: "rfp-w-6 rfp-h-6 text-amber-800", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 3, d: "M5 15l7-7 7 7" }) }) }) })
   ] }) : null;
-  return /* @__PURE__ */ s(
+  return /* @__PURE__ */ n(
     "div",
     {
-      className: `absolute cursor-move select-none ${i ? "" : "transition-all duration-75"} rounded-lg ${d ? "ring-4 ring-blue-400 ring-opacity-50 scale-105" : "hover:scale-102"}`,
+      className: `absolute cursor-move select-none ${i ? "" : "transition-all duration-75"} rounded-lg ${p ? "ring-4 ring-blue-400 ring-opacity-50 scale-105" : "hover:scale-102"}`,
       style: {
         left: `${o.x}px`,
         top: `${o.y}px`,
@@ -483,72 +483,72 @@ const Ht = `
         zIndex: 20
       },
       onClick: (P) => {
-        P.stopPropagation(), m();
+        P.stopPropagation(), f();
       },
-      onMouseDown: q,
+      onMouseDown: V,
       children: [
-        ie(),
-        d && /* @__PURE__ */ e("div", { className: "absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg z-30", children: o.name }),
-        d && /* @__PURE__ */ s(_e, { children: [
-          /* @__PURE__ */ e("div", { className: "absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" }),
-          /* @__PURE__ */ e("div", { className: "absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" }),
-          /* @__PURE__ */ e("div", { className: "absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" }),
-          /* @__PURE__ */ e("div", { className: "absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white" })
+        oe(),
+        p && /* @__PURE__ */ e("div", { className: "rfp-absolute -bottom-8 left-1/2 transform -translate-x-1/2 rfp-bg-gray-900 rfp-text-white rfp-text-xs rfp-px-2 rfp-py-1 rfp-rounded whitespace-nowrap rfp-shadow-lg z-30", children: o.name }),
+        p && /* @__PURE__ */ n(Ze, { children: [
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -top-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -top-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -bottom-1 -left-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white" }),
+          /* @__PURE__ */ e("div", { className: "rfp-absolute -bottom-1 -right-1 rfp-w-3 rfp-h-3 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white" })
         ] })
       ]
     }
   );
-}, Qt = ft, jt = ({
+}, Kt = ut, Qt = ({
   floors: o,
-  currentFloor: d,
-  onAddFloor: m,
+  currentFloor: p,
+  onAddFloor: f,
   onRemoveFloor: C,
   onSwitchFloor: i,
   onRenameFloor: v,
-  onAddTable: q,
-  onAddObject: ie,
+  onAddTable: V,
+  onAddObject: oe,
   onStartWallDrawing: P,
-  onAddFixedElement: oe,
-  onRotateTable: U,
+  onAddFixedElement: le,
+  onRotateTable: q,
   onDuplicateTable: A,
   onRemoveTable: _,
-  onSave: ve,
-  onLoad: Ye,
-  selectedTable: K,
+  onSave: Ne,
+  onLoad: Ae,
+  selectedTable: J,
   selectedTableChairs: $e
 }) => {
-  const [ge, be] = qe.useState(null), [g, I] = qe.useState(""), [F, ye] = qe.useState("tables"), le = qe.useRef(null);
-  qe.useEffect(() => {
-    ge && le.current && (le.current.focus(), le.current.select());
+  const [ge, be] = Ve.useState(null), [h, I] = Ve.useState(""), [F, ye] = Ve.useState("tables"), de = Ve.useRef(null);
+  Ve.useEffect(() => {
+    ge && de.current && (de.current.focus(), de.current.select());
   }, [ge]);
   const ze = (M) => {
     be(M.id), I(M.name);
-  }, xe = () => {
-    ge && g.trim() && v(ge, g.trim()), be(null), I("");
-  }, De = (M) => {
-    M.key === "Enter" ? xe() : M.key === "Escape" && (be(null), I(""));
+  }, we = () => {
+    ge && h.trim() && v(ge, h.trim()), be(null), I("");
+  }, He = (M) => {
+    M.key === "Enter" ? we() : M.key === "Escape" && (be(null), I(""));
   };
-  return /* @__PURE__ */ s("div", { className: "w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col", children: [
-    /* @__PURE__ */ s("div", { className: "p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white", children: [
-      /* @__PURE__ */ e("h1", { className: "text-xl font-bold", children: "Restaurant Designer" }),
-      /* @__PURE__ */ e("p", { className: "text-blue-100 text-sm", children: "Professional Floor Planner" })
+  return /* @__PURE__ */ n("div", { className: "rfp-w-80 rfp-bg-white rfp-shadow-lg rfp-border-r rfp-border-gray-200 rfp-flex rfp-flex-col", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-p-4 bg-gradient-to-r from-blue-600 to-purple-600 rfp-text-white", children: [
+      /* @__PURE__ */ e("h1", { className: "rfp-text-xl rfp-font-bold", children: "Restaurant Designer" }),
+      /* @__PURE__ */ e("p", { className: "rfp-text-blue-100 rfp-text-sm", children: "Professional Floor Planner" })
     ] }),
-    /* @__PURE__ */ s("div", { className: "p-4 border-b border-gray-200", children: [
-      /* @__PURE__ */ s("div", { className: "flex items-center justify-between mb-4", children: [
-        /* @__PURE__ */ s("h2", { className: "text-lg font-semibold text-gray-800 flex items-center gap-2", children: [
-          /* @__PURE__ */ e(ut, { className: "w-5 h-5" }),
+    /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between rfp-mb-4", children: [
+        /* @__PURE__ */ n("h2", { className: "rfp-text-lg rfp-font-semibold rfp-text-gray-800 rfp-flex rfp-items-center rfp-gap-2", children: [
+          /* @__PURE__ */ e(mt, { className: "rfp-w-5 rfp-h-5" }),
           "Floor Plans (",
           o.length,
           ")"
         ] }),
-        /* @__PURE__ */ s("div", { className: "flex gap-1", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-gap-1", children: [
           /* @__PURE__ */ e(
             "button",
             {
-              onClick: m,
-              className: "p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors",
+              onClick: f,
+              className: "rfp-p-2 rfp-text-gray-600 hover:text-green-600 hover:bg-green-50 rfp-rounded-lg transition-colors",
               title: "Add New Floor",
-              children: /* @__PURE__ */ e(st, { className: "w-4 h-4" })
+              children: /* @__PURE__ */ e(rt, { className: "rfp-w-4 rfp-h-4" })
             }
           ),
           /* @__PURE__ */ e(
@@ -556,14 +556,14 @@ const Ht = `
             {
               onClick: C,
               disabled: o.length <= 1,
-              className: "p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+              className: "rfp-p-2 rfp-text-gray-600 hover:text-red-600 hover:bg-red-50 rfp-rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
               title: "Remove Current Floor",
-              children: /* @__PURE__ */ e(xt, { className: "w-4 h-4" })
+              children: /* @__PURE__ */ e(gt, { className: "rfp-w-4 rfp-h-4" })
             }
           )
         ] })
       ] }),
-      /* @__PURE__ */ e("div", { className: "space-y-2 max-h-32 overflow-y-auto", children: o.map((M) => /* @__PURE__ */ s(
+      /* @__PURE__ */ e("div", { className: "rfp-space-y-2 rfp-max-h-32 overflow-y-auto", children: o.map((M) => /* @__PURE__ */ n(
         "div",
         {
           className: `w-full p-3 rounded-lg transition-all flex items-center justify-between ${M.isActive ? "bg-blue-100 text-blue-800 border border-blue-200 shadow-sm" : "text-gray-600 hover:bg-gray-100 border border-transparent"}`,
@@ -572,97 +572,97 @@ const Ht = `
           },
           onDoubleClick: () => ze(M),
           children: [
-            /* @__PURE__ */ s("div", { className: "flex-1", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-flex-1", children: [
               ge === M.id ? /* @__PURE__ */ e(
                 "input",
                 {
-                  ref: le,
+                  ref: de,
                   type: "text",
-                  value: g,
-                  onChange: (Ne) => I(Ne.target.value),
-                  onBlur: xe,
-                  onKeyDown: De,
-                  className: "w-full px-2 py-1 text-sm font-medium bg-white border border-blue-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  onClick: (Ne) => Ne.stopPropagation()
+                  value: h,
+                  onChange: (Me) => I(Me.target.value),
+                  onBlur: we,
+                  onKeyDown: He,
+                  className: "rfp-w-full rfp-px-2 rfp-py-1 rfp-text-sm rfp-font-medium rfp-bg-white rfp-border rfp-border-blue-400 rfp-rounded focus:outline-none focus:ring-2 focus:ring-blue-500",
+                  onClick: (Me) => Me.stopPropagation()
                 }
-              ) : /* @__PURE__ */ e("div", { className: "font-medium cursor-pointer", children: M.name }),
-              /* @__PURE__ */ s("div", { className: "text-xs text-gray-500 mt-0.5", children: [
+              ) : /* @__PURE__ */ e("div", { className: "rfp-font-medium rfp-cursor-pointer", children: M.name }),
+              /* @__PURE__ */ n("div", { className: "rfp-text-xs rfp-text-gray-500 mt-0.5", children: [
                 M.tables.length,
                 " tables, ",
                 M.chairs.length,
                 " chairs"
               ] })
             ] }),
-            M.isActive && /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-blue-500 rounded-full" })
+            M.isActive && /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-blue-500 rfp-rounded-full" })
           ]
         },
         M.id
       )) })
     ] }),
-    /* @__PURE__ */ e("div", { className: "border-b border-gray-200", children: /* @__PURE__ */ s("div", { className: "flex", children: [
-      /* @__PURE__ */ s(
+    /* @__PURE__ */ e("div", { className: "rfp-border-b rfp-border-gray-200", children: /* @__PURE__ */ n("div", { className: "rfp-flex", children: [
+      /* @__PURE__ */ n(
         "button",
         {
           onClick: () => ye("tables"),
           className: `flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${F === "tables" ? "bg-white text-emerald-600 border-b-2 border-emerald-600" : "bg-gray-50 text-gray-600 hover:bg-gray-100"}`,
           children: [
-            /* @__PURE__ */ e(Et, { className: "w-4 h-4" }),
+            /* @__PURE__ */ e(kt, { className: "rfp-w-4 rfp-h-4" }),
             "Tables"
           ]
         }
       ),
-      /* @__PURE__ */ s(
+      /* @__PURE__ */ n(
         "button",
         {
           onClick: () => ye("objects"),
           className: `flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${F === "objects" ? "bg-white text-purple-600 border-b-2 border-purple-600" : "bg-gray-50 text-gray-600 hover:bg-gray-100"}`,
           children: [
-            /* @__PURE__ */ e(Gt, { className: "w-4 h-4" }),
+            /* @__PURE__ */ e(Et, { className: "rfp-w-4 rfp-h-4" }),
             "Objects"
           ]
         }
       ),
-      /* @__PURE__ */ s(
+      /* @__PURE__ */ n(
         "button",
         {
           onClick: () => ye("roomLayout"),
           className: `flex-1 py-3 px-4 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${F === "roomLayout" ? "bg-white text-gray-700 border-b-2 border-gray-700" : "bg-gray-50 text-gray-600 hover:bg-gray-100"}`,
           children: [
-            /* @__PURE__ */ e(zt, { className: "w-4 h-4" }),
+            /* @__PURE__ */ e(Gt, { className: "rfp-w-4 rfp-h-4" }),
             "Room"
           ]
         }
       )
     ] }) }),
-    F === "tables" && /* @__PURE__ */ s("div", { className: "p-4 border-b border-gray-200", children: [
-      /* @__PURE__ */ e("h3", { className: "text-md font-semibold text-gray-800 mb-3", children: "Add Tables" }),
-      /* @__PURE__ */ e("div", { className: "grid grid-cols-2 gap-3", children: Object.entries(Ot).map(([M, Ne]) => /* @__PURE__ */ s(
+    F === "tables" && /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
+      /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Add Tables" }),
+      /* @__PURE__ */ e("div", { className: "rfp-grid grid-cols-2 rfp-gap-3", children: Object.entries(Dt).map(([M, Me]) => /* @__PURE__ */ n(
         "button",
         {
-          onClick: () => q(M),
-          className: "p-3 border-2 border-gray-200 rounded-lg hover:border-emerald-400 hover:bg-emerald-50 transition-all flex flex-col items-center gap-2 hover:shadow-md",
+          onClick: () => V(M),
+          className: "rfp-p-3 rfp-border-2 rfp-border-gray-200 rfp-rounded-lg hover:border-emerald-400 hover:bg-emerald-50 rfp-transition-all rfp-flex rfp-flex-col rfp-items-center rfp-gap-2 hover:shadow-md",
           children: [
-            /* @__PURE__ */ e(Ne, { className: "w-6 h-6 text-emerald-600" }),
-            /* @__PURE__ */ e("span", { className: "text-xs text-gray-700 capitalize font-medium", children: M })
+            /* @__PURE__ */ e(Me, { className: "rfp-w-6 rfp-h-6 text-emerald-600" }),
+            /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-text-gray-700 rfp-capitalize rfp-font-medium", children: M })
           ]
         },
         M
       )) })
     ] }),
-    F === "objects" && /* @__PURE__ */ s("div", { className: "p-4 border-b border-gray-200", children: [
-      /* @__PURE__ */ e("h3", { className: "text-md font-semibold text-gray-800 mb-3", children: "Add Objects" }),
-      /* @__PURE__ */ e("div", { className: "space-y-3", children: Object.keys(Qe).map((M) => {
-        const Ne = rt[M], te = wt[M], Q = Qe[M];
-        return /* @__PURE__ */ s(
+    F === "objects" && /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
+      /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Add Objects" }),
+      /* @__PURE__ */ e("div", { className: "rfp-space-y-3", children: Object.keys(Ke).map((M) => {
+        const Me = st[M], j = xt[M], K = Ke[M];
+        return /* @__PURE__ */ n(
           "button",
           {
-            onClick: () => ie(M),
-            className: `w-full p-4 ${te.bg} border-2 ${te.border} rounded-xl hover:scale-105 transition-all flex items-center gap-3 shadow-lg hover:shadow-xl`,
+            onClick: () => oe(M),
+            className: `w-full p-4 ${j.bg} border-2 ${j.border} rounded-xl hover:scale-105 transition-all flex items-center gap-3 shadow-lg hover:shadow-xl`,
             children: [
-              /* @__PURE__ */ e("div", { className: "bg-white/20 p-2 rounded-lg", children: /* @__PURE__ */ e(Ne, { className: `w-6 h-6 ${te.text}`, strokeWidth: 2.5 }) }),
-              /* @__PURE__ */ s("div", { className: "flex-1 text-left", children: [
-                /* @__PURE__ */ e("span", { className: `text-base font-bold ${te.text}`, children: Q }),
-                /* @__PURE__ */ e("div", { className: "text-xs text-white/80 mt-0.5", children: "Click to add to floor" })
+              /* @__PURE__ */ e("div", { className: "bg-white/20 rfp-p-2 rfp-rounded-lg", children: /* @__PURE__ */ e(Me, { className: `w-6 h-6 ${j.text}`, strokeWidth: 2.5 }) }),
+              /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-text-left", children: [
+                /* @__PURE__ */ e("span", { className: `text-base font-bold ${j.text}`, children: K }),
+                /* @__PURE__ */ e("div", { className: "rfp-text-xs text-white/80 mt-0.5", children: "Click to add to floor" })
               ] })
             ]
           },
@@ -670,12 +670,12 @@ const Ht = `
         );
       }) })
     ] }),
-    F === "roomLayout" && /* @__PURE__ */ s("div", { className: "p-4 border-b border-gray-200", children: [
-      /* @__PURE__ */ s("div", { className: "mb-6", children: [
-        /* @__PURE__ */ e("h3", { className: "text-md font-semibold text-gray-800 mb-3", children: "Draw Walls" }),
-        /* @__PURE__ */ e("div", { className: "space-y-2", children: ["wall", "door", "window"].map((M) => {
-          const Ne = Ft[M], te = je[M];
-          return /* @__PURE__ */ s(
+    F === "roomLayout" && /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-mb-6", children: [
+        /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Draw Walls" }),
+        /* @__PURE__ */ e("div", { className: "rfp-space-y-2", children: ["wall", "door", "window"].map((M) => {
+          const Me = Ot[M], j = Qe[M];
+          return /* @__PURE__ */ n(
             "button",
             {
               onClick: () => P(M),
@@ -685,26 +685,26 @@ const Ht = `
                 window: "bg-gradient-to-br from-blue-500 to-blue-700 border-blue-600 text-white hover:from-blue-600 hover:to-blue-800"
               }[M]}`,
               children: [
-                /* @__PURE__ */ e(Ne, { className: "w-5 h-5", strokeWidth: 2.5 }),
-                /* @__PURE__ */ e("span", { className: "text-sm font-semibold", children: te })
+                /* @__PURE__ */ e(Me, { className: "rfp-w-5 rfp-h-5", strokeWidth: 2.5 }),
+                /* @__PURE__ */ e("span", { className: "rfp-text-sm rfp-font-semibold", children: j })
               ]
             },
             M
           );
         }) })
       ] }),
-      /* @__PURE__ */ s("div", { children: [
-        /* @__PURE__ */ e("h3", { className: "text-md font-semibold text-gray-800 mb-3", children: "Add Elements" }),
-        /* @__PURE__ */ e("div", { className: "space-y-2", children: ["pillar", "column", "stairs"].map((M) => {
-          const Ne = Zt[M], te = _t[M], Q = bt[M];
-          return /* @__PURE__ */ s(
+      /* @__PURE__ */ n("div", { children: [
+        /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Add Elements" }),
+        /* @__PURE__ */ e("div", { className: "rfp-space-y-2", children: ["pillar", "column", "stairs"].map((M) => {
+          const Me = Ft[M], j = Zt[M], K = wt[M];
+          return /* @__PURE__ */ n(
             "button",
             {
-              onClick: () => oe(M),
-              className: `w-full p-3 ${te.bg} border-2 ${te.border} rounded-lg hover:scale-105 transition-all flex items-center gap-3 shadow-md hover:shadow-lg`,
+              onClick: () => le(M),
+              className: `w-full p-3 ${j.bg} border-2 ${j.border} rounded-lg hover:scale-105 transition-all flex items-center gap-3 shadow-md hover:shadow-lg`,
               children: [
-                /* @__PURE__ */ e("div", { className: "bg-white/10 p-1.5 rounded", children: /* @__PURE__ */ e(Ne, { className: `w-5 h-5 ${te.text}`, strokeWidth: 2.5 }) }),
-                /* @__PURE__ */ e("span", { className: `text-sm font-semibold ${te.text}`, children: Q })
+                /* @__PURE__ */ e("div", { className: "bg-white/10 p-1.5 rfp-rounded", children: /* @__PURE__ */ e(Me, { className: `w-5 h-5 ${j.text}`, strokeWidth: 2.5 }) }),
+                /* @__PURE__ */ e("span", { className: `text-sm font-semibold ${j.text}`, children: K })
               ]
             },
             M
@@ -712,100 +712,100 @@ const Ht = `
         }) })
       ] })
     ] }),
-    K && /* @__PURE__ */ s("div", { className: "p-4 border-b border-gray-200", children: [
-      /* @__PURE__ */ s("div", { className: "flex items-center justify-between mb-3", children: [
-        /* @__PURE__ */ e("h3", { className: "text-md font-semibold text-gray-800", children: "Table Properties" }),
-        /* @__PURE__ */ s("div", { className: "flex gap-1", children: [
+    J && /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between rfp-mb-3", children: [
+        /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800", children: "Table Properties" }),
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-gap-1", children: [
           /* @__PURE__ */ e(
             "button",
             {
-              onClick: U,
-              className: "p-1 text-blue-600 hover:bg-blue-100 rounded transition-colors",
+              onClick: q,
+              className: "rfp-p-1 rfp-text-blue-600 hover:bg-blue-100 rfp-rounded transition-colors",
               title: "Rotate Table",
-              children: /* @__PURE__ */ e(Pt, { className: "w-4 h-4" })
+              children: /* @__PURE__ */ e(zt, { className: "rfp-w-4 rfp-h-4" })
             }
           ),
           /* @__PURE__ */ e(
             "button",
             {
               onClick: A,
-              className: "p-1 text-green-600 hover:bg-green-100 rounded transition-colors",
+              className: "rfp-p-1 rfp-text-green-600 hover:bg-green-100 rfp-rounded transition-colors",
               title: "Duplicate Table",
-              children: /* @__PURE__ */ e(st, { className: "w-4 h-4" })
+              children: /* @__PURE__ */ e(rt, { className: "rfp-w-4 rfp-h-4" })
             }
           ),
           /* @__PURE__ */ e(
             "button",
             {
               onClick: _,
-              className: "p-1 text-red-600 hover:bg-red-100 rounded transition-colors",
+              className: "rfp-p-1 rfp-text-red-600 hover:bg-red-100 rfp-rounded transition-colors",
               title: "Delete Table",
-              children: /* @__PURE__ */ e(Ke, { className: "w-4 h-4" })
+              children: /* @__PURE__ */ e(Je, { className: "rfp-w-4 rfp-h-4" })
             }
           )
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "space-y-3 text-sm text-gray-600", children: [
-        /* @__PURE__ */ s("div", { className: "grid grid-cols-2 gap-3", children: [
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-xs uppercase tracking-wide text-gray-400", children: "Name" }),
-            /* @__PURE__ */ e("div", { className: "font-semibold text-gray-800", children: K.name })
+      /* @__PURE__ */ n("div", { className: "rfp-space-y-3 rfp-text-sm rfp-text-gray-600", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-grid grid-cols-2 rfp-gap-3", children: [
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-xs rfp-uppercase rfp-tracking-wide rfp-text-gray-400", children: "Name" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-semibold rfp-text-gray-800", children: J.name })
           ] }),
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-xs uppercase tracking-wide text-gray-400", children: "Shape" }),
-            /* @__PURE__ */ e("div", { className: "font-semibold text-gray-800 capitalize", children: K.shape })
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-xs rfp-uppercase rfp-tracking-wide rfp-text-gray-400", children: "Shape" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-semibold rfp-text-gray-800 rfp-capitalize", children: J.shape })
           ] }),
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-xs uppercase tracking-wide text-gray-400", children: "Size" }),
-            /* @__PURE__ */ e("div", { className: "font-semibold text-gray-800", children: Qt[K.size] })
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-xs rfp-uppercase rfp-tracking-wide rfp-text-gray-400", children: "Size" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-semibold rfp-text-gray-800", children: Kt[J.size] })
           ] }),
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-xs uppercase tracking-wide text-gray-400", children: "Seats" }),
-            /* @__PURE__ */ e("div", { className: "font-semibold text-gray-800", children: $e.length })
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-xs rfp-uppercase rfp-tracking-wide rfp-text-gray-400", children: "Seats" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-semibold rfp-text-gray-800", children: $e.length })
           ] })
         ] }),
-        /* @__PURE__ */ e("div", { className: "bg-blue-50 border border-blue-200 rounded-md p-3", children: /* @__PURE__ */ s("p", { className: "text-xs text-blue-700", children: [
+        /* @__PURE__ */ e("div", { className: "rfp-bg-blue-50 rfp-border rfp-border-blue-200 rfp-rounded-md rfp-p-3", children: /* @__PURE__ */ n("p", { className: "rfp-text-xs rfp-text-blue-700", children: [
           "💡 ",
-          /* @__PURE__ */ e("span", { className: "font-semibold", children: "Tip:" }),
+          /* @__PURE__ */ e("span", { className: "rfp-font-semibold", children: "Tip:" }),
           " Use the ",
-          /* @__PURE__ */ e("span", { className: "font-semibold", children: "Manage Chairs" }),
+          /* @__PURE__ */ e("span", { className: "rfp-font-semibold", children: "Manage Chairs" }),
           " button in the toolbar above to add or remove chairs from each side of the table."
         ] }) })
       ] })
     ] }),
-    /* @__PURE__ */ s("div", { className: "p-4 mt-auto space-y-3", children: [
-      /* @__PURE__ */ s("div", { className: "bg-gray-50 p-3 rounded-lg", children: [
-        /* @__PURE__ */ e("h4", { className: "text-sm font-semibold text-gray-700 mb-2", children: "Current Floor Stats" }),
-        /* @__PURE__ */ s("div", { className: "grid grid-cols-2 gap-4 text-sm", children: [
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-gray-600", children: "Tables" }),
-            /* @__PURE__ */ e("div", { className: "font-bold text-lg text-emerald-600", children: (d == null ? void 0 : d.tables.length) ?? 0 })
+    /* @__PURE__ */ n("div", { className: "rfp-p-4 mt-auto rfp-space-y-3", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-bg-gray-50 rfp-p-3 rfp-rounded-lg", children: [
+        /* @__PURE__ */ e("h4", { className: "rfp-text-sm rfp-font-semibold rfp-text-gray-700 rfp-mb-2", children: "Current Floor Stats" }),
+        /* @__PURE__ */ n("div", { className: "rfp-grid grid-cols-2 rfp-gap-4 rfp-text-sm", children: [
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-gray-600", children: "Tables" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-bold rfp-text-lg text-emerald-600", children: (p == null ? void 0 : p.tables.length) ?? 0 })
           ] }),
-          /* @__PURE__ */ s("div", { children: [
-            /* @__PURE__ */ e("div", { className: "text-gray-600", children: "Total Seats" }),
-            /* @__PURE__ */ e("div", { className: "font-bold text-lg text-amber-600", children: (d == null ? void 0 : d.chairs.length) ?? 0 })
+          /* @__PURE__ */ n("div", { children: [
+            /* @__PURE__ */ e("div", { className: "rfp-text-gray-600", children: "Total Seats" }),
+            /* @__PURE__ */ e("div", { className: "rfp-font-bold rfp-text-lg text-amber-600", children: (p == null ? void 0 : p.chairs.length) ?? 0 })
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "flex gap-2", children: [
-        /* @__PURE__ */ s(
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-gap-2", children: [
+        /* @__PURE__ */ n(
           "button",
           {
-            onClick: ve,
-            className: "flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium",
+            onClick: Ne,
+            className: "rfp-flex-1 rfp-bg-green-600 rfp-text-white rfp-py-3 rfp-px-4 rfp-rounded-lg hover:bg-green-700 transition-colors rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-medium",
             children: [
-              /* @__PURE__ */ e(It, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(Pt, { className: "rfp-w-4 rfp-h-4" }),
               "Save"
             ]
           }
         ),
-        /* @__PURE__ */ s(
+        /* @__PURE__ */ n(
           "button",
           {
-            onClick: Ye,
-            className: "flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium",
+            onClick: Ae,
+            className: "rfp-flex-1 rfp-bg-blue-600 rfp-text-white rfp-py-3 rfp-px-4 rfp-rounded-lg hover:bg-blue-700 transition-colors rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-medium",
             children: [
-              /* @__PURE__ */ e(Rt, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(It, { className: "rfp-w-4 rfp-h-4" }),
               "Load"
             ]
           }
@@ -813,136 +813,136 @@ const Ht = `
       ] })
     ] })
   ] });
-}, gt = ft, en = ["top", "right", "bottom", "left"], tn = ["small", "medium", "large"], nn = ({
+}, ft = ut, jt = ["top", "right", "bottom", "left"], er = ["small", "medium", "large"], tr = ({
   showGrid: o,
-  selectedTable: d,
-  selectedObject: m,
+  selectedTable: p,
+  selectedObject: f,
   selectedWall: C,
   selectedFixedElement: i,
   selectedTableChairs: v,
-  onToggleGrid: q,
-  onAddChair: ie,
+  onToggleGrid: V,
+  onAddChair: oe,
   onRemoveChair: P,
-  onChangeTableSize: oe,
-  onTableNameChange: U,
+  onChangeTableSize: le,
+  onTableNameChange: q,
   onCustomTableSize: A,
   onObjectNameChange: _,
-  onObjectResize: ve,
-  onRemoveObject: Ye,
-  onRemoveWall: K,
+  onObjectResize: Ne,
+  onRemoveObject: Ae,
+  onRemoveWall: J,
   onRemoveFixedElement: $e,
   onChangeWallThickness: ge,
   onConvertWallType: be,
-  onFixedElementNameChange: g,
+  onFixedElementNameChange: h,
   onFixedElementResize: I,
   onChairSizeChange: F,
   onResetChairSizes: ye,
-  on3DPreview: le,
+  on3DPreview: de,
   onObjectRotate: ze,
-  tableCount: xe,
-  chairCount: De,
+  tableCount: we,
+  chairCount: He,
   objectCount: M,
-  wallCount: Ne,
-  fixedElementCount: te,
-  selectedElementType: Q
+  wallCount: Me,
+  fixedElementCount: j,
+  selectedElementType: K
 }) => {
-  const Le = Te(null), n = Te(null), Z = Te(null), H = Te(null), [E, c] = J(!1), [R, p] = J(!1), [T, D] = J(!1), [z, re] = J(!1), [O, de] = J(!1), [ne, L] = J(90), [G, $] = J(90), [b, se] = J(120), [j, Ce] = J(80), [X, S] = J(60), [f, pe] = J(60);
-  return Ve(() => {
-    const u = (N) => {
-      Le.current && !Le.current.contains(N.target) && c(!1), n.current && !n.current.contains(N.target) && p(!1), Z.current && !Z.current.contains(N.target) && D(!1), H.current && !H.current.contains(N.target) && re(!1);
+  const Le = Te(null), r = Te(null), Z = Te(null), H = Te(null), [k, d] = U(!1), [R, m] = U(!1), [T, D] = U(!1), [z, ie] = U(!1), [O, pe] = U(!1), [ee, L] = U(90), [E, $] = U(90), [b, re] = U(120), [Q, ke] = U(80), [X, S] = U(60), [u, ue] = U(60);
+  return _e(() => {
+    const g = (N) => {
+      Le.current && !Le.current.contains(N.target) && d(!1), r.current && !r.current.contains(N.target) && m(!1), Z.current && !Z.current.contains(N.target) && D(!1), H.current && !H.current.contains(N.target) && ie(!1);
     };
-    return document.addEventListener("mousedown", u), () => document.removeEventListener("mousedown", u);
-  }, []), Ve(() => {
-    d ? (L(d.width), $(d.height)) : (c(!1), p(!1), de(!1)), m ? (se(m.width), Ce(m.height)) : D(!1), i ? (S(i.width), pe(i.height)) : re(!1);
-  }, [d, m, i]), /* @__PURE__ */ e("div", { className: "bg-white border-b border-gray-200 shadow-sm min-h-[72px]", children: /* @__PURE__ */ s("div", { className: "px-4 py-3 flex items-center justify-between min-h-[72px]", children: [
-    /* @__PURE__ */ s("div", { className: "flex items-center gap-3 flex-wrap", children: [
-      /* @__PURE__ */ s(
+    return document.addEventListener("mousedown", g), () => document.removeEventListener("mousedown", g);
+  }, []), _e(() => {
+    p ? (L(p.width), $(p.height)) : (d(!1), m(!1), pe(!1)), f ? (re(f.width), ke(f.height)) : D(!1), i ? (S(i.width), ue(i.height)) : ie(!1);
+  }, [p, f, i]), /* @__PURE__ */ e("div", { className: "rfp-bg-white rfp-border-b rfp-border-gray-200 rfp-shadow-sm min-h-[72px]", children: /* @__PURE__ */ n("div", { className: "rfp-px-4 rfp-py-3 rfp-flex rfp-items-center rfp-justify-between min-h-[72px]", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3 rfp-flex-wrap", children: [
+      /* @__PURE__ */ n(
         "button",
         {
-          onClick: q,
+          onClick: V,
           className: `px-3 py-2 rounded-lg transition-all flex items-center gap-2 text-sm font-medium ${o ? "bg-blue-500 text-white shadow-md hover:bg-blue-600" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`,
           title: o ? "Hide Grid" : "Show Grid",
           children: [
-            o ? /* @__PURE__ */ e(Tt, { className: "w-4 h-4" }) : /* @__PURE__ */ e($t, { className: "w-4 h-4" }),
+            o ? /* @__PURE__ */ e(Rt, { className: "rfp-w-4 rfp-h-4" }) : /* @__PURE__ */ e(Tt, { className: "rfp-w-4 rfp-h-4" }),
             /* @__PURE__ */ e("span", { children: "Grid" })
           ]
         }
       ),
-      d && /* @__PURE__ */ s(_e, { children: [
-        /* @__PURE__ */ e("div", { className: "w-px h-8 bg-gray-300" }),
-        /* @__PURE__ */ s("div", { ref: Le, className: "relative", children: [
-          /* @__PURE__ */ s(
+      p && /* @__PURE__ */ n(Ze, { children: [
+        /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
+        /* @__PURE__ */ n("div", { ref: Le, className: "rfp-relative", children: [
+          /* @__PURE__ */ n(
             "button",
             {
               onClick: () => {
-                c(!E), p(!1);
+                d(!k), m(!1);
               },
-              className: "px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+              className: "rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
               children: [
-                /* @__PURE__ */ e(nt, { className: "w-4 h-4" }),
+                /* @__PURE__ */ e(tt, { className: "rfp-w-4 rfp-h-4" }),
                 /* @__PURE__ */ e("span", { children: "Manage Chairs" }),
-                /* @__PURE__ */ e("span", { className: "ml-1 px-1.5 py-0.5 bg-white/20 rounded text-xs", children: v.length })
+                /* @__PURE__ */ e("span", { className: "rfp-ml-1 px-1.5 py-0.5 bg-white/20 rfp-rounded rfp-text-xs", children: v.length })
               ]
             }
           ),
-          E && /* @__PURE__ */ s("div", { className: "absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden", children: [
-            /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3 text-white", children: /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-              /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ e(nt, { className: "w-4 h-4" }),
-                /* @__PURE__ */ e("span", { className: "font-semibold text-sm", children: "Chair Positions" })
+          k && /* @__PURE__ */ n("div", { className: "rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-72 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden", children: [
+            /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-amber-500 to-amber-600 rfp-px-4 rfp-py-3 rfp-text-white", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                /* @__PURE__ */ e(tt, { className: "rfp-w-4 rfp-h-4" }),
+                /* @__PURE__ */ e("span", { className: "rfp-font-semibold rfp-text-sm", children: "Chair Positions" })
               ] }),
-              /* @__PURE__ */ s("span", { className: "text-xs bg-white/20 px-2 py-1 rounded", children: [
+              /* @__PURE__ */ n("span", { className: "rfp-text-xs bg-white/20 rfp-px-2 rfp-py-1 rfp-rounded", children: [
                 "Total: ",
                 v.length
               ] })
             ] }) }),
-            /* @__PURE__ */ s("div", { className: "p-3 space-y-2", children: [
-              en.map((u) => {
-                const N = v.filter((w) => w.position === u).length, Me = v.find((w) => w.position === u), W = (Me == null ? void 0 : Me.size) || 40;
-                return /* @__PURE__ */ s(
+            /* @__PURE__ */ n("div", { className: "rfp-p-3 rfp-space-y-2", children: [
+              jt.map((g) => {
+                const N = v.filter((x) => x.position === g).length, Ce = v.find((x) => x.position === g), B = (Ce == null ? void 0 : Ce.size) || 40;
+                return /* @__PURE__ */ n(
                   "div",
                   {
-                    className: "bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 hover:border-amber-300 transition-all space-y-2",
+                    className: "rfp-bg-gray-50 rfp-rounded-lg rfp-px-3 rfp-py-2 rfp-border rfp-border-gray-200 hover:border-amber-300 rfp-transition-all rfp-space-y-2",
                     children: [
-                      /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-                        /* @__PURE__ */ s("div", { className: "flex items-center gap-3", children: [
-                          /* @__PURE__ */ e("div", { className: "w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-md flex items-center justify-center text-white text-xs font-bold uppercase", children: u[0] }),
-                          /* @__PURE__ */ s("div", { children: [
-                            /* @__PURE__ */ e("div", { className: "text-sm font-medium text-gray-800 capitalize", children: u }),
-                            /* @__PURE__ */ s("div", { className: "text-xs text-gray-500", children: [
+                      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+                        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3", children: [
+                          /* @__PURE__ */ e("div", { className: "rfp-w-8 rfp-h-8 bg-gradient-to-br from-gray-600 to-gray-700 rfp-rounded-md rfp-flex rfp-items-center rfp-justify-center rfp-text-white rfp-text-xs rfp-font-bold rfp-uppercase", children: g[0] }),
+                          /* @__PURE__ */ n("div", { children: [
+                            /* @__PURE__ */ e("div", { className: "rfp-text-sm rfp-font-medium rfp-text-gray-800 rfp-capitalize", children: g }),
+                            /* @__PURE__ */ n("div", { className: "rfp-text-xs rfp-text-gray-500", children: [
                               N,
                               " chair",
                               N !== 1 ? "s" : ""
                             ] })
                           ] })
                         ] }),
-                        /* @__PURE__ */ s("div", { className: "flex items-center gap-1", children: [
+                        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-1", children: [
                           /* @__PURE__ */ e(
                             "button",
                             {
-                              onClick: () => P(u),
+                              onClick: () => P(g),
                               disabled: N === 0,
-                              className: "w-7 h-7 rounded-md bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center",
+                              className: "rfp-w-7 rfp-h-7 rfp-rounded-md rfp-bg-red-50 rfp-text-red-600 hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed rfp-transition-all rfp-flex rfp-items-center rfp-justify-center",
                               title: "Remove chair",
-                              children: /* @__PURE__ */ e(xt, { className: "w-4 h-4" })
+                              children: /* @__PURE__ */ e(gt, { className: "rfp-w-4 rfp-h-4" })
                             }
                           ),
                           /* @__PURE__ */ e(
                             "button",
                             {
-                              onClick: () => ie(u),
-                              className: "w-7 h-7 rounded-md bg-green-50 text-green-600 hover:bg-green-100 transition-all flex items-center justify-center",
+                              onClick: () => oe(g),
+                              className: "rfp-w-7 rfp-h-7 rfp-rounded-md rfp-bg-green-50 rfp-text-green-600 hover:bg-green-100 rfp-transition-all rfp-flex rfp-items-center rfp-justify-center",
                               title: "Add chair",
-                              children: /* @__PURE__ */ e(st, { className: "w-4 h-4" })
+                              children: /* @__PURE__ */ e(rt, { className: "rfp-w-4 rfp-h-4" })
                             }
                           )
                         ] })
                       ] }),
-                      N > 0 && /* @__PURE__ */ s("div", { className: "pt-2 border-t border-gray-200", children: [
-                        /* @__PURE__ */ s("div", { className: "flex items-center justify-between mb-1", children: [
-                          /* @__PURE__ */ e("span", { className: "text-xs font-medium text-gray-600", children: "Chair Size" }),
-                          /* @__PURE__ */ s("span", { className: "text-xs font-bold text-amber-600", children: [
-                            W,
+                      N > 0 && /* @__PURE__ */ n("div", { className: "rfp-pt-2 rfp-border-t rfp-border-gray-200", children: [
+                        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between rfp-mb-1", children: [
+                          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-medium rfp-text-gray-600", children: "Chair Size" }),
+                          /* @__PURE__ */ n("span", { className: "rfp-text-xs rfp-font-bold text-amber-600", children: [
+                            B,
                             "px"
                           ] })
                         ] }),
@@ -952,27 +952,27 @@ const Ht = `
                             type: "range",
                             min: "20",
                             max: "60",
-                            value: W,
-                            onChange: (w) => F == null ? void 0 : F(u, parseInt(w.target.value)),
-                            className: "w-full h-2 bg-gradient-to-r from-amber-200 to-amber-400 rounded-full appearance-none cursor-pointer slider-thumb",
+                            value: B,
+                            onChange: (x) => F == null ? void 0 : F(g, parseInt(x.target.value)),
+                            className: "rfp-w-full rfp-h-2 bg-gradient-to-r from-amber-200 to-amber-400 rfp-rounded-full appearance-none rfp-cursor-pointer slider-thumb",
                             style: {
-                              background: `linear-gradient(to right, rgb(251, 191, 36) 0%, rgb(251, 191, 36) ${(W - 20) / 40 * 100}%, rgb(253, 230, 138) ${(W - 20) / 40 * 100}%, rgb(253, 230, 138) 100%)`
+                              background: `linear-gradient(to right, rgb(251, 191, 36) 0%, rgb(251, 191, 36) ${(B - 20) / 40 * 100}%, rgb(253, 230, 138) ${(B - 20) / 40 * 100}%, rgb(253, 230, 138) 100%)`
                             }
                           }
                         )
                       ] })
                     ]
                   },
-                  u
+                  g
                 );
               }),
-              /* @__PURE__ */ s(
+              /* @__PURE__ */ n(
                 "button",
                 {
                   onClick: () => ye == null ? void 0 : ye(),
-                  className: "w-full mt-3 px-3 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all flex items-center justify-center gap-2 text-sm font-medium",
+                  className: "rfp-w-full rfp-mt-3 rfp-px-3 rfp-py-2 bg-gradient-to-r from-gray-500 to-gray-600 rfp-text-white rfp-rounded-lg hover:from-gray-600 hover:to-gray-700 rfp-transition-all rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-text-sm rfp-font-medium",
                   children: [
-                    /* @__PURE__ */ e(at, { className: "w-4 h-4" }),
+                    /* @__PURE__ */ e(nt, { className: "rfp-w-4 rfp-h-4" }),
                     /* @__PURE__ */ e("span", { children: "Reset All Sizes" })
                   ]
                 }
@@ -980,60 +980,60 @@ const Ht = `
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ s("div", { ref: n, className: "relative", children: [
-          /* @__PURE__ */ s(
+        /* @__PURE__ */ n("div", { ref: r, className: "rfp-relative", children: [
+          /* @__PURE__ */ n(
             "button",
             {
               onClick: () => {
-                p(!R), c(!1);
+                m(!R), d(!1);
               },
-              className: "px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+              className: "rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
               children: [
-                /* @__PURE__ */ e(Ue, { className: "w-4 h-4" }),
-                /* @__PURE__ */ s("span", { children: [
+                /* @__PURE__ */ e(qe, { className: "rfp-w-4 rfp-h-4" }),
+                /* @__PURE__ */ n("span", { children: [
                   "Size: ",
-                  gt[d.size]
+                  ft[p.size]
                 ] })
               ]
             }
           ),
-          R && /* @__PURE__ */ s("div", { className: "absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden", children: [
-            /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-2 text-white", children: /* @__PURE__ */ e("span", { className: "font-semibold text-sm", children: "Table Size" }) }),
-            /* @__PURE__ */ s("div", { className: "p-3 space-y-2", children: [
-              /* @__PURE__ */ e("div", { className: "flex gap-2", children: tn.map((u) => {
-                const N = d.size === u;
+          R && /* @__PURE__ */ n("div", { className: "rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-64 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden", children: [
+            /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-emerald-500 to-emerald-600 rfp-px-4 rfp-py-2 rfp-text-white", children: /* @__PURE__ */ e("span", { className: "rfp-font-semibold rfp-text-sm", children: "Table Size" }) }),
+            /* @__PURE__ */ n("div", { className: "rfp-p-3 rfp-space-y-2", children: [
+              /* @__PURE__ */ e("div", { className: "rfp-flex rfp-gap-2", children: er.map((g) => {
+                const N = p.size === g;
                 return /* @__PURE__ */ e(
                   "button",
                   {
                     onClick: () => {
-                      oe(u), de(!1);
+                      le(g), pe(!1);
                     },
                     className: `flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all ${N && !O ? "bg-emerald-500 text-white shadow-sm" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-                    children: gt[u]
+                    children: ft[g]
                   },
-                  u
+                  g
                 );
               }) }),
-              /* @__PURE__ */ s(
+              /* @__PURE__ */ n(
                 "button",
                 {
-                  onClick: () => de(!O),
+                  onClick: () => pe(!O),
                   className: `w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all ${O ? "bg-purple-500 text-white shadow-sm" : "bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 hover:from-purple-200 hover:to-purple-100"}`,
                   children: [
-                    /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                      /* @__PURE__ */ e("span", { className: "text-sm font-semibold", children: "Pro Mode" }),
-                      /* @__PURE__ */ e("span", { className: "text-xs bg-white/20 px-1.5 py-0.5 rounded", children: "Custom" })
+                    /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                      /* @__PURE__ */ e("span", { className: "rfp-text-sm rfp-font-semibold", children: "Pro Mode" }),
+                      /* @__PURE__ */ e("span", { className: "rfp-text-xs bg-white/20 px-1.5 py-0.5 rfp-rounded", children: "Custom" })
                     ] }),
-                    /* @__PURE__ */ e(Lt, { className: `w-4 h-4 transition-transform ${O ? "rotate-90" : ""}` })
+                    /* @__PURE__ */ e($t, { className: `w-4 h-4 transition-transform ${O ? "rotate-90" : ""}` })
                   ]
                 }
               ),
-              /* @__PURE__ */ e("div", { className: `overflow-hidden transition-all duration-300 ease-in-out ${O ? "max-h-48 opacity-100" : "max-h-0 opacity-0"}`, children: /* @__PURE__ */ s("div", { className: "pt-2 space-y-3 border-t border-gray-200", children: [
-                /* @__PURE__ */ s("div", { className: "space-y-1", children: [
-                  /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-                    /* @__PURE__ */ e("label", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide", children: "Width" }),
-                    /* @__PURE__ */ s("span", { className: "text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded", children: [
-                      ne,
+              /* @__PURE__ */ e("div", { className: `overflow-hidden transition-all duration-300 ease-in-out ${O ? "max-h-48 opacity-100" : "max-h-0 opacity-0"}`, children: /* @__PURE__ */ n("div", { className: "rfp-pt-2 rfp-space-y-3 rfp-border-t rfp-border-gray-200", children: [
+                /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
+                  /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+                    /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Width" }),
+                    /* @__PURE__ */ n("span", { className: "rfp-text-xs font-mono rfp-bg-purple-100 rfp-text-purple-700 rfp-px-2 py-0.5 rfp-rounded", children: [
+                      ee,
                       "px"
                     ] })
                   ] }),
@@ -1044,23 +1044,23 @@ const Ht = `
                       min: "40",
                       max: "200",
                       step: "5",
-                      value: ne,
-                      onChange: (u) => {
-                        const N = parseInt(u.target.value);
-                        L(N), A(N, G);
+                      value: ee,
+                      onChange: (g) => {
+                        const N = parseInt(g.target.value);
+                        L(N), A(N, E);
                       },
-                      className: "w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb",
+                      className: "rfp-w-full rfp-h-2 rfp-bg-purple-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                       style: {
-                        background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${(ne - 40) / 160 * 100}%, rgb(233, 213, 255) ${(ne - 40) / 160 * 100}%, rgb(233, 213, 255) 100%)`
+                        background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${(ee - 40) / 160 * 100}%, rgb(233, 213, 255) ${(ee - 40) / 160 * 100}%, rgb(233, 213, 255) 100%)`
                       }
                     }
                   )
                 ] }),
-                /* @__PURE__ */ s("div", { className: "space-y-1", children: [
-                  /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-                    /* @__PURE__ */ e("label", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide", children: "Height" }),
-                    /* @__PURE__ */ s("span", { className: "text-xs font-mono bg-purple-100 text-purple-700 px-2 py-0.5 rounded", children: [
-                      G,
+                /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
+                  /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+                    /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Height" }),
+                    /* @__PURE__ */ n("span", { className: "rfp-text-xs font-mono rfp-bg-purple-100 rfp-text-purple-700 rfp-px-2 py-0.5 rfp-rounded", children: [
+                      E,
                       "px"
                     ] })
                   ] }),
@@ -1071,64 +1071,64 @@ const Ht = `
                       min: "40",
                       max: "200",
                       step: "5",
-                      value: G,
-                      onChange: (u) => {
-                        const N = parseInt(u.target.value);
-                        $(N), A(ne, N);
+                      value: E,
+                      onChange: (g) => {
+                        const N = parseInt(g.target.value);
+                        $(N), A(ee, N);
                       },
-                      className: "w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-thumb",
+                      className: "rfp-w-full rfp-h-2 rfp-bg-purple-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                       style: {
-                        background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${(G - 40) / 160 * 100}%, rgb(233, 213, 255) ${(G - 40) / 160 * 100}%, rgb(233, 213, 255) 100%)`
+                        background: `linear-gradient(to right, rgb(168, 85, 247) 0%, rgb(168, 85, 247) ${(E - 40) / 160 * 100}%, rgb(233, 213, 255) ${(E - 40) / 160 * 100}%, rgb(233, 213, 255) 100%)`
                       }
                     }
                   )
                 ] }),
-                /* @__PURE__ */ e("p", { className: "text-xs text-gray-500 italic pt-1", children: "Drag sliders for precise sizing" })
+                /* @__PURE__ */ e("p", { className: "rfp-text-xs rfp-text-gray-500 italic rfp-pt-1", children: "Drag sliders for precise sizing" })
               ] }) })
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ s("div", { className: "flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2", children: [
-          /* @__PURE__ */ e("span", { className: "text-xs font-semibold uppercase tracking-wide text-gray-500", children: "Name:" }),
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2", children: [
+          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: "Name:" }),
           /* @__PURE__ */ e(
             "input",
             {
               type: "text",
-              value: d.name,
-              onChange: (u) => U(u.target.value),
-              className: "bg-transparent text-sm text-gray-800 font-medium focus:outline-none w-32",
+              value: p.name,
+              onChange: (g) => q(g.target.value),
+              className: "rfp-bg-transparent rfp-text-sm rfp-text-gray-800 rfp-font-medium focus:outline-none rfp-w-32",
               placeholder: "Table name"
             }
           )
         ] })
       ] }),
-      m && /* @__PURE__ */ s(_e, { children: [
-        /* @__PURE__ */ e("div", { className: "w-px h-8 bg-gray-300" }),
-        /* @__PURE__ */ s("div", { ref: Z, className: "relative", children: [
-          /* @__PURE__ */ s(
+      f && /* @__PURE__ */ n(Ze, { children: [
+        /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
+        /* @__PURE__ */ n("div", { ref: Z, className: "rfp-relative", children: [
+          /* @__PURE__ */ n(
             "button",
             {
               onClick: () => D(!T),
-              className: `px-3 py-2 rounded-lg ${m.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : m.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
+              className: `px-3 py-2 rounded-lg ${f.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
               children: [
                 (() => {
-                  const u = rt[m.type];
-                  return /* @__PURE__ */ e(u, { className: "w-4 h-4" });
+                  const g = st[f.type];
+                  return /* @__PURE__ */ e(g, { className: "rfp-w-4 rfp-h-4" });
                 })(),
-                /* @__PURE__ */ s("span", { children: [
+                /* @__PURE__ */ n("span", { children: [
                   "Resize ",
-                  Qe[m.type]
+                  Ke[f.type]
                 ] })
               ]
             }
           ),
-          T && /* @__PURE__ */ s("div", { className: "absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 overflow-hidden", children: [
-            /* @__PURE__ */ e("div", { className: `${m.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : m.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} px-4 py-2 text-white`, children: /* @__PURE__ */ e("span", { className: "font-semibold text-sm", children: "Custom Size" }) }),
-            /* @__PURE__ */ s("div", { className: "p-3 space-y-3", children: [
-              /* @__PURE__ */ s("div", { className: "space-y-1", children: [
-                /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-                  /* @__PURE__ */ e("label", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide", children: "Width" }),
-                  /* @__PURE__ */ s("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${m.type === "bar" ? "bg-purple-100 text-purple-700" : m.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
+          T && /* @__PURE__ */ n("div", { className: "rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-64 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden", children: [
+            /* @__PURE__ */ e("div", { className: `${f.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} px-4 py-2 text-white`, children: /* @__PURE__ */ e("span", { className: "rfp-font-semibold rfp-text-sm", children: "Custom Size" }) }),
+            /* @__PURE__ */ n("div", { className: "rfp-p-3 rfp-space-y-3", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
+                /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+                  /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Width" }),
+                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${f.type === "bar" ? "bg-purple-100 text-purple-700" : f.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
                     b,
                     "px"
                   ] })
@@ -1141,22 +1141,22 @@ const Ht = `
                     max: "1000",
                     step: "10",
                     value: b,
-                    onChange: (u) => {
-                      const N = parseInt(u.target.value);
-                      se(N), ve(N, j);
+                    onChange: (g) => {
+                      const N = parseInt(g.target.value);
+                      re(N), Ne(N, Q);
                     },
-                    className: "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb",
+                    className: "rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                     style: {
-                      background: `linear-gradient(to right, ${m.type === "bar" ? "rgb(168, 85, 247)" : m.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${m.type === "bar" ? "rgb(168, 85, 247)" : m.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(b - 60) / 940 * 100}%, rgb(229, 231, 235) ${(b - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
+                      background: `linear-gradient(to right, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(b - 60) / 940 * 100}%, rgb(229, 231, 235) ${(b - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
                     }
                   }
                 )
               ] }),
-              /* @__PURE__ */ s("div", { className: "space-y-1", children: [
-                /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-                  /* @__PURE__ */ e("label", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide", children: "Height" }),
-                  /* @__PURE__ */ s("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${m.type === "bar" ? "bg-purple-100 text-purple-700" : m.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
-                    j,
+              /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
+                /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+                  /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Height" }),
+                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${f.type === "bar" ? "bg-purple-100 text-purple-700" : f.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
+                    Q,
                     "px"
                   ] })
                 ] }),
@@ -1167,66 +1167,66 @@ const Ht = `
                     min: "60",
                     max: "1000",
                     step: "10",
-                    value: j,
-                    onChange: (u) => {
-                      const N = parseInt(u.target.value);
-                      Ce(N), ve(b, N);
+                    value: Q,
+                    onChange: (g) => {
+                      const N = parseInt(g.target.value);
+                      ke(N), Ne(b, N);
                     },
-                    className: "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb",
+                    className: "rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                     style: {
-                      background: `linear-gradient(to right, ${m.type === "bar" ? "rgb(168, 85, 247)" : m.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${m.type === "bar" ? "rgb(168, 85, 247)" : m.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(j - 60) / 940 * 100}%, rgb(229, 231, 235) ${(j - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
+                      background: `linear-gradient(to right, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(Q - 60) / 940 * 100}%, rgb(229, 231, 235) ${(Q - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
                     }
                   }
                 )
               ] }),
-              /* @__PURE__ */ e("p", { className: "text-xs text-gray-500 italic pt-1", children: "Drag sliders to resize the object" })
+              /* @__PURE__ */ e("p", { className: "rfp-text-xs rfp-text-gray-500 italic rfp-pt-1", children: "Drag sliders to resize the object" })
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ s(
+        /* @__PURE__ */ n(
           "button",
           {
             onClick: () => {
-              const u = ((m.rotation || 0) + 90) % 360;
-              ze == null || ze(u);
+              const g = ((f.rotation || 0) + 90) % 360;
+              ze == null || ze(g);
             },
-            className: `px-3 py-2 rounded-lg ${m.type === "bar" ? "bg-gradient-to-r from-purple-600 to-purple-700" : m.type === "kitchen" ? "bg-gradient-to-r from-orange-600 to-orange-700" : "bg-gradient-to-r from-cyan-600 to-cyan-700"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
+            className: `px-3 py-2 rounded-lg ${f.type === "bar" ? "bg-gradient-to-r from-purple-600 to-purple-700" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-600 to-orange-700" : "bg-gradient-to-r from-cyan-600 to-cyan-700"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
             title: "Rotate 90°",
             children: [
-              /* @__PURE__ */ e(at, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(nt, { className: "rfp-w-4 rfp-h-4" }),
               /* @__PURE__ */ e("span", { children: "Rotate" })
             ]
           }
         ),
-        /* @__PURE__ */ s(
+        /* @__PURE__ */ n(
           "button",
           {
-            onClick: Ye,
-            className: "px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+            onClick: Ae,
+            className: "rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
             title: "Delete Object",
             children: [
-              /* @__PURE__ */ e(Ke, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(Je, { className: "rfp-w-4 rfp-h-4" }),
               /* @__PURE__ */ e("span", { children: "Delete" })
             ]
           }
         ),
-        /* @__PURE__ */ s("div", { className: "flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2", children: [
-          /* @__PURE__ */ e("span", { className: "text-xs font-semibold uppercase tracking-wide text-gray-500", children: "Name:" }),
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2", children: [
+          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: "Name:" }),
           /* @__PURE__ */ e(
             "input",
             {
               type: "text",
-              value: m.name,
-              onChange: (u) => _(u.target.value),
-              className: "bg-transparent text-sm text-gray-800 font-medium focus:outline-none w-32",
+              value: f.name,
+              onChange: (g) => _(g.target.value),
+              className: "rfp-bg-transparent rfp-text-sm rfp-text-gray-800 rfp-font-medium focus:outline-none rfp-w-32",
               placeholder: "Object name"
             }
           )
         ] })
       ] }),
-      C && /* @__PURE__ */ s(_e, { children: [
-        /* @__PURE__ */ e("div", { className: "w-px h-8 bg-gray-300" }),
-        be && /* @__PURE__ */ s("div", { className: "flex items-center gap-1 bg-gray-50 border border-gray-300 rounded-lg p-1", children: [
+      C && /* @__PURE__ */ n(Ze, { children: [
+        /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
+        be && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-1 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-p-1", children: [
           /* @__PURE__ */ e(
             "button",
             {
@@ -1255,14 +1255,14 @@ const Ht = `
             }
           )
         ] }),
-        ge && /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ e("span", { className: "text-xs font-semibold text-gray-600", children: "Thickness:" }),
-          /* @__PURE__ */ s(
+        ge && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600", children: "Thickness:" }),
+          /* @__PURE__ */ n(
             "select",
             {
               value: C.thickness,
-              onChange: (u) => ge(Number(u.target.value)),
-              className: "px-2 py-1 text-sm border border-gray-300 rounded bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
+              onChange: (g) => ge(Number(g.target.value)),
+              className: "rfp-px-2 rfp-py-1 rfp-text-sm rfp-border rfp-border-gray-300 rfp-rounded rfp-bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
               children: [
                 /* @__PURE__ */ e("option", { value: 4, children: "Thin (4px)" }),
                 /* @__PURE__ */ e("option", { value: 8, children: "Normal (8px)" }),
@@ -1272,48 +1272,48 @@ const Ht = `
             }
           )
         ] }),
-        /* @__PURE__ */ s("div", { className: "flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2", children: [
-          /* @__PURE__ */ e("span", { className: "text-xs font-semibold uppercase tracking-wide text-gray-500", children: je[C.type] }),
-          /* @__PURE__ */ s("span", { className: "text-sm text-gray-600", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2", children: [
+          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: Qe[C.type] }),
+          /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-text-gray-600", children: [
             Math.round(Math.sqrt(
               Math.pow(C.endX - C.startX, 2) + Math.pow(C.endY - C.startY, 2)
             )),
             "px"
           ] })
         ] }),
-        /* @__PURE__ */ s(
+        /* @__PURE__ */ n(
           "button",
           {
-            onClick: K,
-            className: "px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+            onClick: J,
+            className: "rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
             title: "Delete Wall",
             children: [
-              /* @__PURE__ */ e(Ke, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(Je, { className: "rfp-w-4 rfp-h-4" }),
               /* @__PURE__ */ e("span", { children: "Delete" })
             ]
           }
         )
       ] }),
-      i && /* @__PURE__ */ s(_e, { children: [
-        /* @__PURE__ */ e("div", { className: "w-px h-8 bg-gray-300" }),
-        /* @__PURE__ */ e("div", { className: "flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-lg px-3 py-2", children: /* @__PURE__ */ e("span", { className: "text-xs font-semibold uppercase tracking-wide text-gray-500", children: bt[i.type] }) }),
-        I && /* @__PURE__ */ s("div", { ref: H, className: "relative", children: [
-          /* @__PURE__ */ s(
+      i && /* @__PURE__ */ n(Ze, { children: [
+        /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
+        /* @__PURE__ */ e("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2", children: /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: wt[i.type] }) }),
+        I && /* @__PURE__ */ n("div", { ref: H, className: "rfp-relative", children: [
+          /* @__PURE__ */ n(
             "button",
             {
-              onClick: () => re(!z),
-              className: "px-3 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+              onClick: () => ie(!z),
+              className: "rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-gray-600 hover:bg-gray-700 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
               children: [
-                /* @__PURE__ */ e(Ue, { className: "w-4 h-4" }),
+                /* @__PURE__ */ e(qe, { className: "rfp-w-4 rfp-h-4" }),
                 /* @__PURE__ */ e("span", { children: "Resize" })
               ]
             }
           ),
-          z && /* @__PURE__ */ e("div", { className: "absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 min-w-[320px]", children: /* @__PURE__ */ s("div", { className: "space-y-4", children: [
-            /* @__PURE__ */ s("div", { children: [
-              /* @__PURE__ */ s("div", { className: "flex justify-between items-center mb-2", children: [
-                /* @__PURE__ */ e("label", { className: "text-sm font-semibold text-gray-700", children: "Width" }),
-                /* @__PURE__ */ s("span", { className: "text-sm font-bold text-blue-600", children: [
+          z && /* @__PURE__ */ e("div", { className: "rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-bg-white rfp-rounded-xl shadow-2xl rfp-border rfp-border-gray-200 rfp-p-4 z-50 min-w-[320px]", children: /* @__PURE__ */ n("div", { className: "rfp-space-y-4", children: [
+            /* @__PURE__ */ n("div", { children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-justify-between rfp-items-center rfp-mb-2", children: [
+                /* @__PURE__ */ e("label", { className: "rfp-text-sm rfp-font-semibold rfp-text-gray-700", children: "Width" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-font-bold rfp-text-blue-600", children: [
                   X,
                   "px"
                 ] })
@@ -1325,23 +1325,23 @@ const Ht = `
                   min: "30",
                   max: "200",
                   value: X,
-                  onChange: (u) => {
-                    const N = parseInt(u.target.value);
-                    S(N), I(N, f);
+                  onChange: (g) => {
+                    const N = parseInt(g.target.value);
+                    S(N), I(N, u);
                   },
-                  className: "w-full h-2 bg-gradient-to-r from-blue-200 to-blue-500 rounded-lg appearance-none cursor-pointer slider"
+                  className: "rfp-w-full rfp-h-2 bg-gradient-to-r from-blue-200 to-blue-500 rfp-rounded-lg appearance-none rfp-cursor-pointer slider"
                 }
               ),
-              /* @__PURE__ */ s("div", { className: "flex justify-between text-xs text-gray-500 mt-1", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-justify-between rfp-text-xs rfp-text-gray-500 rfp-mt-1", children: [
                 /* @__PURE__ */ e("span", { children: "30px" }),
                 /* @__PURE__ */ e("span", { children: "200px" })
               ] })
             ] }),
-            /* @__PURE__ */ s("div", { children: [
-              /* @__PURE__ */ s("div", { className: "flex justify-between items-center mb-2", children: [
-                /* @__PURE__ */ e("label", { className: "text-sm font-semibold text-gray-700", children: "Height" }),
-                /* @__PURE__ */ s("span", { className: "text-sm font-bold text-blue-600", children: [
-                  f,
+            /* @__PURE__ */ n("div", { children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-justify-between rfp-items-center rfp-mb-2", children: [
+                /* @__PURE__ */ e("label", { className: "rfp-text-sm rfp-font-semibold rfp-text-gray-700", children: "Height" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-font-bold rfp-text-blue-600", children: [
+                  u,
                   "px"
                 ] })
               ] }),
@@ -1351,87 +1351,87 @@ const Ht = `
                   type: "range",
                   min: "30",
                   max: "200",
-                  value: f,
-                  onChange: (u) => {
-                    const N = parseInt(u.target.value);
-                    pe(N), I(X, N);
+                  value: u,
+                  onChange: (g) => {
+                    const N = parseInt(g.target.value);
+                    ue(N), I(X, N);
                   },
-                  className: "w-full h-2 bg-gradient-to-r from-green-200 to-green-500 rounded-lg appearance-none cursor-pointer slider"
+                  className: "rfp-w-full rfp-h-2 bg-gradient-to-r from-green-200 to-green-500 rfp-rounded-lg appearance-none rfp-cursor-pointer slider"
                 }
               ),
-              /* @__PURE__ */ s("div", { className: "flex justify-between text-xs text-gray-500 mt-1", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-justify-between rfp-text-xs rfp-text-gray-500 rfp-mt-1", children: [
                 /* @__PURE__ */ e("span", { children: "30px" }),
                 /* @__PURE__ */ e("span", { children: "200px" })
               ] })
             ] }),
-            /* @__PURE__ */ e("div", { className: "pt-3 border-t border-gray-200", children: /* @__PURE__ */ s("div", { className: "text-center", children: [
-              /* @__PURE__ */ e("span", { className: "text-xs text-gray-600", children: "Current Size: " }),
-              /* @__PURE__ */ s("span", { className: "text-sm font-bold text-gray-800", children: [
+            /* @__PURE__ */ e("div", { className: "rfp-pt-3 rfp-border-t rfp-border-gray-200", children: /* @__PURE__ */ n("div", { className: "rfp-text-center", children: [
+              /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-text-gray-600", children: "Current Size: " }),
+              /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-font-bold rfp-text-gray-800", children: [
                 X,
                 " × ",
-                f,
+                u,
                 "px"
               ] })
             ] }) })
           ] }) })
         ] }),
-        /* @__PURE__ */ s(
+        /* @__PURE__ */ n(
           "button",
           {
             onClick: $e,
-            className: "px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold",
+            className: "rfp-px-3 rfp-py-2 rfp-rounded-lg rfp-bg-red-500 hover:bg-red-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
             title: "Delete Element",
             children: [
-              /* @__PURE__ */ e(Ke, { className: "w-4 h-4" }),
+              /* @__PURE__ */ e(Je, { className: "rfp-w-4 rfp-h-4" }),
               /* @__PURE__ */ e("span", { children: "Delete" })
             ]
           }
         )
       ] })
     ] }),
-    /* @__PURE__ */ s("div", { className: "flex items-center gap-3 flex-wrap", children: [
-      /* @__PURE__ */ s(
+    /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3 rfp-flex-wrap", children: [
+      /* @__PURE__ */ n(
         "button",
         {
-          onClick: le,
-          className: "px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-semibold text-sm",
+          onClick: de,
+          className: "rfp-px-4 rfp-py-2 bg-gradient-to-r from-purple-600 to-blue-600 rfp-text-white rfp-rounded-lg hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-font-semibold rfp-text-sm",
           children: [
-            /* @__PURE__ */ e(Wt, { className: "w-4 h-4" }),
+            /* @__PURE__ */ e(Lt, { className: "rfp-w-4 rfp-h-4" }),
             "3D"
           ]
         }
       ),
-      /* @__PURE__ */ s("div", { className: "flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded text-xs", children: [
-        /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-emerald-600 rounded-full" }),
-        /* @__PURE__ */ s("span", { className: "font-medium text-emerald-800", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 bg-emerald-50 rfp-rounded rfp-text-xs", children: [
+        /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 bg-emerald-600 rfp-rounded-full" }),
+        /* @__PURE__ */ n("span", { className: "rfp-font-medium text-emerald-800", children: [
           "Tables: ",
-          xe
+          we
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "flex items-center gap-1.5 px-2 py-1 bg-amber-50 rounded text-xs", children: [
-        /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-amber-600 rounded-full" }),
-        /* @__PURE__ */ s("span", { className: "font-medium text-amber-800", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 bg-amber-50 rfp-rounded rfp-text-xs", children: [
+        /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 bg-amber-600 rfp-rounded-full" }),
+        /* @__PURE__ */ n("span", { className: "rfp-font-medium text-amber-800", children: [
           "Chairs: ",
-          De
+          He
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "flex items-center gap-1.5 px-2 py-1 bg-purple-50 rounded text-xs", children: [
-        /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-purple-600 rounded-full" }),
-        /* @__PURE__ */ s("span", { className: "font-medium text-purple-800", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-purple-50 rfp-rounded rfp-text-xs", children: [
+        /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-purple-600 rfp-rounded-full" }),
+        /* @__PURE__ */ n("span", { className: "rfp-font-medium rfp-text-purple-800", children: [
           "Objects: ",
           M
         ] })
       ] }),
-      Q && /* @__PURE__ */ s("div", { className: "flex items-center gap-1.5 px-2 py-1 bg-blue-50 rounded text-xs", children: [
-        /* @__PURE__ */ e("div", { className: "w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" }),
-        /* @__PURE__ */ s("span", { className: "font-medium text-blue-800 capitalize", children: [
+      K && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-blue-50 rfp-rounded rfp-text-xs", children: [
+        /* @__PURE__ */ e("div", { className: "w-1.5 h-1.5 rfp-bg-blue-600 rfp-rounded-full rfp-animate-pulse" }),
+        /* @__PURE__ */ n("span", { className: "rfp-font-medium rfp-text-blue-800 rfp-capitalize", children: [
           "Selected: ",
-          Q
+          K
         ] })
       ] })
     ] })
   ] }) });
-}, pt = {
+}, ht = {
   default: {
     position: { x: 1050, y: 800, z: 1050 },
     // Slightly more zoomed out
@@ -1467,26 +1467,26 @@ const Ht = `
     name: "Corner",
     icon: "↖"
   }
-}, sn = ({ floor: o, isOpen: d, onClose: m }) => {
-  const C = Te(null), i = Te(null), v = Te(null), q = Te(null), ie = Te(null), [P, oe] = J(!1), [U, A] = J("default"), [_, ve] = J(!1), Ye = Te(3e-3), K = Te(null), $e = (g) => {
+}, rr = ({ floor: o, isOpen: p, onClose: f }) => {
+  const C = Te(null), i = Te(null), v = Te(null), V = Te(null), oe = Te(null), [P, le] = U(!1), [q, A] = U("default"), [_, Ne] = U(!1), Ae = Te(3e-3), J = Te(null), $e = (h) => {
     if (!v.current || _)
       return;
-    const I = pt[g], F = v.current;
-    K.current = {
+    const I = ht[h], F = v.current;
+    J.current = {
       startPos: F.position.clone(),
       endPos: new t.Vector3(I.position.x, I.position.y, I.position.z),
       startTarget: new t.Vector3(0, 100, 0),
       endTarget: new t.Vector3(I.target.x, I.target.y, I.target.z),
       progress: 0
-    }, ve(!0), A(g), oe(!1);
-  }, ge = (g) => {
+    }, Ne(!0), A(h), le(!1);
+  }, ge = (h) => {
     if (!v.current || _)
       return;
     const I = v.current, F = Math.sqrt(I.position.x ** 2 + I.position.z ** 2), ye = Math.atan2(I.position.z, I.position.x);
-    switch (g) {
+    switch (h) {
       case "left":
-        const le = ye + 0.2;
-        I.position.x = F * Math.cos(le), I.position.z = F * Math.sin(le);
+        const de = ye + 0.2;
+        I.position.x = F * Math.cos(de), I.position.z = F * Math.sin(de);
         break;
       case "right":
         const ze = ye - 0.2;
@@ -1500,14 +1500,14 @@ const Ht = `
         break;
     }
     I.lookAt(0, 100, 0);
-  }, be = (g) => {
-    !v.current || _ || (v.current.position.multiplyScalar(g), v.current.lookAt(0, 100, 0));
+  }, be = (h) => {
+    !v.current || _ || (v.current.position.multiplyScalar(h), v.current.lookAt(0, 100, 0));
   };
-  return Ve(() => {
-    if (!d || !C.current)
+  return _e(() => {
+    if (!p || !C.current)
       return;
-    const g = new t.Scene();
-    g.background = new t.Color(14608111), i.current = g;
+    const h = new t.Scene();
+    h.background = new t.Color(14608111), i.current = h;
     const I = new t.PerspectiveCamera(
       45,
       C.current.clientWidth / C.current.clientHeight,
@@ -1516,49 +1516,49 @@ const Ht = `
     );
     I.position.set(1050, 800, 1050), I.lookAt(0, 100, 0), v.current = I;
     const F = new t.WebGLRenderer({ antialias: !0, alpha: !0 });
-    F.setSize(C.current.clientWidth, C.current.clientHeight), F.shadowMap.enabled = !0, F.shadowMap.type = t.PCFSoftShadowMap, F.toneMapping = t.ACESFilmicToneMapping, F.toneMappingExposure = 1.2, C.current.appendChild(F.domElement), q.current = F;
-    const ye = new t.PMREMGenerator(F), le = new t.Scene();
-    le.background = new t.Color(16777215);
-    const ze = ye.fromScene(le).texture;
-    g.environment = ze, ye.dispose(), g.add(new t.AmbientLight(16777215, 0.6));
-    const xe = new t.DirectionalLight(16777215, 0.8);
-    xe.position.set(400, 600, 300), xe.castShadow = !0, xe.shadow.mapSize.width = 4096, xe.shadow.mapSize.height = 4096, xe.shadow.camera.left = xe.shadow.camera.bottom = -700, xe.shadow.camera.right = xe.shadow.camera.top = 700, xe.shadow.bias = -1e-4, g.add(xe);
-    const De = new t.DirectionalLight(16777215, 0.3);
-    De.position.set(-400, 400, -300), g.add(De);
+    F.setSize(C.current.clientWidth, C.current.clientHeight), F.shadowMap.enabled = !0, F.shadowMap.type = t.PCFSoftShadowMap, F.toneMapping = t.ACESFilmicToneMapping, F.toneMappingExposure = 1.2, C.current.appendChild(F.domElement), V.current = F;
+    const ye = new t.PMREMGenerator(F), de = new t.Scene();
+    de.background = new t.Color(16777215);
+    const ze = ye.fromScene(de).texture;
+    h.environment = ze, ye.dispose(), h.add(new t.AmbientLight(16777215, 0.6));
+    const we = new t.DirectionalLight(16777215, 0.8);
+    we.position.set(400, 600, 300), we.castShadow = !0, we.shadow.mapSize.width = 4096, we.shadow.mapSize.height = 4096, we.shadow.camera.left = we.shadow.camera.bottom = -700, we.shadow.camera.right = we.shadow.camera.top = 700, we.shadow.bias = -1e-4, h.add(we);
+    const He = new t.DirectionalLight(16777215, 0.3);
+    He.position.set(-400, 400, -300), h.add(He);
     const M = new t.DirectionalLight(16777215, 0.2);
-    M.position.set(0, 300, -500), g.add(M);
-    const Ne = new t.Mesh(
+    M.position.set(0, 300, -500), h.add(M);
+    const Me = new t.Mesh(
       new t.PlaneGeometry(1200, 1200),
       new t.MeshStandardMaterial({ color: 13684949, roughness: 0.8, metalness: 0.2 })
       // Medium grey
     );
-    Ne.rotation.x = -Math.PI / 2, Ne.receiveShadow = !0, g.add(Ne);
-    const te = new t.GridHelper(3e3, 150, 10526888, 12105920);
-    te.position.y = 1, g.add(te), o.walls.forEach((n) => {
-      const Z = Math.sqrt(Math.pow(n.endX - n.startX, 2) + Math.pow(n.endY - n.startY, 2)), H = Math.atan2(n.endY - n.startY, n.endX - n.startX), E = n.type === "window" ? 80 : 120, c = n.startX + (n.endX - n.startX) / 2 - 400, R = -(n.startY + (n.endY - n.startY) / 2 - 400);
-      if (n.type === "door") {
-        const p = new t.Group(), T = Z, D = E, z = n.thickness * 0.8, re = new t.MeshStandardMaterial({
+    Me.rotation.x = -Math.PI / 2, Me.receiveShadow = !0, h.add(Me);
+    const j = new t.GridHelper(3e3, 150, 10526888, 12105920);
+    j.position.y = 1, h.add(j), o.walls.forEach((r) => {
+      const Z = Math.sqrt(Math.pow(r.endX - r.startX, 2) + Math.pow(r.endY - r.startY, 2)), H = Math.atan2(r.endY - r.startY, r.endX - r.startX), k = r.type === "window" ? 80 : 120, d = r.startX + (r.endX - r.startX) / 2 - 400, R = -(r.startY + (r.endY - r.startY) / 2 - 400);
+      if (r.type === "door") {
+        const m = new t.Group(), T = Z, D = k, z = r.thickness * 0.8, ie = new t.MeshStandardMaterial({
           color: 3812901,
           // dark stained wood
           roughness: 0.9,
           metalness: 0
-        }), O = 8, de = new t.Mesh(
-          new t.BoxGeometry(T, O, n.thickness + 4),
-          re
+        }), O = 8, pe = new t.Mesh(
+          new t.BoxGeometry(T, O, r.thickness + 4),
+          ie
         );
-        de.position.y = D / 2 - O / 2, p.add(de);
-        const ne = new t.Mesh(
-          new t.BoxGeometry(T, O, n.thickness + 4),
-          re
+        pe.position.y = D / 2 - O / 2, m.add(pe);
+        const ee = new t.Mesh(
+          new t.BoxGeometry(T, O, r.thickness + 4),
+          ie
         );
-        ne.position.y = -D / 2 + O / 2, p.add(ne);
+        ee.position.y = -D / 2 + O / 2, m.add(ee);
         const L = new t.Mesh(
-          new t.BoxGeometry(O, D, n.thickness + 4),
-          re
+          new t.BoxGeometry(O, D, r.thickness + 4),
+          ie
         );
-        L.position.x = -T / 2 + O / 2, p.add(L);
-        const G = L.clone();
-        G.position.x = T / 2 - O / 2, p.add(G);
+        L.position.x = -T / 2 + O / 2, m.add(L);
+        const E = L.clone();
+        E.position.x = T / 2 - O / 2, m.add(E);
         const $ = new t.MeshStandardMaterial({
           color: 5125166,
           // warm brown
@@ -1574,45 +1574,45 @@ const Ht = `
           // frosted effect
           metalness: 0
           // no mirror reflection
-        }), se = (T - O * 2 - 4) / 2, j = D - O * 2 - 4, Ce = (Ee) => {
-          const ke = new t.Group(), ce = new t.Mesh(
-            new t.BoxGeometry(se, j, z),
+        }), re = (T - O * 2 - 4) / 2, Q = D - O * 2 - 4, ke = (Ge) => {
+          const Ee = new t.Group(), ce = new t.Mesh(
+            new t.BoxGeometry(re, Q, z),
             $
           );
-          ke.add(ce);
-          const he = new t.Mesh(
-            new t.PlaneGeometry(se * 0.8, j * 0.85),
+          Ee.add(ce);
+          const fe = new t.Mesh(
+            new t.PlaneGeometry(re * 0.8, Q * 0.85),
             b
           );
-          he.position.set(0, 0, z / 2 + 0.1), ke.add(he);
-          const Fe = new t.MeshStandardMaterial({
+          fe.position.set(0, 0, z / 2 + 0.1), Ee.add(fe);
+          const w = new t.MeshStandardMaterial({
             color: 8947848,
             metalness: 0.4,
             roughness: 0.7
-          }), x = new t.Mesh(
+          }), ne = new t.Mesh(
             new t.CylinderGeometry(0.6, 0.6, 12, 12),
-            Fe
+            w
           );
-          return x.rotation.z = Math.PI / 2, x.position.set(Ee > 0 ? -se * 0.35 : se * 0.35, 0, z / 2 + 1.5), ke.add(x), ke.position.x = Ee, ke;
-        }, X = Ce(-se / 2), S = Ce(se / 2);
-        p.add(X), p.add(S);
-        const f = 14, pe = new t.PlaneGeometry(T * 0.9, f), u = document.createElement("canvas");
-        u.width = 512, u.height = 128;
-        const N = u.getContext("2d");
-        N && (N.fillStyle = "#3a2e25", N.fillRect(0, 0, u.width, u.height), N.font = "bold 60px Arial", N.fillStyle = "#f5d590", N.textAlign = "center", N.textBaseline = "middle", N.fillText("WELCOME", u.width / 2, u.height / 2));
-        const Me = new t.CanvasTexture(u), W = new t.MeshStandardMaterial({
-          map: Me,
+          return ne.rotation.z = Math.PI / 2, ne.position.set(Ge > 0 ? -re * 0.35 : re * 0.35, 0, z / 2 + 1.5), Ee.add(ne), Ee.position.x = Ge, Ee;
+        }, X = ke(-re / 2), S = ke(re / 2);
+        m.add(X), m.add(S);
+        const u = 14, ue = new t.PlaneGeometry(T * 0.9, u), g = document.createElement("canvas");
+        g.width = 512, g.height = 128;
+        const N = g.getContext("2d");
+        N && (N.fillStyle = "#3a2e25", N.fillRect(0, 0, g.width, g.height), N.font = "bold 60px Arial", N.fillStyle = "#f5d590", N.textAlign = "center", N.textBaseline = "middle", N.fillText("WELCOME", g.width / 2, g.height / 2));
+        const Ce = new t.CanvasTexture(g), B = new t.MeshStandardMaterial({
+          map: Ce,
           roughness: 0.8,
           metalness: 0.1
-        }), w = new t.Mesh(pe, W);
-        w.position.set(0, D / 2 - O - f / 2 - 4, n.thickness / 2 + 2), p.add(w), p.position.set(c, D / 2, R), p.rotation.y = -H, p.castShadow = !0, p.receiveShadow = !0, g.add(p);
-      } else if (n.type === "window") {
-        const p = Z > 20 ? Z : 120, T = E, D = T * 0.45, z = T * 0.65, re = T * 0.1, O = T * 0.3, de = new t.MeshStandardMaterial({
+        }), x = new t.Mesh(ue, B);
+        x.position.set(0, D / 2 - O - u / 2 - 4, r.thickness / 2 + 2), m.add(x), m.position.set(d, D / 2, R), m.rotation.y = -H, m.castShadow = !0, m.receiveShadow = !0, h.add(m);
+      } else if (r.type === "window") {
+        const m = Z > 20 ? Z : 120, T = k, D = T * 0.45, z = T * 0.65, ie = T * 0.1, O = T * 0.3, pe = new t.MeshStandardMaterial({
           color: 13158608,
           // Grey-blue for window sills and wall sections
           roughness: 0.85,
           metalness: 0.05
-        }), ne = new t.MeshPhysicalMaterial({
+        }), ee = new t.MeshPhysicalMaterial({
           color: 2763306,
           metalness: 0.95,
           roughness: 0.2,
@@ -1631,111 +1631,111 @@ const Ht = `
           clearcoat: 0.8,
           clearcoatRoughness: 0.1,
           reflectivity: 0.5
-        }), G = new t.Mesh(
-          new t.BoxGeometry(p, D, n.thickness),
-          de
+        }), E = new t.Mesh(
+          new t.BoxGeometry(m, D, r.thickness),
+          pe
         );
-        G.position.set(c, D / 2, R), G.rotation.y = -H, G.receiveShadow = !0, G.castShadow = !0, g.add(G);
-        const $ = D + z / 2, b = 4, se = Math.max(2, Math.floor(p / 80)), j = (p - b * (se + 1)) / se;
-        for (let u = 0; u < se; u++) {
-          const N = -p / 2 + b + j / 2 + u * (j + b), Me = c + N * Math.cos(-H), W = R + N * Math.sin(-H), w = new t.Mesh(
-            new t.BoxGeometry(j - 2, z - b * 2, 1),
+        E.position.set(d, D / 2, R), E.rotation.y = -H, E.receiveShadow = !0, E.castShadow = !0, h.add(E);
+        const $ = D + z / 2, b = 4, re = Math.max(2, Math.floor(m / 80)), Q = (m - b * (re + 1)) / re;
+        for (let g = 0; g < re; g++) {
+          const N = -m / 2 + b + Q / 2 + g * (Q + b), Ce = d + N * Math.cos(-H), B = R + N * Math.sin(-H), x = new t.Mesh(
+            new t.BoxGeometry(Q - 2, z - b * 2, 1),
             L
           );
-          if (w.position.set(Me, $, W), w.rotation.y = -H, w.castShadow = !1, w.receiveShadow = !1, g.add(w), u < se - 1) {
-            const Ee = -p / 2 + b + (u + 1) * j + (u + 0.5) * b, ke = c + Ee * Math.cos(-H), ce = R + Ee * Math.sin(-H), he = new t.Mesh(
-              new t.BoxGeometry(b, z, n.thickness + 3),
-              ne
+          if (x.position.set(Ce, $, B), x.rotation.y = -H, x.castShadow = !1, x.receiveShadow = !1, h.add(x), g < re - 1) {
+            const Ge = -m / 2 + b + (g + 1) * Q + (g + 0.5) * b, Ee = d + Ge * Math.cos(-H), ce = R + Ge * Math.sin(-H), fe = new t.Mesh(
+              new t.BoxGeometry(b, z, r.thickness + 3),
+              ee
             );
-            he.position.set(ke, $, ce), he.rotation.y = -H, he.castShadow = !0, g.add(he);
+            fe.position.set(Ee, $, ce), fe.rotation.y = -H, fe.castShadow = !0, h.add(fe);
           }
         }
-        const Ce = D + z + re / 2, X = new t.Mesh(
-          new t.BoxGeometry(p - b * 2, re - b, 1),
+        const ke = D + z + ie / 2, X = new t.Mesh(
+          new t.BoxGeometry(m - b * 2, ie - b, 1),
           L
         );
-        X.position.set(c, Ce, R), X.rotation.y = -H, X.castShadow = !1, g.add(X);
+        X.position.set(d, ke, R), X.rotation.y = -H, X.castShadow = !1, h.add(X);
         const S = new t.Mesh(
-          new t.BoxGeometry(p, b, n.thickness + 2),
-          ne
+          new t.BoxGeometry(m, b, r.thickness + 2),
+          ee
         );
-        S.position.set(c, D + z + b / 2, R), S.rotation.y = -H, S.castShadow = !0, g.add(S);
-        const f = new t.Mesh(
-          new t.BoxGeometry(p, b, n.thickness + 2),
-          ne
+        S.position.set(d, D + z + b / 2, R), S.rotation.y = -H, S.castShadow = !0, h.add(S);
+        const u = new t.Mesh(
+          new t.BoxGeometry(m, b, r.thickness + 2),
+          ee
         );
-        f.position.set(c, D + z + re + b / 2, R), f.rotation.y = -H, f.castShadow = !0, g.add(f);
-        const pe = new t.Mesh(
-          new t.BoxGeometry(p, O, n.thickness),
-          de
+        u.position.set(d, D + z + ie + b / 2, R), u.rotation.y = -H, u.castShadow = !0, h.add(u);
+        const ue = new t.Mesh(
+          new t.BoxGeometry(m, O, r.thickness),
+          pe
         );
-        pe.position.set(c, D + z + re + O / 2, R), pe.rotation.y = -H, pe.castShadow = !0, pe.receiveShadow = !0, g.add(pe);
+        ue.position.set(d, D + z + ie + O / 2, R), ue.rotation.y = -H, ue.castShadow = !0, ue.receiveShadow = !0, h.add(ue);
       } else {
-        const p = new t.Mesh(
-          new t.BoxGeometry(Z, E, n.thickness),
+        const m = new t.Mesh(
+          new t.BoxGeometry(Z, k, r.thickness),
           new t.MeshStandardMaterial({ color: 12105920, roughness: 0.9, metalness: 0.05 })
         );
-        p.position.set(c, E / 2, R), p.rotation.y = -H, p.castShadow = !0, p.receiveShadow = !0, g.add(p);
+        m.position.set(d, k / 2, R), m.rotation.y = -H, m.castShadow = !0, m.receiveShadow = !0, h.add(m);
       }
-    }), o.fixedElements.forEach((n) => {
-      const Z = n.x - 400 + n.width / 2, H = -(n.y - 400 + n.height / 2);
-      if (n.type === "pillar") {
-        const E = Math.min(n.width, n.height) / 2, c = new t.Mesh(
-          new t.CylinderGeometry(E, E * 1.1, 140, 32),
+    }), o.fixedElements.forEach((r) => {
+      const Z = r.x - 400 + r.width / 2, H = -(r.y - 400 + r.height / 2);
+      if (r.type === "pillar") {
+        const k = Math.min(r.width, r.height) / 2, d = new t.Mesh(
+          new t.CylinderGeometry(k, k * 1.1, 140, 32),
           new t.MeshStandardMaterial({ color: 4868698, roughness: 0.6, metalness: 0.4 })
         );
-        c.position.set(Z, 70, H), c.castShadow = !0, g.add(c);
+        d.position.set(Z, 70, H), d.castShadow = !0, h.add(d);
         const R = new t.Mesh(
-          new t.CylinderGeometry(E * 1.3, E * 1.1, 10, 32),
+          new t.CylinderGeometry(k * 1.3, k * 1.1, 10, 32),
           new t.MeshStandardMaterial({ color: 5921386, roughness: 0.5, metalness: 0.5 })
         );
-        R.position.set(Z, 135, H), R.castShadow = !0, g.add(R);
-        const p = new t.Mesh(
-          new t.CylinderGeometry(E * 1.2, E * 1.3, 10, 32),
+        R.position.set(Z, 135, H), R.castShadow = !0, h.add(R);
+        const m = new t.Mesh(
+          new t.CylinderGeometry(k * 1.2, k * 1.3, 10, 32),
           new t.MeshStandardMaterial({ color: 5921386, roughness: 0.5, metalness: 0.5 })
         );
-        p.position.set(Z, 5, H), p.castShadow = !0, g.add(p);
-      } else if (n.type === "column") {
-        const E = new t.Mesh(
-          new t.BoxGeometry(n.width, 140, n.height),
+        m.position.set(Z, 5, H), m.castShadow = !0, h.add(m);
+      } else if (r.type === "column") {
+        const k = new t.Mesh(
+          new t.BoxGeometry(r.width, 140, r.height),
           new t.MeshStandardMaterial({ color: 3816010, roughness: 0.7, metalness: 0.3 })
         );
-        E.position.set(Z, 70, H), E.castShadow = !0, g.add(E);
-        const c = new t.LineSegments(
-          new t.EdgesGeometry(E.geometry),
+        k.position.set(Z, 70, H), k.castShadow = !0, h.add(k);
+        const d = new t.LineSegments(
+          new t.EdgesGeometry(k.geometry),
           new t.LineBasicMaterial({ color: 6974074 })
         );
-        c.position.copy(E.position), g.add(c);
+        d.position.copy(k.position), h.add(d);
       } else {
-        const R = n.height / 8;
-        for (let p = 0; p < 8; p++) {
+        const R = r.height / 8;
+        for (let m = 0; m < 8; m++) {
           const T = new t.Mesh(
-            new t.BoxGeometry(n.width, 6.25, R * (8 - p)),
+            new t.BoxGeometry(r.width, 6.25, R * (8 - m)),
             new t.MeshStandardMaterial({ color: 6636321, roughness: 0.8 })
           );
-          T.position.set(Z, 6.25 / 2 + p * 6.25, H + p * R / 2), T.castShadow = !0, g.add(T);
+          T.position.set(Z, 6.25 / 2 + m * 6.25, H + m * R / 2), T.castShadow = !0, h.add(T);
           const D = new t.LineSegments(
             new t.EdgesGeometry(T.geometry),
             new t.LineBasicMaterial({ color: 3810320 })
           );
-          D.position.copy(T.position), g.add(D);
+          D.position.copy(T.position), h.add(D);
         }
       }
-    }), o.objects.forEach((n) => {
-      const Z = n.x - 400 + n.width / 2, H = -(n.y - 400 + n.height / 2), E = -(n.rotation * Math.PI / 180);
-      if (n.type === "bar") {
-        const c = n.x - 400 + n.width / 2, R = -(n.y - 400 + n.height / 2), p = -(n.rotation * Math.PI / 180), T = 50, D = new t.MeshPhysicalMaterial({
+    }), o.objects.forEach((r) => {
+      const Z = r.x - 400 + r.width / 2, H = -(r.y - 400 + r.height / 2), k = -(r.rotation * Math.PI / 180);
+      if (r.type === "bar") {
+        const d = r.x - 400 + r.width / 2, R = -(r.y - 400 + r.height / 2), m = -(r.rotation * Math.PI / 180), T = 50, D = new t.MeshPhysicalMaterial({
           color: 1710618,
           roughness: 0.5,
           metalness: 0.8,
           clearcoat: 0.2,
           clearcoatRoughness: 0.4
         }), z = new t.Mesh(
-          new t.BoxGeometry(n.width, T, n.height),
+          new t.BoxGeometry(r.width, T, r.height),
           D
         );
-        z.position.set(c, T / 2, R), z.rotation.y = p, z.castShadow = !0, z.receiveShadow = !0, g.add(z);
-        const re = [8323072, 10770944, 6691328, 9109504, 8930304], O = re[Math.floor(Math.random() * re.length)], de = new t.MeshPhysicalMaterial({
+        z.position.set(d, T / 2, R), z.rotation.y = m, z.castShadow = !0, z.receiveShadow = !0, h.add(z);
+        const ie = [8323072, 10770944, 6691328, 9109504, 8930304], O = ie[Math.floor(Math.random() * ie.length)], pe = new t.MeshPhysicalMaterial({
           color: O,
           metalness: 0.1,
           roughness: 0.05,
@@ -1746,61 +1746,61 @@ const Ht = `
           reflectivity: 0.9,
           clearcoat: 1,
           clearcoatRoughness: 0.05
-        }), ne = new t.Mesh(
-          new t.BoxGeometry(n.width + 6, 6, n.height + 6),
-          de
+        }), ee = new t.Mesh(
+          new t.BoxGeometry(r.width + 6, 6, r.height + 6),
+          pe
         );
-        ne.position.set(c, T + 3, R), ne.rotation.y = p, ne.castShadow = !0, g.add(ne);
+        ee.position.set(d, T + 3, R), ee.rotation.y = m, ee.castShadow = !0, h.add(ee);
         const L = new t.MeshStandardMaterial({
           emissive: 16711799,
           // pinkish-red glow
           emissiveIntensity: 0.6,
           color: 0
-        }), G = new t.Mesh(
-          new t.BoxGeometry(n.width + 6, 0.5, n.height + 6),
+        }), E = new t.Mesh(
+          new t.BoxGeometry(r.width + 6, 0.5, r.height + 6),
           L
         );
-        G.position.set(c, T + 1, R), G.rotation.y = p, g.add(G);
+        E.position.set(d, T + 1, R), E.rotation.y = m, h.add(E);
         const $ = O === 8323072 ? 13938487 : 11579568, b = new t.Mesh(
-          new t.BoxGeometry(n.width + 8, 0.6, n.height + 8),
+          new t.BoxGeometry(r.width + 8, 0.6, r.height + 8),
           new t.MeshStandardMaterial({
             color: $,
             metalness: 1,
             roughness: 0.2
           })
         );
-        b.position.set(c, T + 6.5, R), b.rotation.y = p, g.add(b);
-        const se = new t.MeshStandardMaterial({
+        b.position.set(d, T + 6.5, R), b.rotation.y = m, h.add(b);
+        const re = new t.MeshStandardMaterial({
           color: 13421772,
           metalness: 1,
           roughness: 0.1
-        }), j = new t.CylinderGeometry(2, 2, T, 16);
+        }), Q = new t.CylinderGeometry(2, 2, T, 16);
         [
-          [n.width / 2 - 6, n.height / 2 - 6],
-          [-n.width / 2 + 6, n.height / 2 - 6],
-          [n.width / 2 - 6, -n.height / 2 + 6],
-          [-n.width / 2 + 6, -n.height / 2 + 6]
-        ].forEach(([ue, Se]) => {
-          const we = new t.Mesh(j, se);
-          we.position.set(
-            c + ue * Math.cos(p) - Se * Math.sin(p),
+          [r.width / 2 - 6, r.height / 2 - 6],
+          [-r.width / 2 + 6, r.height / 2 - 6],
+          [r.width / 2 - 6, -r.height / 2 + 6],
+          [-r.width / 2 + 6, -r.height / 2 + 6]
+        ].forEach(([xe, Se]) => {
+          const ve = new t.Mesh(Q, re);
+          ve.position.set(
+            d + xe * Math.cos(m) - Se * Math.sin(m),
             T / 2,
-            R + ue * Math.sin(p) + Se * Math.cos(p)
-          ), we.castShadow = !0, g.add(we);
+            R + xe * Math.sin(m) + Se * Math.cos(m)
+          ), ve.castShadow = !0, h.add(ve);
         });
         const X = new t.PointLight(O, 0.4, 600);
-        X.position.set(c, T + 70, R), g.add(X);
-        const S = 120, f = new t.Group(), pe = new t.MeshPhysicalMaterial({
+        X.position.set(d, T + 70, R), h.add(X);
+        const S = 120, u = new t.Group(), ue = new t.MeshPhysicalMaterial({
           color: 2105376,
           metalness: 1,
           roughness: 0.25,
           clearcoat: 0.6,
           clearcoatRoughness: 0.1
-        }), u = new t.Mesh(
-          new t.BoxGeometry(n.width + 40, 10, n.height + 40),
-          pe
+        }), g = new t.Mesh(
+          new t.BoxGeometry(r.width + 40, 10, r.height + 40),
+          ue
         );
-        u.castShadow = !0, u.receiveShadow = !0, f.add(u);
+        g.castShadow = !0, g.receiveShadow = !0, u.add(g);
         const N = new t.MeshPhysicalMaterial({
           color: 10770944,
           // whiskey amber
@@ -1811,20 +1811,20 @@ const Ht = `
           ior: 1.45,
           clearcoat: 1,
           clearcoatRoughness: 0.05
-        }), Me = new t.Mesh(
-          new t.PlaneGeometry(n.width + 32, n.height + 32),
+        }), Ce = new t.Mesh(
+          new t.PlaneGeometry(r.width + 32, r.height + 32),
           N
         );
-        Me.rotation.x = -Math.PI / 2, Me.position.y = -3, f.add(Me);
-        const W = new t.MeshStandardMaterial({
+        Ce.rotation.x = -Math.PI / 2, Ce.position.y = -3, u.add(Ce);
+        const B = new t.MeshStandardMaterial({
           emissive: 16764040,
           emissiveIntensity: 1.6,
           color: 0
-        }), w = new t.BoxGeometry(4, 2, n.height + 36), Ee = new t.Mesh(w, W), ke = Ee.clone();
-        Ee.position.set(-(n.width + 36) / 2, -2, 0), ke.position.set((n.width + 36) / 2, -2, 0), f.add(Ee, ke);
-        const ce = new t.Group(), he = [11674146, 14919767, 9127187, 27028, 7810842];
-        for (let ue = -3; ue <= 3; ue++) {
-          const Se = he[Math.floor(Math.random() * he.length)], we = new t.MeshPhysicalMaterial({
+        }), x = new t.BoxGeometry(4, 2, r.height + 36), Ge = new t.Mesh(x, B), Ee = Ge.clone();
+        Ge.position.set(-(r.width + 36) / 2, -2, 0), Ee.position.set((r.width + 36) / 2, -2, 0), u.add(Ge, Ee);
+        const ce = new t.Group(), fe = [11674146, 14919767, 9127187, 27028, 7810842];
+        for (let xe = -3; xe <= 3; xe++) {
+          const Se = fe[Math.floor(Math.random() * fe.length)], ve = new t.MeshPhysicalMaterial({
             color: Se,
             roughness: 0.1,
             transmission: 0.95,
@@ -1832,58 +1832,58 @@ const Ht = `
             ior: 1.5,
             clearcoat: 0.3,
             clearcoatRoughness: 0.2
-          }), Ae = new t.Mesh(
+          }), s = new t.Mesh(
             new t.CylinderGeometry(3, 3, 20, 32),
-            we
+            ve
           );
-          Ae.position.set(ue * 12, -12, 0), ce.add(Ae);
+          s.position.set(xe * 12, -12, 0), ce.add(s);
           const a = new t.Mesh(
             new t.CylinderGeometry(1.2, 1.2, 6, 16),
-            we
+            ve
           );
-          a.position.set(ue * 12, -3, 0), ce.add(a);
+          a.position.set(xe * 12, -3, 0), ce.add(a);
         }
-        ce.position.y = -15, f.add(ce);
-        const Fe = new t.MeshPhysicalMaterial({
+        ce.position.y = -15, u.add(ce);
+        const w = new t.MeshPhysicalMaterial({
           color: 16777215,
           roughness: 0.1,
           transmission: 0.9,
           thickness: 0.4,
           ior: 1.45
         });
-        for (let ue = -2; ue <= 2; ue++) {
+        for (let xe = -2; xe <= 2; xe++) {
           const Se = new t.Mesh(
             new t.SphereGeometry(2.5, 16, 16, 0, Math.PI),
             // half-sphere
-            Fe
+            w
           );
-          Se.position.set(ue * 10, -25, 0), Se.scale.y = 0.6, f.add(Se);
+          Se.position.set(xe * 10, -25, 0), Se.scale.y = 0.6, u.add(Se);
         }
-        const x = new t.MeshStandardMaterial({
+        const ne = new t.MeshStandardMaterial({
           color: 11184810,
           metalness: 1,
           roughness: 0.2
-        }), fe = new t.CylinderGeometry(1.5, 1.5, S - 60, 16);
+        }), Fe = new t.CylinderGeometry(1.5, 1.5, S - 60, 16);
         [
-          [n.width / 2 - 10, n.height / 2 - 10],
-          [-n.width / 2 + 10, n.height / 2 - 10],
-          [n.width / 2 - 10, -n.height / 2 + 10],
-          [-n.width / 2 + 10, -n.height / 2 + 10]
-        ].forEach(([ue, Se]) => {
-          const we = new t.Mesh(fe, x);
-          we.position.set(ue, -(S - 80) / 2, Se), we.rotation.x = Math.PI / 2, f.add(we);
-        }), f.position.set(c, S, R), f.rotation.y = p, g.add(f);
-        const He = new t.PointLight(16755285, 0.8, 600);
-        He.position.set(c, S - 20, R), g.add(He);
-      } else if (n.type === "kitchen") {
-        const c = new t.Group(), R = new t.MeshPhysicalMaterial({
+          [r.width / 2 - 10, r.height / 2 - 10],
+          [-r.width / 2 + 10, r.height / 2 - 10],
+          [r.width / 2 - 10, -r.height / 2 + 10],
+          [-r.width / 2 + 10, -r.height / 2 + 10]
+        ].forEach(([xe, Se]) => {
+          const ve = new t.Mesh(Fe, ne);
+          ve.position.set(xe, -(S - 80) / 2, Se), ve.rotation.x = Math.PI / 2, u.add(ve);
+        }), u.position.set(d, S, R), u.rotation.y = m, h.add(u);
+        const Ye = new t.PointLight(16755285, 0.8, 600);
+        Ye.position.set(d, S - 20, R), h.add(Ye);
+      } else if (r.type === "kitchen") {
+        const d = new t.Group(), R = new t.MeshPhysicalMaterial({
           color: 11579568,
           metalness: 1,
           roughness: 0.25,
           envMapIntensity: 1,
           clearcoat: 1,
           clearcoatRoughness: 0.05
-        }), p = new t.MeshPhysicalMaterial({
+        }), m = new t.MeshPhysicalMaterial({
           color: 10079487,
           roughness: 0.05,
           transmission: 0.9,
@@ -1891,39 +1891,39 @@ const Ht = `
           metalness: 0.1,
           envMapIntensity: 1.2
         }), T = new t.Mesh(
-          new t.BoxGeometry(n.width, 50, n.height),
+          new t.BoxGeometry(r.width, 50, r.height),
           R
         );
-        T.position.set(0, 25, 0), T.castShadow = !0, T.receiveShadow = !0, c.add(T);
+        T.position.set(0, 25, 0), T.castShadow = !0, T.receiveShadow = !0, d.add(T);
         const D = new t.Mesh(
-          new t.BoxGeometry(n.width, 4, n.height),
-          p
+          new t.BoxGeometry(r.width, 4, r.height),
+          m
         );
-        D.position.set(0, 52, 0), c.add(D);
+        D.position.set(0, 52, 0), d.add(D);
         const z = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.4, 10, n.height * 0.6),
+          new t.BoxGeometry(r.width * 0.4, 10, r.height * 0.6),
           new t.MeshStandardMaterial({ color: 2236962, roughness: 0.4 })
         );
-        z.position.set(-n.width * 0.2, 55, 0), c.add(z);
-        const re = new t.MeshStandardMaterial({
+        z.position.set(-r.width * 0.2, 55, 0), d.add(z);
+        const ie = new t.MeshStandardMaterial({
           color: 3355443,
           metalness: 0.8,
           roughness: 0.2
         });
         [
-          [-n.width * 0.25, n.height * 0.15],
-          [-n.width * 0.15, n.height * 0.15],
-          [-n.width * 0.25, -n.height * 0.15],
-          [-n.width * 0.15, -n.height * 0.15]
+          [-r.width * 0.25, r.height * 0.15],
+          [-r.width * 0.15, r.height * 0.15],
+          [-r.width * 0.25, -r.height * 0.15],
+          [-r.width * 0.15, -r.height * 0.15]
         ].forEach(([X, S]) => {
-          const f = new t.Mesh(
+          const u = new t.Mesh(
             new t.CylinderGeometry(6, 6, 2, 32),
-            re
+            ie
           );
-          f.rotation.x = Math.PI / 2, f.position.set(X, 61, S), c.add(f);
+          u.rotation.x = Math.PI / 2, u.position.set(X, 61, S), d.add(u);
         });
-        const de = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.5, 35, n.height * 0.65),
+        const pe = new t.Mesh(
+          new t.BoxGeometry(r.width * 0.5, 35, r.height * 0.65),
           new t.MeshPhysicalMaterial({
             color: 12632256,
             metalness: 1,
@@ -1931,18 +1931,18 @@ const Ht = `
             envMapIntensity: 1.1
           })
         );
-        de.position.set(-n.width * 0.2, 95, 0), de.castShadow = !0, c.add(de);
-        const ne = new t.MeshPhysicalMaterial({
+        pe.position.set(-r.width * 0.2, 95, 0), pe.castShadow = !0, d.add(pe);
+        const ee = new t.MeshPhysicalMaterial({
           color: 14540253,
           roughness: 0.3,
           metalness: 0.5
         });
         for (let X = 0; X < 3; X++) {
           const S = new t.Mesh(
-            new t.BoxGeometry(n.width * 0.7, 4, n.height * 0.2),
-            ne
+            new t.BoxGeometry(r.width * 0.7, 4, r.height * 0.2),
+            ee
           );
-          S.position.set(n.width * 0.15, 75 + X * 22, n.height * 0.35), S.castShadow = !0, c.add(S);
+          S.position.set(r.width * 0.15, 75 + X * 22, r.height * 0.35), S.castShadow = !0, d.add(S);
         }
         const L = new t.MeshStandardMaterial({
           color: 8947848,
@@ -1954,42 +1954,42 @@ const Ht = `
             new t.CylinderGeometry(1.5, 1.5, 15, 16),
             L
           );
-          S.rotation.z = Math.PI / 2, S.position.set(X * n.width * 0.2, 35, n.height * 0.45), c.add(S);
+          S.rotation.z = Math.PI / 2, S.position.set(X * r.width * 0.2, 35, r.height * 0.45), d.add(S);
         }
-        const G = new t.PointLight(16777215, 1.5, 400);
-        G.position.set(0, 140, 0), G.castShadow = !0, c.add(G);
+        const E = new t.PointLight(16777215, 1.5, 400);
+        E.position.set(0, 140, 0), E.castShadow = !0, d.add(E);
         const $ = document.createElement("canvas");
         $.width = 1024, $.height = 768;
         const b = $.getContext("2d");
         b && (b.fillStyle = "#dc2626", b.fillRect(0, 0, $.width, $.height), b.strokeStyle = "#ffffff", b.lineWidth = 25, b.strokeRect(30, 30, $.width - 60, $.height - 60), b.strokeStyle = "#000000", b.lineWidth = 15, b.strokeRect(50, 50, $.width - 100, $.height - 100), b.shadowColor = "rgba(0, 0, 0, 0.8)", b.shadowBlur = 20, b.shadowOffsetX = 8, b.shadowOffsetY = 8, b.font = "bold 180px Arial", b.textAlign = "center", b.textBaseline = "middle", b.fillStyle = "#ffffff", b.fillText("👨‍🍳", $.width / 2, $.height / 2 - 150), b.fillStyle = "#ffffff", b.font = "bold 220px Impact, Arial Black, sans-serif", b.fillText("CHEF", $.width / 2, $.height / 2 + 120), b.strokeStyle = "#000000", b.lineWidth = 12, b.strokeText("CHEF", $.width / 2, $.height / 2 + 120), b.strokeStyle = "#fbbf24", b.lineWidth = 6, b.strokeText("CHEF", $.width / 2, $.height / 2 + 120));
-        const se = new t.CanvasTexture($), j = new t.Mesh(
-          new t.PlaneGeometry(n.height * 0.6, n.height * 0.45),
+        const re = new t.CanvasTexture($), Q = new t.Mesh(
+          new t.PlaneGeometry(r.height * 0.6, r.height * 0.45),
           new t.MeshStandardMaterial({
-            map: se,
+            map: re,
             roughness: 0.4,
             metalness: 0.1,
             emissive: 14427686,
             emissiveIntensity: 0.3
           })
         );
-        j.position.set(-n.width / 2 + 3, 50, 0), j.rotation.y = Math.PI / 2, c.add(j);
-        const Ce = new t.Mesh(
-          new t.PlaneGeometry(n.height * 0.6, n.height * 0.45),
+        Q.position.set(-r.width / 2 + 3, 50, 0), Q.rotation.y = Math.PI / 2, d.add(Q);
+        const ke = new t.Mesh(
+          new t.PlaneGeometry(r.height * 0.6, r.height * 0.45),
           new t.MeshStandardMaterial({
-            map: se,
+            map: re,
             roughness: 0.4,
             metalness: 0.1,
             emissive: 14427686,
             emissiveIntensity: 0.3
           })
         );
-        Ce.position.set(n.width / 2 - 3, 50, 0), Ce.rotation.y = -Math.PI / 2, c.add(Ce), c.position.set(Z, 0, H), c.rotation.y = E, g.add(c);
-      } else if (n.type === "toilet") {
-        const c = new t.Group(), R = new t.MeshStandardMaterial({
+        ke.position.set(r.width / 2 - 3, 50, 0), ke.rotation.y = -Math.PI / 2, d.add(ke), d.position.set(Z, 0, H), d.rotation.y = k, h.add(d);
+      } else if (r.type === "toilet") {
+        const d = new t.Group(), R = new t.MeshStandardMaterial({
           color: 14013914,
           roughness: 0.7,
           metalness: 0.05
-        }), p = new t.MeshStandardMaterial({
+        }), m = new t.MeshStandardMaterial({
           color: 3900150,
           roughness: 0.6,
           metalness: 0.1
@@ -2001,191 +2001,191 @@ const Ht = `
           color: 14277081,
           roughness: 0.7,
           metalness: 0.05
-        }), z = 120, re = new t.Mesh(
-          new t.BoxGeometry(n.width, 4, n.height),
+        }), z = 120, ie = new t.Mesh(
+          new t.BoxGeometry(r.width, 4, r.height),
           D
         );
-        re.position.y = 2, re.receiveShadow = !0, c.add(re);
+        ie.position.y = 2, ie.receiveShadow = !0, d.add(ie);
         const O = new t.Mesh(
-          new t.BoxGeometry(n.width, z, 6),
+          new t.BoxGeometry(r.width, z, 6),
           R
         );
-        O.position.set(0, z / 2, -n.height / 2), O.castShadow = !0, c.add(O);
-        const de = new t.Mesh(
-          new t.BoxGeometry(6, z, n.height),
+        O.position.set(0, z / 2, -r.height / 2), O.castShadow = !0, d.add(O);
+        const pe = new t.Mesh(
+          new t.BoxGeometry(6, z, r.height),
           R
         );
-        de.position.set(-n.width / 2, z / 2, 0), de.castShadow = !0, c.add(de);
-        const ne = new t.Mesh(
-          new t.BoxGeometry(6, z, n.height),
+        pe.position.set(-r.width / 2, z / 2, 0), pe.castShadow = !0, d.add(pe);
+        const ee = new t.Mesh(
+          new t.BoxGeometry(6, z, r.height),
           R
         );
-        ne.position.set(n.width / 2, z / 2, 0), ne.castShadow = !0, c.add(ne);
+        ee.position.set(r.width / 2, z / 2, 0), ee.castShadow = !0, d.add(ee);
         const L = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.24, z, 6),
+          new t.BoxGeometry(r.width * 0.24, z, 6),
           R
         );
-        L.position.set(0, z / 2, n.height / 2), L.castShadow = !0, c.add(L);
-        const G = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.055, z, 6),
+        L.position.set(0, z / 2, r.height / 2), L.castShadow = !0, d.add(L);
+        const E = new t.Mesh(
+          new t.BoxGeometry(r.width * 0.055, z, 6),
           R
         );
-        G.position.set(-n.width * 0.4725, z / 2, n.height / 2), G.castShadow = !0, c.add(G);
+        E.position.set(-r.width * 0.4725, z / 2, r.height / 2), E.castShadow = !0, d.add(E);
         const $ = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.055, z, 6),
+          new t.BoxGeometry(r.width * 0.055, z, 6),
           R
         );
-        $.position.set(n.width * 0.4725, z / 2, n.height / 2), $.castShadow = !0, c.add($);
+        $.position.set(r.width * 0.4725, z / 2, r.height / 2), $.castShadow = !0, d.add($);
         const b = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.33, z - 95, 6),
+          new t.BoxGeometry(r.width * 0.33, z - 95, 6),
           R
         );
-        b.position.set(n.width * 0.285, 95 + (z - 95) / 2, n.height / 2), b.castShadow = !0, c.add(b);
-        const se = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.33, z - 95, 6),
+        b.position.set(r.width * 0.285, 95 + (z - 95) / 2, r.height / 2), b.castShadow = !0, d.add(b);
+        const re = new t.Mesh(
+          new t.BoxGeometry(r.width * 0.33, z - 95, 6),
           R
         );
-        se.position.set(-n.width * 0.285, 95 + (z - 95) / 2, n.height / 2), se.castShadow = !0, c.add(se);
-        const j = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.33, 95, 4),
-          p
+        re.position.set(-r.width * 0.285, 95 + (z - 95) / 2, r.height / 2), re.castShadow = !0, d.add(re);
+        const Q = new t.Mesh(
+          new t.BoxGeometry(r.width * 0.33, 95, 4),
+          m
         );
-        j.position.set(n.width * 0.285, 47.5, n.height / 2 - 2), j.castShadow = !0, c.add(j);
-        const Ce = new t.MeshStandardMaterial({
+        Q.position.set(r.width * 0.285, 47.5, r.height / 2 - 2), Q.castShadow = !0, d.add(Q);
+        const ke = new t.MeshStandardMaterial({
           color: 13938487,
           metalness: 0.1,
           roughness: 0.8
         }), X = new t.Mesh(
           new t.CylinderGeometry(1.5, 1.5, 12, 16),
-          Ce
+          ke
         );
-        X.rotation.z = Math.PI / 2, X.position.set(n.width * 0.285 - n.width * 0.132, 47.5, n.height / 2 + 1), c.add(X);
+        X.rotation.z = Math.PI / 2, X.position.set(r.width * 0.285 - r.width * 0.132, 47.5, r.height / 2 + 1), d.add(X);
         const S = document.createElement("canvas");
         S.width = 512, S.height = 768;
-        const f = S.getContext("2d");
-        if (f) {
-          const V = f.createLinearGradient(0, 0, 0, S.height);
-          V.addColorStop(0, "#3b82f6"), V.addColorStop(1, "#1e40af"), f.fillStyle = V, f.fillRect(0, 0, S.width, S.height), f.strokeStyle = "#ffffff", f.lineWidth = 12, f.strokeRect(20, 20, S.width - 40, S.height - 40), f.strokeStyle = "rgba(255, 255, 255, 0.3)", f.lineWidth = 6, f.strokeRect(30, 30, S.width - 60, S.height - 60), f.shadowColor = "rgba(0, 0, 0, 0.5)", f.shadowBlur = 15, f.shadowOffsetX = 4, f.shadowOffsetY = 4, f.fillStyle = "#ffffff", f.font = "bold 120px Georgia, serif", f.textAlign = "center", f.textBaseline = "middle", f.fillText("W.C.", S.width / 2, S.height / 2 - 100), f.strokeStyle = "#ffffff", f.lineWidth = 4, f.beginPath(), f.moveTo(100, S.height / 2), f.lineTo(S.width - 100, S.height / 2), f.stroke();
-          const Ge = f.createLinearGradient(0, S.height / 2, 0, S.height / 2 + 150);
-          Ge.addColorStop(0, "#ffd700"), Ge.addColorStop(0.5, "#ffed4e"), Ge.addColorStop(1, "#ffd700"), f.fillStyle = Ge, f.font = "bold 140px Georgia, serif", f.fillText("MALE", S.width / 2, S.height / 2 + 120), f.strokeStyle = "#b8860b", f.lineWidth = 3, f.strokeText("MALE", S.width / 2, S.height / 2 + 120);
+        const u = S.getContext("2d");
+        if (u) {
+          const Ie = u.createLinearGradient(0, 0, 0, S.height);
+          Ie.addColorStop(0, "#3b82f6"), Ie.addColorStop(1, "#1e40af"), u.fillStyle = Ie, u.fillRect(0, 0, S.width, S.height), u.strokeStyle = "#ffffff", u.lineWidth = 12, u.strokeRect(20, 20, S.width - 40, S.height - 40), u.strokeStyle = "rgba(255, 255, 255, 0.3)", u.lineWidth = 6, u.strokeRect(30, 30, S.width - 60, S.height - 60), u.shadowColor = "rgba(0, 0, 0, 0.5)", u.shadowBlur = 15, u.shadowOffsetX = 4, u.shadowOffsetY = 4, u.fillStyle = "#ffffff", u.font = "bold 120px Georgia, serif", u.textAlign = "center", u.textBaseline = "middle", u.fillText("W.C.", S.width / 2, S.height / 2 - 100), u.strokeStyle = "#ffffff", u.lineWidth = 4, u.beginPath(), u.moveTo(100, S.height / 2), u.lineTo(S.width - 100, S.height / 2), u.stroke();
+          const he = u.createLinearGradient(0, S.height / 2, 0, S.height / 2 + 150);
+          he.addColorStop(0, "#ffd700"), he.addColorStop(0.5, "#ffed4e"), he.addColorStop(1, "#ffd700"), u.fillStyle = he, u.font = "bold 140px Georgia, serif", u.fillText("MALE", S.width / 2, S.height / 2 + 120), u.strokeStyle = "#b8860b", u.lineWidth = 3, u.strokeText("MALE", S.width / 2, S.height / 2 + 120);
         }
-        const pe = new t.CanvasTexture(S), u = new t.Mesh(
-          new t.PlaneGeometry(n.width * 0.25, n.width * 0.375),
+        const ue = new t.CanvasTexture(S), g = new t.Mesh(
+          new t.PlaneGeometry(r.width * 0.25, r.width * 0.375),
           new t.MeshStandardMaterial({
-            map: pe,
+            map: ue,
             roughness: 0.3,
             metalness: 0.15,
             emissive: 1982639,
             emissiveIntensity: 0.1
           })
         );
-        u.position.set(n.width * 0.285, 47.5, n.height / 2 + 2.5), c.add(u);
+        g.position.set(r.width * 0.285, 47.5, r.height / 2 + 2.5), d.add(g);
         const N = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.33, 95, 4),
+          new t.BoxGeometry(r.width * 0.33, 95, 4),
           T
         );
-        N.position.set(-n.width * 0.285, 47.5, n.height / 2 - 2), N.castShadow = !0, c.add(N);
-        const Me = X.clone();
-        Me.position.set(-n.width * 0.285 + n.width * 0.132, 47.5, n.height / 2 + 1), c.add(Me);
-        const W = document.createElement("canvas");
-        W.width = 512, W.height = 768;
-        const w = W.getContext("2d");
-        if (w) {
-          const V = w.createLinearGradient(0, 0, 0, W.height);
-          V.addColorStop(0, "#ef4444"), V.addColorStop(1, "#b91c1c"), w.fillStyle = V, w.fillRect(0, 0, W.width, W.height), w.strokeStyle = "#ffffff", w.lineWidth = 12, w.strokeRect(20, 20, W.width - 40, W.height - 40), w.strokeStyle = "rgba(255, 255, 255, 0.3)", w.lineWidth = 6, w.strokeRect(30, 30, W.width - 60, W.height - 60), w.shadowColor = "rgba(0, 0, 0, 0.5)", w.shadowBlur = 15, w.shadowOffsetX = 4, w.shadowOffsetY = 4, w.fillStyle = "#ffffff", w.font = "bold 120px Georgia, serif", w.textAlign = "center", w.textBaseline = "middle", w.fillText("W.C.", W.width / 2, W.height / 2 - 100), w.strokeStyle = "#ffffff", w.lineWidth = 4, w.beginPath(), w.moveTo(100, W.height / 2), w.lineTo(W.width - 100, W.height / 2), w.stroke();
-          const Ge = w.createLinearGradient(0, W.height / 2, 0, W.height / 2 + 150);
-          Ge.addColorStop(0, "#ffb6c1"), Ge.addColorStop(0.5, "#ffd1dc"), Ge.addColorStop(1, "#ffb6c1"), w.fillStyle = Ge, w.font = "bold 120px Georgia, serif", w.fillText("FEMALE", W.width / 2, W.height / 2 + 120), w.strokeStyle = "#dc143c", w.lineWidth = 3, w.strokeText("FEMALE", W.width / 2, W.height / 2 + 120);
+        N.position.set(-r.width * 0.285, 47.5, r.height / 2 - 2), N.castShadow = !0, d.add(N);
+        const Ce = X.clone();
+        Ce.position.set(-r.width * 0.285 + r.width * 0.132, 47.5, r.height / 2 + 1), d.add(Ce);
+        const B = document.createElement("canvas");
+        B.width = 512, B.height = 768;
+        const x = B.getContext("2d");
+        if (x) {
+          const Ie = x.createLinearGradient(0, 0, 0, B.height);
+          Ie.addColorStop(0, "#ef4444"), Ie.addColorStop(1, "#b91c1c"), x.fillStyle = Ie, x.fillRect(0, 0, B.width, B.height), x.strokeStyle = "#ffffff", x.lineWidth = 12, x.strokeRect(20, 20, B.width - 40, B.height - 40), x.strokeStyle = "rgba(255, 255, 255, 0.3)", x.lineWidth = 6, x.strokeRect(30, 30, B.width - 60, B.height - 60), x.shadowColor = "rgba(0, 0, 0, 0.5)", x.shadowBlur = 15, x.shadowOffsetX = 4, x.shadowOffsetY = 4, x.fillStyle = "#ffffff", x.font = "bold 120px Georgia, serif", x.textAlign = "center", x.textBaseline = "middle", x.fillText("W.C.", B.width / 2, B.height / 2 - 100), x.strokeStyle = "#ffffff", x.lineWidth = 4, x.beginPath(), x.moveTo(100, B.height / 2), x.lineTo(B.width - 100, B.height / 2), x.stroke();
+          const he = x.createLinearGradient(0, B.height / 2, 0, B.height / 2 + 150);
+          he.addColorStop(0, "#ffb6c1"), he.addColorStop(0.5, "#ffd1dc"), he.addColorStop(1, "#ffb6c1"), x.fillStyle = he, x.font = "bold 120px Georgia, serif", x.fillText("FEMALE", B.width / 2, B.height / 2 + 120), x.strokeStyle = "#dc143c", x.lineWidth = 3, x.strokeText("FEMALE", B.width / 2, B.height / 2 + 120);
         }
-        const Ee = new t.CanvasTexture(W), ke = new t.Mesh(
-          new t.PlaneGeometry(n.width * 0.25, n.width * 0.375),
+        const Ge = new t.CanvasTexture(B), Ee = new t.Mesh(
+          new t.PlaneGeometry(r.width * 0.25, r.width * 0.375),
           new t.MeshStandardMaterial({
-            map: Ee,
+            map: Ge,
             roughness: 0.3,
             metalness: 0.15,
             emissive: 12131356,
             emissiveIntensity: 0.1
           })
         );
-        ke.position.set(-n.width * 0.285, 47.5, n.height / 2 + 2.5), c.add(ke);
+        Ee.position.set(-r.width * 0.285, 47.5, r.height / 2 + 2.5), d.add(Ee);
         const ce = document.createElement("canvas");
         ce.width = 512, ce.height = 256;
-        const he = ce.getContext("2d");
-        he && (he.fillStyle = "#d5d5da", he.fillRect(0, 0, ce.width, ce.height), he.fillStyle = "#2a2a2a", he.font = "bold 140px Arial", he.textAlign = "center", he.textBaseline = "middle", he.fillText("W.C.", ce.width / 2, ce.height / 2));
-        const Fe = new t.CanvasTexture(ce), x = new t.Mesh(
-          new t.PlaneGeometry(n.width * 0.4, n.width * 0.2),
+        const fe = ce.getContext("2d");
+        fe && (fe.fillStyle = "#d5d5da", fe.fillRect(0, 0, ce.width, ce.height), fe.fillStyle = "#2a2a2a", fe.font = "bold 140px Arial", fe.textAlign = "center", fe.textBaseline = "middle", fe.fillText("W.C.", ce.width / 2, ce.height / 2));
+        const w = new t.CanvasTexture(ce), ne = new t.Mesh(
+          new t.PlaneGeometry(r.width * 0.4, r.width * 0.2),
           new t.MeshStandardMaterial({
-            map: Fe,
+            map: w,
             roughness: 0.5,
             metalness: 0.05
           })
         );
-        x.position.set(0, 100, -n.height / 2 + 3.5), c.add(x);
-        const fe = new t.MeshStandardMaterial({
+        ne.position.set(0, 100, -r.height / 2 + 3.5), d.add(ne);
+        const Fe = new t.MeshStandardMaterial({
           color: 16119285,
           metalness: 0.1,
           roughness: 0.5
-        }), He = new t.Mesh(
-          new t.BoxGeometry(n.width * 0.5, 12, n.height * 0.25),
-          fe
+        }), Ye = new t.Mesh(
+          new t.BoxGeometry(r.width * 0.5, 12, r.height * 0.25),
+          Fe
         );
-        He.position.set(0, 32, -n.height * 0.3), He.castShadow = !0, c.add(He);
-        const ue = new t.MeshStandardMaterial({
+        Ye.position.set(0, 32, -r.height * 0.3), Ye.castShadow = !0, d.add(Ye);
+        const xe = new t.MeshStandardMaterial({
           color: 16777215,
           roughness: 0.3,
           metalness: 0.05
         }), Se = new t.Mesh(
           new t.CylinderGeometry(12, 12, 6, 32),
-          ue
+          xe
         );
-        Se.position.set(0, 40, -n.height * 0.3), c.add(Se);
-        const we = new t.MeshStandardMaterial({
+        Se.position.set(0, 40, -r.height * 0.3), d.add(Se);
+        const ve = new t.MeshStandardMaterial({
           color: 12632256,
           metalness: 0.1,
           roughness: 0.8
-        }), Ae = new t.Mesh(
+        }), s = new t.Mesh(
           new t.TorusGeometry(4, 1, 8, 24, Math.PI),
-          we
+          ve
         );
-        Ae.rotation.z = Math.PI / 2, Ae.position.set(0, 48, -n.height * 0.35), c.add(Ae);
+        s.rotation.z = Math.PI / 2, s.position.set(0, 48, -r.height * 0.35), d.add(s);
         const a = new t.MeshStandardMaterial({
           color: 16777215,
           roughness: 0.25,
           metalness: 0.05
-        }), r = new t.Mesh(
+        }), l = new t.Mesh(
           new t.CylinderGeometry(10, 8, 12, 32),
           a
         );
-        r.position.set(-n.width * 0.25, 6, n.height * 0.25), c.add(r);
-        const l = new t.Mesh(
+        l.position.set(-r.width * 0.25, 6, r.height * 0.25), d.add(l);
+        const c = new t.Mesh(
           new t.TorusGeometry(9, 2, 16, 32),
           a
         );
-        l.rotation.x = Math.PI / 2, l.position.set(-n.width * 0.25, 13, n.height * 0.25), c.add(l);
-        const h = new t.Mesh(
+        c.rotation.x = Math.PI / 2, c.position.set(-r.width * 0.25, 13, r.height * 0.25), d.add(c);
+        const y = new t.Mesh(
           new t.BoxGeometry(14, 20, 8),
           a
         );
-        h.position.set(-n.width * 0.25, 22, n.height * 0.25 - 10), c.add(h);
-        const y = new t.Mesh(
+        y.position.set(-r.width * 0.25, 22, r.height * 0.25 - 10), d.add(y);
+        const G = new t.Mesh(
           new t.BoxGeometry(2, 6, 1),
-          we
+          ve
         );
-        y.position.set(-n.width * 0.25 + 8, 25, n.height * 0.25 - 10), c.add(y);
-        const k = new t.Mesh(
+        G.position.set(-r.width * 0.25 + 8, 25, r.height * 0.25 - 10), d.add(G);
+        const W = new t.Mesh(
           new t.SphereGeometry(7, 32, 32, 0, Math.PI * 2, 0, Math.PI / 1.5),
           a
         );
-        k.position.set(n.width * 0.25, 25, n.height * 0.25), k.rotation.x = Math.PI / 6, c.add(k);
-        const B = new t.Mesh(
+        W.position.set(r.width * 0.25, 25, r.height * 0.25), W.rotation.x = Math.PI / 6, d.add(W);
+        const te = new t.Mesh(
           new t.CylinderGeometry(1.5, 1.5, 8, 16),
-          we
+          ve
         );
-        B.position.set(n.width * 0.25, 35, n.height * 0.25 - 5), c.add(B);
-        const ee = new t.PointLight(16777215, 0.5, 280);
-        ee.position.set(0, z - 15, 0), ee.castShadow = !1, c.add(ee), c.position.set(Z, 0, H), c.rotation.y = E, g.add(c);
+        te.position.set(r.width * 0.25, 35, r.height * 0.25 - 5), d.add(te);
+        const se = new t.PointLight(16777215, 0.5, 280);
+        se.position.set(0, z - 15, 0), se.castShadow = !1, d.add(se), d.position.set(Z, 0, H), d.rotation.y = k, h.add(d);
       }
-    }), o.tables.forEach((n) => {
-      const E = n.shape === "rectangle" ? n.width * 1.5 : n.width, c = n.x - 400 + E / 2, R = -(n.y - 400 + n.height / 2), p = -(n.rotation * Math.PI / 180), T = new t.MeshPhysicalMaterial({
+    }), o.tables.forEach((r) => {
+      const k = r.shape === "rectangle" ? r.width * 1.5 : r.width, d = r.x - 400 + k / 2, R = -(r.y - 400 + r.height / 2), m = -(r.rotation * Math.PI / 180), T = new t.MeshPhysicalMaterial({
         color: 7294519,
         // rich brown wood tone
         roughness: 0.35,
@@ -2196,10 +2196,10 @@ const Ht = `
         sheen: 0.5,
         // subtle velvet-like reflection
         sheenColor: new t.Color(10251068)
-      }), D = n.shape === "circle" ? new t.CylinderGeometry(E / 2, E / 2, 4, 64) : new t.BoxGeometry(E, 4, n.height), z = new t.Mesh(D, T);
-      if (z.position.set(c, 33 + 4 / 2, R), z.rotation.y = p, z.castShadow = !0, z.receiveShadow = !0, g.add(z), n.shape === "circle") {
+      }), D = r.shape === "circle" ? new t.CylinderGeometry(k / 2, k / 2, 4, 64) : new t.BoxGeometry(k, 4, r.height), z = new t.Mesh(D, T);
+      if (z.position.set(d, 33 + 4 / 2, R), z.rotation.y = m, z.castShadow = !0, z.receiveShadow = !0, h.add(z), r.shape === "circle") {
         const L = new t.Mesh(
-          new t.TorusGeometry(E / 2 + 1, 1.2, 16, 64),
+          new t.TorusGeometry(k / 2 + 1, 1.2, 16, 64),
           new t.MeshStandardMaterial({
             color: 13938487,
             // gold-like tone
@@ -2207,116 +2207,116 @@ const Ht = `
             roughness: 0.3
           })
         );
-        L.position.set(c, 33 + 4 / 2 + 0.5, R), L.rotation.x = Math.PI / 2, g.add(L);
+        L.position.set(d, 33 + 4 / 2 + 0.5, R), L.rotation.x = Math.PI / 2, h.add(L);
       } else {
         const L = new t.LineSegments(
           new t.EdgesGeometry(D),
           new t.LineBasicMaterial({ color: 13938487, linewidth: 2 })
         );
-        L.position.copy(z.position), L.rotation.y = p, g.add(L);
+        L.position.copy(z.position), L.rotation.y = m, h.add(L);
       }
-      const re = new t.MeshStandardMaterial({
+      const ie = new t.MeshStandardMaterial({
         color: 2236962,
         metalness: 0.9,
         roughness: 0.2
       }), O = 3.2;
-      (n.shape === "circle" ? [
-        [E * 0.3, E * 0.3],
-        [-E * 0.3, E * 0.3],
-        [E * 0.3, -E * 0.3],
-        [-E * 0.3, -E * 0.3]
+      (r.shape === "circle" ? [
+        [k * 0.3, k * 0.3],
+        [-k * 0.3, k * 0.3],
+        [k * 0.3, -k * 0.3],
+        [-k * 0.3, -k * 0.3]
       ] : [
-        [E / 2 - 10, n.height / 2 - 10],
-        [-E / 2 + 10, n.height / 2 - 10],
-        [E / 2 - 10, -n.height / 2 + 10],
-        [-E / 2 + 10, -n.height / 2 + 10]
-      ]).forEach(([L, G]) => {
+        [k / 2 - 10, r.height / 2 - 10],
+        [-k / 2 + 10, r.height / 2 - 10],
+        [k / 2 - 10, -r.height / 2 + 10],
+        [-k / 2 + 10, -r.height / 2 + 10]
+      ]).forEach(([L, E]) => {
         const $ = new t.Mesh(
           new t.CylinderGeometry(O, O, 33, 16),
-          re
+          ie
         );
         $.position.set(
-          c + L * Math.cos(p) - G * Math.sin(p),
+          d + L * Math.cos(m) - E * Math.sin(m),
           33 / 2,
-          R + L * Math.sin(p) + G * Math.cos(p)
-        ), $.castShadow = !0, g.add($);
+          R + L * Math.sin(m) + E * Math.cos(m)
+        ), $.castShadow = !0, h.add($);
       });
-      const ne = o.chairs.filter((L) => L.tableId === n.id);
-      ne.forEach((L) => {
-        const G = L.size || 40, $ = 38, b = new t.MeshStandardMaterial({ color: 9127187, roughness: 0.5, metalness: 0.1 }), se = new t.MeshStandardMaterial({ color: 12092939, roughness: 0.7, metalness: 0.05 }), j = ne.filter((ue) => ue.position === L.position).length, X = (["top", "bottom"].includes(L.position) ? E : n.height) - G * j, S = j > 1 ? X / (j + 1) : X / 2, f = S + L.index * (G + S) + G / 2, pe = G * 0.4;
-        let u = 0, N = 0;
-        L.position === "top" ? (u = f - E / 2, N = n.height / 2 + pe + G / 2) : L.position === "bottom" ? (u = f - E / 2, N = -(n.height / 2 + pe + G / 2)) : L.position === "left" ? (u = -(E / 2 + pe + G / 2), N = f - n.height / 2) : (u = E / 2 + pe + G / 2, N = f - n.height / 2);
-        const Me = u * Math.cos(p) - N * Math.sin(p), W = u * Math.sin(p) + N * Math.cos(p), w = new t.Mesh(
-          new t.BoxGeometry(G * 0.75, 4, G * 0.75),
-          se
-        ), Ee = $ * 0.4;
-        w.position.set(c + Me, Ee, R - W);
-        const ke = {
+      const ee = o.chairs.filter((L) => L.tableId === r.id);
+      ee.forEach((L) => {
+        const E = L.size || 40, $ = 38, b = new t.MeshStandardMaterial({ color: 9127187, roughness: 0.5, metalness: 0.1 }), re = new t.MeshStandardMaterial({ color: 12092939, roughness: 0.7, metalness: 0.05 }), Q = ee.filter((xe) => xe.position === L.position).length, X = (["top", "bottom"].includes(L.position) ? k : r.height) - E * Q, S = Q > 1 ? X / (Q + 1) : X / 2, u = S + L.index * (E + S) + E / 2, ue = E * 0.4;
+        let g = 0, N = 0;
+        L.position === "top" ? (g = u - k / 2, N = r.height / 2 + ue + E / 2) : L.position === "bottom" ? (g = u - k / 2, N = -(r.height / 2 + ue + E / 2)) : L.position === "left" ? (g = -(k / 2 + ue + E / 2), N = u - r.height / 2) : (g = k / 2 + ue + E / 2, N = u - r.height / 2);
+        const Ce = g * Math.cos(m) - N * Math.sin(m), B = g * Math.sin(m) + N * Math.cos(m), x = new t.Mesh(
+          new t.BoxGeometry(E * 0.75, 4, E * 0.75),
+          re
+        ), Ge = $ * 0.4;
+        x.position.set(d + Ce, Ge, R - B);
+        const Ee = {
           top: 0,
           bottom: Math.PI,
           left: Math.PI / 2,
           right: -Math.PI / 2
         }[L.position] || 0;
-        w.rotation.y = ke + p, w.castShadow = !0, g.add(w);
+        x.rotation.y = Ee + m, x.castShadow = !0, h.add(x);
         const ce = new t.Mesh(
-          new t.BoxGeometry(G * 0.75, $ * 0.55, 3),
+          new t.BoxGeometry(E * 0.75, $ * 0.55, 3),
           b
-        ), he = G * 0.75 / 2 + 1.5;
+        ), fe = E * 0.75 / 2 + 1.5;
         ce.position.set(
-          w.position.x - Math.sin(w.rotation.y) * he,
+          x.position.x - Math.sin(x.rotation.y) * fe,
           $ * 0.65,
-          w.position.z - Math.cos(w.rotation.y) * he
-        ), ce.rotation.y = w.rotation.y, ce.castShadow = !0, g.add(ce);
-        const x = Ee - 4 / 2, fe = new t.CylinderGeometry(2, 2, x, 8), He = new t.MeshStandardMaterial({ color: 6636321, roughness: 0.6, metalness: 0.2 });
+          x.position.z - Math.cos(x.rotation.y) * fe
+        ), ce.rotation.y = x.rotation.y, ce.castShadow = !0, h.add(ce);
+        const ne = Ge - 4 / 2, Fe = new t.CylinderGeometry(2, 2, ne, 8), Ye = new t.MeshStandardMaterial({ color: 6636321, roughness: 0.6, metalness: 0.2 });
         [
-          [G * 0.3, G * 0.3],
-          [G * 0.3, -G * 0.3],
-          [-G * 0.3, G * 0.3],
-          [-G * 0.3, -G * 0.3]
-        ].forEach(([ue, Se]) => {
-          const we = new t.Mesh(fe, He), Ae = Math.cos(w.rotation.y), a = Math.sin(w.rotation.y);
-          we.position.set(
-            w.position.x + ue * Ae - Se * a,
-            x / 2,
+          [E * 0.3, E * 0.3],
+          [E * 0.3, -E * 0.3],
+          [-E * 0.3, E * 0.3],
+          [-E * 0.3, -E * 0.3]
+        ].forEach(([xe, Se]) => {
+          const ve = new t.Mesh(Fe, Ye), s = Math.cos(x.rotation.y), a = Math.sin(x.rotation.y);
+          ve.position.set(
+            x.position.x + xe * s - Se * a,
+            ne / 2,
             // Position legs so they sit on the floor
-            w.position.z + ue * a + Se * Ae
-          ), we.castShadow = !0, g.add(we);
+            x.position.z + xe * a + Se * s
+          ), ve.castShadow = !0, h.add(ve);
         });
       });
     });
-    const Q = () => {
-      var n;
-      if (ie.current = requestAnimationFrame(Q), K.current && K.current.progress < 1) {
-        const Z = K.current;
-        Z.progress += 0.05, Z.progress >= 1 && (Z.progress = 1, ve(!1), K.current = null);
-        const E = ((c) => c < 0.5 ? 4 * c * c * c : 1 - Math.pow(-2 * c + 2, 3) / 2)(Z.progress);
+    const K = () => {
+      var r;
+      if (oe.current = requestAnimationFrame(K), J.current && J.current.progress < 1) {
+        const Z = J.current;
+        Z.progress += 0.05, Z.progress >= 1 && (Z.progress = 1, Ne(!1), J.current = null);
+        const k = ((d) => d < 0.5 ? 4 * d * d * d : 1 - Math.pow(-2 * d + 2, 3) / 2)(Z.progress);
         if (v.current) {
-          v.current.position.lerpVectors(Z.startPos, Z.endPos, E);
-          const c = new t.Vector3();
-          c.lerpVectors(Z.startTarget, Z.endTarget, E), v.current.lookAt(c);
+          v.current.position.lerpVectors(Z.startPos, Z.endPos, k);
+          const d = new t.Vector3();
+          d.lerpVectors(Z.startTarget, Z.endTarget, k), v.current.lookAt(d);
         }
       }
       if (P && v.current && !_) {
-        const Z = Math.sqrt(v.current.position.x ** 2 + v.current.position.z ** 2), H = Math.atan2(v.current.position.z, v.current.position.x) + Ye.current;
+        const Z = Math.sqrt(v.current.position.x ** 2 + v.current.position.z ** 2), H = Math.atan2(v.current.position.z, v.current.position.x) + Ae.current;
         v.current.position.x = Z * Math.cos(H), v.current.position.z = Z * Math.sin(H), v.current.lookAt(0, 100, 0);
       }
-      (n = q.current) == null || n.render(g, I);
+      (r = V.current) == null || r.render(h, I);
     };
-    Q();
+    K();
     const Le = () => {
-      C.current && v.current && q.current && (v.current.aspect = C.current.clientWidth / C.current.clientHeight, v.current.updateProjectionMatrix(), q.current.setSize(C.current.clientWidth, C.current.clientHeight));
+      C.current && v.current && V.current && (v.current.aspect = C.current.clientWidth / C.current.clientHeight, v.current.updateProjectionMatrix(), V.current.setSize(C.current.clientWidth, C.current.clientHeight));
     };
     return window.addEventListener("resize", Le), () => {
-      window.removeEventListener("resize", Le), ie.current && cancelAnimationFrame(ie.current), q.current && C.current && (C.current.removeChild(q.current.domElement), q.current.dispose());
+      window.removeEventListener("resize", Le), oe.current && cancelAnimationFrame(oe.current), V.current && C.current && (C.current.removeChild(V.current.domElement), V.current.dispose());
     };
-  }, [d, o, P, _]), d ? /* @__PURE__ */ e("div", { className: "fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-2", children: /* @__PURE__ */ s("div", { className: "bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl w-full h-full max-w-[98vw] max-h-[98vh] flex flex-col overflow-hidden border border-gray-800", children: [
-    /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-1", children: /* @__PURE__ */ s("div", { className: "bg-gray-900 px-6 py-4 flex items-center justify-between", children: [
-      /* @__PURE__ */ s("div", { children: [
-        /* @__PURE__ */ s("h2", { className: "text-2xl font-bold text-white flex items-center gap-3", children: [
-          /* @__PURE__ */ e("div", { className: "p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg", children: /* @__PURE__ */ e(tt, { className: "w-5 h-5" }) }),
+  }, [p, o, P, _]), p ? /* @__PURE__ */ e("div", { className: "rfp-fixed rfp-inset-0 bg-black/60 backdrop-blur-sm z-[200] rfp-flex rfp-items-center rfp-justify-center rfp-p-2", children: /* @__PURE__ */ n("div", { className: "bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl rfp-w-full rfp-h-full max-w-[98vw] max-h-[98vh] rfp-flex rfp-flex-col rfp-overflow-hidden rfp-border rfp-border-gray-800", children: [
+    /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rfp-p-1", children: /* @__PURE__ */ n("div", { className: "rfp-bg-gray-900 rfp-px-6 rfp-py-4 rfp-flex rfp-items-center rfp-justify-between", children: [
+      /* @__PURE__ */ n("div", { children: [
+        /* @__PURE__ */ n("h2", { className: "rfp-text-2xl rfp-font-bold rfp-text-white rfp-flex rfp-items-center rfp-gap-3", children: [
+          /* @__PURE__ */ e("div", { className: "rfp-p-2 bg-gradient-to-br from-blue-500 to-purple-600 rfp-rounded-lg", children: /* @__PURE__ */ e(et, { className: "rfp-w-5 rfp-h-5" }) }),
           "3D Floor Plan Visualization"
         ] }),
-        /* @__PURE__ */ s("p", { className: "text-gray-400 text-sm mt-1", children: [
+        /* @__PURE__ */ n("p", { className: "rfp-text-gray-400 rfp-text-sm rfp-mt-1", children: [
           "Professional Camera Controls • ",
           o.name
         ] })
@@ -2324,58 +2324,58 @@ const Ht = `
       /* @__PURE__ */ e(
         "button",
         {
-          onClick: m,
-          className: "p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all hover:scale-110",
-          children: /* @__PURE__ */ e(Bt, { className: "w-5 h-5" })
+          onClick: f,
+          className: "p-2.5 bg-red-500/20 hover:bg-red-500/30 rfp-text-red-400 rfp-rounded-xl rfp-transition-all hover:scale-110",
+          children: /* @__PURE__ */ e(Wt, { className: "rfp-w-5 rfp-h-5" })
         }
       )
     ] }) }),
-    /* @__PURE__ */ s("div", { className: "flex-1 flex gap-3 p-3 min-h-0", children: [
-      /* @__PURE__ */ s("div", { className: "w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700 p-5 flex flex-col gap-5 overflow-y-auto flex-shrink-0", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-flex rfp-gap-3 rfp-p-3 rfp-min-h-0", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl rfp-border rfp-border-gray-700 rfp-p-5 rfp-flex rfp-flex-col rfp-gap-5 overflow-y-auto flex-shrink-0", children: [
         /* @__PURE__ */ e(
           "button",
           {
             onClick: () => $e("default"),
-            className: "px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2",
+            className: "rfp-px-4 rfp-py-3 bg-gradient-to-r from-blue-500 to-purple-600 rfp-text-white rfp-rounded-xl rfp-font-semibold rfp-transition-all hover:scale-105 hover:shadow-lg rfp-flex rfp-items-center rfp-justify-center rfp-gap-2",
             children: "🏠 Default View"
           }
         ),
-        /* @__PURE__ */ s("div", { className: "flex flex-col gap-3", children: [
-          /* @__PURE__ */ s("div", { className: "text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700", children: [
-            /* @__PURE__ */ e(tt, { className: "w-5 h-5 text-purple-400" }),
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-3", children: [
+          /* @__PURE__ */ n("div", { className: "rfp-text-white rfp-text-sm rfp-font-bold rfp-uppercase rfp-tracking-wider rfp-flex rfp-items-center rfp-gap-2 rfp-pb-2 rfp-border-b rfp-border-gray-700", children: [
+            /* @__PURE__ */ e(et, { className: "rfp-w-5 rfp-h-5 rfp-text-purple-400" }),
             "Manual Control"
           ] }),
-          /* @__PURE__ */ e("div", { className: "flex justify-center", children: /* @__PURE__ */ s("div", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ e("div", { className: "rfp-flex rfp-justify-center", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-1", children: [
             /* @__PURE__ */ e(
               "button",
               {
                 onClick: () => ge("up"),
-                className: "w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto",
+                className: "rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30 mx-auto",
                 disabled: _,
                 title: "Rotate Up",
-                children: /* @__PURE__ */ e("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M5 15l7-7 7 7" }) })
+                children: /* @__PURE__ */ e("svg", { className: "rfp-w-6 rfp-h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M5 15l7-7 7 7" }) })
               }
             ),
-            /* @__PURE__ */ s("div", { className: "flex gap-1 justify-center", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-flex rfp-gap-1 rfp-justify-center", children: [
               /* @__PURE__ */ e(
                 "button",
                 {
                   onClick: () => ge("left"),
-                  className: "w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30",
+                  className: "rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30",
                   disabled: _,
                   title: "Rotate Left",
-                  children: /* @__PURE__ */ e("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" }) })
+                  children: /* @__PURE__ */ e("svg", { className: "rfp-w-6 rfp-h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" }) })
                 }
               ),
-              /* @__PURE__ */ e("div", { className: "w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ e(tt, { className: "w-6 h-6 text-white" }) }),
+              /* @__PURE__ */ e("div", { className: "rfp-w-12 rfp-h-12 bg-gradient-to-br from-blue-600 to-purple-600 rfp-rounded-lg rfp-flex rfp-items-center rfp-justify-center", children: /* @__PURE__ */ e(et, { className: "rfp-w-6 rfp-h-6 rfp-text-white" }) }),
               /* @__PURE__ */ e(
                 "button",
                 {
                   onClick: () => ge("right"),
-                  className: "w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30",
+                  className: "rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30",
                   disabled: _,
                   title: "Rotate Right",
-                  children: /* @__PURE__ */ e("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 5l7 7-7 7" }) })
+                  children: /* @__PURE__ */ e("svg", { className: "rfp-w-6 rfp-h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 5l7 7-7 7" }) })
                 }
               )
             ] }),
@@ -2383,99 +2383,99 @@ const Ht = `
               "button",
               {
                 onClick: () => ge("down"),
-                className: "w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto",
+                className: "rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30 mx-auto",
                 disabled: _,
                 title: "Rotate Down",
-                children: /* @__PURE__ */ e("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M19 9l-7 7-7-7" }) })
+                children: /* @__PURE__ */ e("svg", { className: "rfp-w-6 rfp-h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ e("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M19 9l-7 7-7-7" }) })
               }
             )
           ] }) })
         ] }),
-        /* @__PURE__ */ s("div", { className: "flex flex-col gap-3", children: [
-          /* @__PURE__ */ s("div", { className: "text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700", children: [
-            /* @__PURE__ */ e(ct, { className: "w-5 h-5 text-green-400" }),
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-3", children: [
+          /* @__PURE__ */ n("div", { className: "rfp-text-white rfp-text-sm rfp-font-bold rfp-uppercase rfp-tracking-wider rfp-flex rfp-items-center rfp-gap-2 rfp-pb-2 rfp-border-b rfp-border-gray-700", children: [
+            /* @__PURE__ */ e(dt, { className: "rfp-w-5 rfp-h-5 rfp-text-green-400" }),
             "Zoom & Rotation"
           ] }),
-          /* @__PURE__ */ s("div", { className: "flex flex-col gap-2", children: [
-            /* @__PURE__ */ s(
+          /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-2", children: [
+            /* @__PURE__ */ n(
               "button",
               {
                 onClick: () => be(0.85),
-                className: "px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30",
+                className: "rfp-px-4 rfp-py-3 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-semibold disabled:opacity-30",
                 disabled: _,
                 children: [
-                  /* @__PURE__ */ e(ct, { className: "w-5 h-5" }),
+                  /* @__PURE__ */ e(dt, { className: "rfp-w-5 rfp-h-5" }),
                   "Zoom In"
                 ]
               }
             ),
-            /* @__PURE__ */ s(
+            /* @__PURE__ */ n(
               "button",
               {
                 onClick: () => be(1.15),
-                className: "px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30",
+                className: "rfp-px-4 rfp-py-3 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-semibold disabled:opacity-30",
                 disabled: _,
                 children: [
-                  /* @__PURE__ */ e(Xt, { className: "w-5 h-5" }),
+                  /* @__PURE__ */ e(Bt, { className: "rfp-w-5 rfp-h-5" }),
                   "Zoom Out"
                 ]
               }
             ),
-            /* @__PURE__ */ s(
+            /* @__PURE__ */ n(
               "button",
               {
-                onClick: () => oe(!P),
+                onClick: () => le(!P),
                 className: `px-4 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold ${P ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg" : "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"}`,
                 children: [
-                  /* @__PURE__ */ e(at, { className: `w-5 h-5 ${P ? "animate-spin" : ""}` }),
+                  /* @__PURE__ */ e(nt, { className: `w-5 h-5 ${P ? "animate-spin" : ""}` }),
                   P ? "Auto-Rotating" : "Auto-Rotate"
                 ]
               }
             )
           ] })
         ] }),
-        /* @__PURE__ */ s("div", { className: "flex flex-col gap-3 mt-auto", children: [
-          /* @__PURE__ */ s(
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-3 mt-auto", children: [
+          /* @__PURE__ */ n(
             "button",
             {
               onClick: () => $e("default"),
-              className: "px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2 font-bold",
+              className: "rfp-px-4 rfp-py-3 bg-gradient-to-r from-orange-500 to-red-600 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 hover:shadow-lg rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-bold",
               children: [
-                /* @__PURE__ */ e(At, { className: "w-5 h-5" }),
+                /* @__PURE__ */ e(Xt, { className: "rfp-w-5 rfp-h-5" }),
                 "Reset View"
               ]
             }
           ),
-          /* @__PURE__ */ s("div", { className: "bg-gray-800/50 rounded-xl p-4 border border-gray-700", children: [
-            /* @__PURE__ */ s("div", { className: "flex items-center gap-2 text-gray-400 mb-3", children: [
-              /* @__PURE__ */ e(Yt, { className: "w-4 h-4" }),
-              /* @__PURE__ */ e("span", { className: "font-medium text-sm", children: "Scene Statistics" })
+          /* @__PURE__ */ n("div", { className: "bg-gray-800/50 rfp-rounded-xl rfp-p-4 rfp-border rfp-border-gray-700", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-text-gray-400 rfp-mb-3", children: [
+              /* @__PURE__ */ e(At, { className: "rfp-w-4 rfp-h-4" }),
+              /* @__PURE__ */ e("span", { className: "rfp-font-medium rfp-text-sm", children: "Scene Statistics" })
             ] }),
-            /* @__PURE__ */ s("div", { className: "grid grid-cols-2 gap-2 text-sm", children: [
-              /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-emerald-500 rounded-full animate-pulse" }),
-                /* @__PURE__ */ s("span", { className: "text-gray-300", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-grid grid-cols-2 rfp-gap-2 rfp-text-sm", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 bg-emerald-500 rfp-rounded-full rfp-animate-pulse" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-gray-300", children: [
                   o.tables.length,
                   " Tables"
                 ] })
               ] }),
-              /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-amber-500 rounded-full animate-pulse" }),
-                /* @__PURE__ */ s("span", { className: "text-gray-300", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 bg-amber-500 rfp-rounded-full rfp-animate-pulse" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-gray-300", children: [
                   o.chairs.length,
                   " Chairs"
                 ] })
               ] }),
-              /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-purple-500 rounded-full animate-pulse" }),
-                /* @__PURE__ */ s("span", { className: "text-gray-300", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-purple-500 rfp-rounded-full rfp-animate-pulse" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-gray-300", children: [
                   o.objects.length,
                   " Objects"
                 ] })
               ] }),
-              /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-blue-500 rounded-full animate-pulse" }),
-                /* @__PURE__ */ s("span", { className: "text-gray-300", children: [
+              /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+                /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-blue-500 rfp-rounded-full rfp-animate-pulse" }),
+                /* @__PURE__ */ n("span", { className: "rfp-text-gray-300", children: [
                   o.walls.length,
                   " Walls"
                 ] })
@@ -2484,36 +2484,36 @@ const Ht = `
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "flex-1 relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl overflow-hidden shadow-2xl border border-gray-300", children: [
-        /* @__PURE__ */ e("div", { ref: C, className: "w-full h-full" }),
-        _ && /* @__PURE__ */ e("div", { className: "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2", children: /* @__PURE__ */ e("div", { className: "bg-black/80 backdrop-blur-xl rounded-xl px-6 py-3 shadow-2xl border border-gray-700", children: /* @__PURE__ */ s("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ e("div", { className: "animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-white" }),
-          /* @__PURE__ */ e("span", { className: "text-white text-sm font-medium", children: "Transitioning Camera..." })
+      /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl rfp-overflow-hidden shadow-2xl rfp-border rfp-border-gray-300", children: [
+        /* @__PURE__ */ e("div", { ref: C, className: "rfp-w-full rfp-h-full" }),
+        _ && /* @__PURE__ */ e("div", { className: "rfp-absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2", children: /* @__PURE__ */ e("div", { className: "bg-black/80 backdrop-blur-xl rfp-rounded-xl rfp-px-6 rfp-py-3 shadow-2xl rfp-border rfp-border-gray-700", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3", children: [
+          /* @__PURE__ */ e("div", { className: "rfp-animate-spin rfp-rounded-full rfp-h-5 rfp-w-5 rfp-border-2 rfp-border-gray-500 border-t-white" }),
+          /* @__PURE__ */ e("span", { className: "rfp-text-white rfp-text-sm rfp-font-medium", children: "Transitioning Camera..." })
         ] }) }) })
       ] })
     ] }),
-    /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 px-6 py-3 border-t border-gray-800", children: /* @__PURE__ */ s("div", { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ s("div", { className: "flex items-center gap-4", children: [
-        /* @__PURE__ */ s("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ e(ut, { className: "w-4 h-4 text-gray-400" }),
-          /* @__PURE__ */ s("span", { className: "text-sm text-gray-400", children: [
+    /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 rfp-px-6 rfp-py-3 rfp-border-t rfp-border-gray-800", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-4", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
+          /* @__PURE__ */ e(mt, { className: "rfp-w-4 rfp-h-4 rfp-text-gray-400" }),
+          /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-text-gray-400", children: [
             "Viewing: ",
-            /* @__PURE__ */ e("span", { className: "text-white font-semibold", children: o.name })
+            /* @__PURE__ */ e("span", { className: "rfp-text-white rfp-font-semibold", children: o.name })
           ] })
         ] }),
-        /* @__PURE__ */ s("div", { className: "text-sm text-gray-400", children: [
+        /* @__PURE__ */ n("div", { className: "rfp-text-sm rfp-text-gray-400", children: [
           "Camera: ",
-          /* @__PURE__ */ e("span", { className: "text-white font-semibold", children: pt[U].name })
+          /* @__PURE__ */ e("span", { className: "rfp-text-white rfp-font-semibold", children: ht[q].name })
         ] })
       ] }),
-      /* @__PURE__ */ s("div", { className: "flex items-center gap-2 text-xs text-gray-500", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-text-xs rfp-text-gray-500", children: [
         /* @__PURE__ */ e("span", { children: "High Performance Mode" }),
-        /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-green-500 rounded-full animate-pulse" })
+        /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-green-500 rfp-rounded-full rfp-animate-pulse" })
       ] })
     ] }) })
   ] }) }) : null;
-}, ln = () => {
-  const [o, d] = J([
+}, ir = () => {
+  const [o, p] = U([
     {
       id: "floor-1",
       name: "Ground Floor",
@@ -2524,412 +2524,412 @@ const Ht = `
       walls: [],
       fixedElements: []
     }
-  ]), [m, C] = J("floor-1"), [i, v] = J(null), [q, ie] = J(!1), [P, oe] = J({ x: 0, y: 0 }), U = 1, [A, _] = J(!0), [ve, Ye] = J(!1), [K, $e] = J(!1), [ge, be] = J(null), [g, I] = J(null), [F, ye] = J(null), [le, ze] = J(!1), [xe, De] = J(null), [M, Ne] = J(null), te = Te(null), Q = Te(null), Le = Te(null);
-  Ve(() => {
+  ]), [f, C] = U("floor-1"), [i, v] = U(null), [V, oe] = U(!1), [P, le] = U({ x: 0, y: 0 }), q = 1, [A, _] = U(!0), [Ne, Ae] = U(!1), [J, $e] = U(!1), [ge, be] = U(null), [h, I] = U(null), [F, ye] = U(null), [de, ze] = U(!1), [we, He] = U(null), [M, Me] = U(null), j = Te(null), K = Te(null), Le = Te(null);
+  _e(() => {
     if ((i == null ? void 0 : i.type) === "table") {
-      const a = n();
-      if (!a)
+      const s = r();
+      if (!s)
         return;
-      const r = a.chairs.filter((h) => h.tableId === i.id);
-      if (r.filter((h) => h.size === void 0).length > 0) {
-        const h = {};
-        r.forEach((y) => {
-          y.size !== void 0 && !h[y.position] && (h[y.position] = y.size);
-        }), d((y) => y.map(
-          (k) => k.id === m ? {
-            ...k,
-            chairs: k.chairs.map((B) => {
-              if (B.tableId === i.id && B.size === void 0) {
-                const ee = h[B.position] ?? 40;
-                return { ...B, size: ee };
+      const a = s.chairs.filter((c) => c.tableId === i.id);
+      if (a.filter((c) => c.size === void 0).length > 0) {
+        const c = {};
+        a.forEach((y) => {
+          y.size !== void 0 && !c[y.position] && (c[y.position] = y.size);
+        }), p((y) => y.map(
+          (G) => G.id === f ? {
+            ...G,
+            chairs: G.chairs.map((W) => {
+              if (W.tableId === i.id && W.size === void 0) {
+                const te = c[W.position] ?? 40;
+                return { ...W, size: te };
               }
-              return B;
+              return W;
             })
-          } : k
+          } : G
         ));
       }
     }
   }, [i]);
-  const n = () => o.find((a) => a.id === m), Z = (a, r = "medium") => {
-    const l = n();
+  const r = () => o.find((s) => s.id === f), Z = (s, a = "medium") => {
+    const l = r();
     if (!l)
       return;
-    const { width: h, height: y } = ht(a, r), k = {
-      id: Ze(),
+    const { width: c, height: y } = pt(s, a), G = {
+      id: Oe(),
       name: `Table ${l.tables.length + 1}`,
-      shape: a,
-      size: r,
+      shape: s,
+      size: a,
       x: 200 + l.tables.length * 20,
       y: 200 + l.tables.length * 20,
-      width: h,
+      width: c,
       height: y,
       rotation: 0
     };
-    d((B) => B.map(
-      (ee) => ee.id === m ? { ...ee, tables: [...ee.tables, k] } : ee
-    )), v({ type: "table", id: k.id });
-  }, H = (a) => {
-    const r = n();
-    if (!r)
+    p((W) => W.map(
+      (te) => te.id === f ? { ...te, tables: [...te.tables, G] } : te
+    )), v({ type: "table", id: G.id });
+  }, H = (s) => {
+    const a = r();
+    if (!a)
       return;
     const l = {
-      id: Ze(),
-      name: `${Qe[a]} ${r.objects.length + 1}`,
-      type: a,
-      x: 300 + r.objects.length * 30,
-      y: 300 + r.objects.length * 30,
+      id: Oe(),
+      name: `${Ke[s]} ${a.objects.length + 1}`,
+      type: s,
+      x: 300 + a.objects.length * 30,
+      y: 300 + a.objects.length * 30,
       width: 120,
       height: 80,
       rotation: 0
     };
-    d((h) => h.map(
-      (y) => y.id === m ? { ...y, objects: [...y.objects, l] } : y
+    p((c) => c.map(
+      (y) => y.id === f ? { ...y, objects: [...y.objects, l] } : y
     )), v({ type: "object", id: l.id });
-  }, E = (a) => {
+  }, k = (s) => {
     if (!i || i.type !== "table")
       return;
-    const r = n();
-    if (!r)
+    const a = r();
+    if (!a)
       return;
-    const l = r.chairs.filter(
-      (ee) => ee.tableId === i.id && ee.position === a
-    ), h = l.length, y = l.find((ee) => ee.size !== void 0), k = (y == null ? void 0 : y.size) ?? 40, B = {
-      id: Ze(),
+    const l = a.chairs.filter(
+      (te) => te.tableId === i.id && te.position === s
+    ), c = l.length, y = l.find((te) => te.size !== void 0), G = (y == null ? void 0 : y.size) ?? 40, W = {
+      id: Oe(),
       tableId: i.id,
-      position: a,
-      index: h,
+      position: s,
+      index: c,
       x: 0,
       y: 0,
-      size: k
+      size: G
       // Always set a size to prevent recalculation on table resize
     };
-    d((ee) => ee.map(
-      (V) => V.id === m ? { ...V, chairs: [...V.chairs, B] } : V
+    p((te) => te.map(
+      (se) => se.id === f ? { ...se, chairs: [...se.chairs, W] } : se
     ));
-  }, c = (a) => {
+  }, d = (s) => {
     if (!i || i.type !== "table")
       return;
-    const r = n();
-    if (!r)
+    const a = r();
+    if (!a)
       return;
-    const l = r.chairs.filter(
-      (y) => y.tableId === i.id && y.position === a
+    const l = a.chairs.filter(
+      (y) => y.tableId === i.id && y.position === s
     );
     if (l.length === 0)
       return;
-    const h = l.reduce(
-      (y, k) => k.index > y.index ? k : y
+    const c = l.reduce(
+      (y, G) => G.index > y.index ? G : y
     );
-    d((y) => y.map(
-      (k) => k.id === m ? {
-        ...k,
-        chairs: k.chairs.filter((B) => B.id !== h.id)
-      } : k
+    p((y) => y.map(
+      (G) => G.id === f ? {
+        ...G,
+        chairs: G.chairs.filter((W) => W.id !== c.id)
+      } : G
     ));
-  }, R = (a, r) => {
-    !i || i.type !== "table" || !n() || d((h) => h.map(
-      (y) => y.id === m ? {
+  }, R = (s, a) => {
+    !i || i.type !== "table" || !r() || p((c) => c.map(
+      (y) => y.id === f ? {
         ...y,
         chairs: y.chairs.map(
-          (k) => k.tableId === i.id && k.position === a ? { ...k, size: r } : k
+          (G) => G.tableId === i.id && G.position === s ? { ...G, size: a } : G
         )
       } : y
     ));
-  }, p = () => {
-    !i || i.type !== "table" || !n() || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, m = () => {
+    !i || i.type !== "table" || !r() || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
-        chairs: l.chairs.map((h) => {
-          if (h.tableId === i.id) {
-            const { size: y, ...k } = h;
-            return k;
+        chairs: l.chairs.map((c) => {
+          if (c.tableId === i.id) {
+            const { size: y, ...G } = c;
+            return G;
           }
-          return h;
+          return c;
         })
       } : l
     ));
   }, T = () => {
-    i && (i.type === "table" ? d((a) => a.map(
-      (r) => r.id === m ? {
-        ...r,
-        tables: r.tables.filter((l) => l.id !== i.id),
-        chairs: r.chairs.filter((l) => l.tableId !== i.id)
-      } : r
-    )) : i.type === "object" ? d((a) => a.map(
-      (r) => r.id === m ? {
-        ...r,
-        objects: r.objects.filter((l) => l.id !== i.id)
-      } : r
-    )) : i.type === "wall" ? d((a) => a.map(
-      (r) => r.id === m ? {
-        ...r,
-        walls: r.walls.filter((l) => l.id !== i.id)
-      } : r
-    )) : i.type === "fixedElement" && d((a) => a.map(
-      (r) => r.id === m ? {
-        ...r,
-        fixedElements: r.fixedElements.filter((l) => l.id !== i.id)
-      } : r
+    i && (i.type === "table" ? p((s) => s.map(
+      (a) => a.id === f ? {
+        ...a,
+        tables: a.tables.filter((l) => l.id !== i.id),
+        chairs: a.chairs.filter((l) => l.tableId !== i.id)
+      } : a
+    )) : i.type === "object" ? p((s) => s.map(
+      (a) => a.id === f ? {
+        ...a,
+        objects: a.objects.filter((l) => l.id !== i.id)
+      } : a
+    )) : i.type === "wall" ? p((s) => s.map(
+      (a) => a.id === f ? {
+        ...a,
+        walls: a.walls.filter((l) => l.id !== i.id)
+      } : a
+    )) : i.type === "fixedElement" && p((s) => s.map(
+      (a) => a.id === f ? {
+        ...a,
+        fixedElements: a.fixedElements.filter((l) => l.id !== i.id)
+      } : a
     )), v(null));
-  }, D = (a) => {
-    !i || i.type !== "wall" || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, D = (s) => {
+    !i || i.type !== "wall" || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
         walls: l.walls.map(
-          (h) => h.id === i.id ? { ...h, thickness: a } : h
+          (c) => c.id === i.id ? { ...c, thickness: s } : c
         )
       } : l
     ));
-  }, z = (a) => {
-    !i || i.type !== "wall" || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, z = (s) => {
+    !i || i.type !== "wall" || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
         walls: l.walls.map(
-          (h) => h.id === i.id ? { ...h, type: a } : h
+          (c) => c.id === i.id ? { ...c, type: s } : c
         )
       } : l
     ));
-  }, re = () => {
-    !i || i.type !== "table" || d((a) => a.map(
-      (r) => r.id === m ? {
-        ...r,
-        tables: r.tables.map(
+  }, ie = () => {
+    !i || i.type !== "table" || p((s) => s.map(
+      (a) => a.id === f ? {
+        ...a,
+        tables: a.tables.map(
           (l) => l.id === i.id ? { ...l, rotation: (l.rotation || 0) + 45 } : l
         )
-      } : r
+      } : a
     ));
   }, O = () => {
     if (!i || i.type !== "table")
       return;
-    const a = n();
+    const s = r();
+    if (!s)
+      return;
+    const a = s.tables.find((G) => G.id === i.id);
     if (!a)
       return;
-    const r = a.tables.find((k) => k.id === i.id);
-    if (!r)
-      return;
     const l = {
-      ...r,
-      id: Ze(),
-      name: `${r.name} Copy`,
-      x: r.x + 50,
-      y: r.y + 50
-    }, y = a.chairs.filter((k) => k.tableId === r.id).map((k) => ({
-      ...k,
-      id: Ze(),
+      ...a,
+      id: Oe(),
+      name: `${a.name} Copy`,
+      x: a.x + 50,
+      y: a.y + 50
+    }, y = s.chairs.filter((G) => G.tableId === a.id).map((G) => ({
+      ...G,
+      id: Oe(),
       tableId: l.id
     }));
-    d((k) => k.map(
-      (B) => B.id === m ? {
-        ...B,
-        tables: [...B.tables, l],
-        chairs: [...B.chairs, ...y]
-      } : B
+    p((G) => G.map(
+      (W) => W.id === f ? {
+        ...W,
+        tables: [...W.tables, l],
+        chairs: [...W.chairs, ...y]
+      } : W
     )), v({ type: "table", id: l.id });
-  }, de = et((a) => {
-    !i || i.type !== "table" || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, pe = je((s) => {
+    !i || i.type !== "table" || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
         tables: l.tables.map(
-          (h) => h.id === i.id ? a(h) : h
+          (c) => c.id === i.id ? s(c) : c
         )
       } : l
     ));
-  }, [i, m]), ne = (a) => {
-    de((r) => {
-      const { width: l, height: h } = ht(r.shape, a);
-      return { ...r, size: a, width: l, height: h };
+  }, [i, f]), ee = (s) => {
+    pe((a) => {
+      const { width: l, height: c } = pt(a.shape, s);
+      return { ...a, size: s, width: l, height: c };
     });
-  }, L = (a, r) => {
-    de((l) => ({
+  }, L = (s, a) => {
+    pe((l) => ({
       ...l,
-      width: a,
-      height: r,
+      width: s,
+      height: a,
       // Set size to a custom indicator or keep current
       size: "medium"
       // Keep a valid size for the interface
     }));
-  }, G = (a) => {
-    !i || i.type !== "object" || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, E = (s) => {
+    !i || i.type !== "object" || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
         objects: l.objects.map(
-          (h) => h.id === i.id ? { ...h, name: a } : h
+          (c) => c.id === i.id ? { ...c, name: s } : c
         )
       } : l
     ));
-  }, $ = (a, r) => {
-    !i || i.type !== "object" || d((l) => l.map(
-      (h) => h.id === m ? {
-        ...h,
-        objects: h.objects.map(
-          (y) => y.id === i.id ? { ...y, width: a, height: r } : y
+  }, $ = (s, a) => {
+    !i || i.type !== "object" || p((l) => l.map(
+      (c) => c.id === f ? {
+        ...c,
+        objects: c.objects.map(
+          (y) => y.id === i.id ? { ...y, width: s, height: a } : y
         )
-      } : h
+      } : c
     ));
-  }, b = (a) => {
-    !i || i.type !== "object" || d((r) => r.map(
-      (l) => l.id === m ? {
+  }, b = (s) => {
+    !i || i.type !== "object" || p((a) => a.map(
+      (l) => l.id === f ? {
         ...l,
         objects: l.objects.map(
-          (h) => h.id === i.id ? { ...h, rotation: a } : h
+          (c) => c.id === i.id ? { ...c, rotation: s } : c
         )
       } : l
     ));
-  }, se = (a, r) => {
-    !i || i.type !== "fixedElement" || d((l) => l.map(
-      (h) => h.id === m ? {
-        ...h,
-        fixedElements: h.fixedElements.map(
-          (y) => y.id === i.id ? { ...y, width: a, height: r } : y
+  }, re = (s, a) => {
+    !i || i.type !== "fixedElement" || p((l) => l.map(
+      (c) => c.id === f ? {
+        ...c,
+        fixedElements: c.fixedElements.map(
+          (y) => y.id === i.id ? { ...y, width: s, height: a } : y
         )
-      } : h
+      } : c
     ));
-  }, j = (a) => {
-    de((r) => ({ ...r, name: a }));
-  }, Ce = (a) => {
-    if (te.current && !le) {
-      if (K && ge) {
-        const r = te.current.getBoundingClientRect(), l = Math.round((a.clientX - r.left) / U / Y) * Y, h = Math.round((a.clientY - r.top) / U / Y) * Y;
-        if (!g)
-          I({ x: l, y: h });
+  }, Q = (s) => {
+    pe((a) => ({ ...a, name: s }));
+  }, ke = (s) => {
+    if (j.current && !de) {
+      if (J && ge) {
+        const a = j.current.getBoundingClientRect(), l = Math.round((s.clientX - a.left) / q / Y) * Y, c = Math.round((s.clientY - a.top) / q / Y) * Y;
+        if (!h)
+          I({ x: l, y: c });
         else {
-          if (!n())
+          if (!r())
             return;
-          const k = Je(g, { x: l, y: h }), B = {
-            id: Ze(),
+          const G = Ue(h, { x: l, y: c }), W = {
+            id: Oe(),
             type: ge,
-            startX: g.x,
-            startY: g.y,
-            endX: k.x,
-            endY: k.y,
+            startX: h.x,
+            startY: h.y,
+            endX: G.x,
+            endY: G.y,
             thickness: 8
           };
-          d((ee) => ee.map(
-            (V) => V.id === m ? { ...V, walls: [...V.walls, B] } : V
+          p((te) => te.map(
+            (se) => se.id === f ? { ...se, walls: [...se.walls, W] } : se
           )), I(null), ye(null), $e(!1), be(null);
         }
         return;
       }
       v(null);
     }
-  }, X = (a, r) => {
-    v({ type: a, id: r });
-  }, S = (a, r) => {
-    if (!te.current)
+  }, X = (s, a) => {
+    v({ type: s, id: a });
+  }, S = (s, a) => {
+    if (!j.current)
       return;
-    a.preventDefault(), a.stopPropagation();
-    const l = te.current.getBoundingClientRect(), h = (a.clientX - l.left) / U, y = (a.clientY - l.top) / U, k = n();
-    if (!k)
+    s.preventDefault(), s.stopPropagation();
+    const l = j.current.getBoundingClientRect(), c = (s.clientX - l.left) / q, y = (s.clientY - l.top) / q, G = r();
+    if (!G)
       return;
-    const B = k.tables.find((Ie) => Ie.id === r), ee = k.objects.find((Ie) => Ie.id === r), V = k.fixedElements.find((Ie) => Ie.id === r), Ge = k.walls.find((Ie) => Ie.id === r);
-    if (Ge)
-      oe({
-        x: h - Ge.startX,
-        y: y - Ge.startY
-      }), Q.current = { id: r, type: "wall" };
+    const W = G.tables.find((he) => he.id === a), te = G.objects.find((he) => he.id === a), se = G.fixedElements.find((he) => he.id === a), Ie = G.walls.find((he) => he.id === a);
+    if (Ie)
+      le({
+        x: c - Ie.startX,
+        y: y - Ie.startY
+      }), K.current = { id: a, type: "wall" };
     else {
-      const Ie = B || ee || V;
-      Ie && oe({
-        x: h - Ie.x,
-        y: y - Ie.y
+      const he = W || te || se;
+      he && le({
+        x: c - he.x,
+        y: y - he.y
       });
-      const We = B ? "table" : ee ? "object" : V ? "fixedElement" : "table";
-      Q.current = { id: r, type: We };
+      const We = W ? "table" : te ? "object" : se ? "fixedElement" : "table";
+      K.current = { id: a, type: We };
     }
-    ie(!0);
-  }, f = et((a) => {
-    !q && !le || !Q.current || !te.current || (Le.current && cancelAnimationFrame(Le.current), Le.current = requestAnimationFrame(() => {
-      var B, ee, V, Ge, Ie;
-      if (!te.current)
+    oe(!0);
+  }, u = je((s) => {
+    !V && !de || !K.current || !j.current || (Le.current && cancelAnimationFrame(Le.current), Le.current = requestAnimationFrame(() => {
+      var W, te, se, Ie, he;
+      if (!j.current)
         return;
-      const r = te.current.getBoundingClientRect(), l = (a.clientX - r.left) / U, h = (a.clientY - r.top) / U, y = Math.round(l / Y) * Y, k = Math.round(h / Y) * Y;
-      if (le && ((B = Q.current) == null ? void 0 : B.type) === "wall") {
-        const We = o.find((Xe) => Xe.id === m), Be = We == null ? void 0 : We.walls.find((Xe) => {
+      const a = j.current.getBoundingClientRect(), l = (s.clientX - a.left) / q, c = (s.clientY - a.top) / q, y = Math.round(l / Y) * Y, G = Math.round(c / Y) * Y;
+      if (de && ((W = K.current) == null ? void 0 : W.type) === "wall") {
+        const We = o.find((Xe) => Xe.id === f), Be = We == null ? void 0 : We.walls.find((Xe) => {
           var Pe;
-          return Xe.id === ((Pe = Q.current) == null ? void 0 : Pe.id);
+          return Xe.id === ((Pe = K.current) == null ? void 0 : Pe.id);
         });
         if (Be) {
-          const Xe = xe === "start" ? { x: Be.endX, y: Be.endY } : { x: Be.startX, y: Be.startY }, Pe = Je(Xe, { x: y, y: k });
-          d((Oe) => Oe.map(
-            (me) => me.id === m ? {
+          const Xe = we === "start" ? { x: Be.endX, y: Be.endY } : { x: Be.startX, y: Be.startY }, Pe = Ue(Xe, { x: y, y: G });
+          p((De) => De.map(
+            (me) => me.id === f ? {
               ...me,
               walls: me.walls.map(
                 (ae) => {
                   var Re;
-                  return ae.id === ((Re = Q.current) == null ? void 0 : Re.id) ? xe === "start" ? { ...ae, startX: Pe.x, startY: Pe.y } : { ...ae, endX: Pe.x, endY: Pe.y } : ae;
+                  return ae.id === ((Re = K.current) == null ? void 0 : Re.id) ? we === "start" ? { ...ae, startX: Pe.x, startY: Pe.y } : { ...ae, endX: Pe.x, endY: Pe.y } : ae;
                 }
               )
             } : me
           ));
         }
-      } else if (((ee = Q.current) == null ? void 0 : ee.type) === "table") {
-        const We = l - P.x, Be = h - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
-        d((Oe) => Oe.map(
-          (me) => me.id === m ? {
+      } else if (((te = K.current) == null ? void 0 : te.type) === "table") {
+        const We = l - P.x, Be = c - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
+        p((De) => De.map(
+          (me) => me.id === f ? {
             ...me,
             tables: me.tables.map(
               (ae) => {
                 var Re;
-                return ae.id === ((Re = Q.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
+                return ae.id === ((Re = K.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
               }
             )
           } : me
         ));
-      } else if (((V = Q.current) == null ? void 0 : V.type) === "object") {
-        const We = l - P.x, Be = h - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
-        d((Oe) => Oe.map(
-          (me) => me.id === m ? {
+      } else if (((se = K.current) == null ? void 0 : se.type) === "object") {
+        const We = l - P.x, Be = c - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
+        p((De) => De.map(
+          (me) => me.id === f ? {
             ...me,
             objects: me.objects.map(
               (ae) => {
                 var Re;
-                return ae.id === ((Re = Q.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
+                return ae.id === ((Re = K.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
               }
             )
           } : me
         ));
-      } else if (((Ge = Q.current) == null ? void 0 : Ge.type) === "fixedElement") {
-        const We = l - P.x, Be = h - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
-        d((Oe) => Oe.map(
-          (me) => me.id === m ? {
+      } else if (((Ie = K.current) == null ? void 0 : Ie.type) === "fixedElement") {
+        const We = l - P.x, Be = c - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
+        p((De) => De.map(
+          (me) => me.id === f ? {
             ...me,
             fixedElements: me.fixedElements.map(
               (ae) => {
                 var Re;
-                return ae.id === ((Re = Q.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
+                return ae.id === ((Re = K.current) == null ? void 0 : Re.id) ? { ...ae, x: Xe, y: Pe } : ae;
               }
             )
           } : me
         ));
-      } else if (((Ie = Q.current) == null ? void 0 : Ie.type) === "wall" && !le) {
-        const We = l - P.x, Be = h - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
-        d((Oe) => Oe.map(
-          (me) => me.id === m ? {
+      } else if (((he = K.current) == null ? void 0 : he.type) === "wall" && !de) {
+        const We = l - P.x, Be = c - P.y, Xe = Math.round(We / Y) * Y, Pe = Math.round(Be / Y) * Y;
+        p((De) => De.map(
+          (me) => me.id === f ? {
             ...me,
             walls: me.walls.map((ae) => {
-              var ot;
-              if (ae.id !== ((ot = Q.current) == null ? void 0 : ot.id))
+              var it;
+              if (ae.id !== ((it = K.current) == null ? void 0 : it.id))
                 return ae;
-              const Re = Xe - ae.startX, it = Pe - ae.startY;
+              const Re = Xe - ae.startX, at = Pe - ae.startY;
               return {
                 ...ae,
                 startX: ae.startX + Re,
-                startY: ae.startY + it,
+                startY: ae.startY + at,
                 endX: ae.endX + Re,
-                endY: ae.endY + it
+                endY: ae.endY + at
               };
             })
           } : me
         ));
       }
     }));
-  }, [q, le, xe, P, m, U, o]), pe = () => {
-    Le.current && (cancelAnimationFrame(Le.current), Le.current = null), ie(!1), Q.current = null, ze(!1), De(null), Ne(null);
-  }, u = (a, r, l) => {
-    a.preventDefault(), a.stopPropagation(), ze(!0), De(l), Q.current = { id: r, type: "wall" };
+  }, [V, de, we, P, f, q, o]), ue = () => {
+    Le.current && (cancelAnimationFrame(Le.current), Le.current = null), oe(!1), K.current = null, ze(!1), He(null), Me(null);
+  }, g = (s, a, l) => {
+    s.preventDefault(), s.stopPropagation(), ze(!0), He(l), K.current = { id: a, type: "wall" };
   }, N = () => {
-    const a = {
-      id: Ze(),
+    const s = {
+      id: Oe(),
       name: `Floor ${o.length + 1}`,
       isActive: !1,
       tables: [],
@@ -2938,159 +2938,124 @@ const Ht = `
       walls: [],
       fixedElements: []
     };
-    d((r) => [...r, a]), W(a.id);
-  }, Me = () => {
+    p((a) => [...a, s]), B(s.id);
+  }, Ce = () => {
     if (o.length <= 1)
       return;
-    const a = o.filter((r) => r.id !== m);
-    d(a), C(a[0].id);
-  }, W = (a) => {
-    d((r) => r.map((l) => ({
+    const s = o.filter((a) => a.id !== f);
+    p(s), C(s[0].id);
+  }, B = (s) => {
+    p((a) => a.map((l) => ({
       ...l,
-      isActive: l.id === a
-    }))), C(a), v(null);
-  }, w = (a, r) => {
-    d((l) => l.map(
-      (h) => h.id === a ? { ...h, name: r } : h
+      isActive: l.id === s
+    }))), C(s), v(null);
+  }, x = (s, a) => {
+    p((l) => l.map(
+      (c) => c.id === s ? { ...c, name: a } : c
     ));
-  }, Ee = (a) => {
-    $e(!0), be(a), I(null), ye(null), v(null);
-  }, ke = (a) => {
-    const r = n();
-    if (!r)
+  }, Ge = (s) => {
+    $e(!0), be(s), I(null), ye(null), v(null);
+  }, Ee = (s) => {
+    const a = r();
+    if (!a)
       return;
     const l = {
-      id: Ze(),
-      name: `${a.charAt(0).toUpperCase() + a.slice(1)} ${r.fixedElements.length + 1}`,
-      type: a,
-      x: 400 + r.fixedElements.length * 30,
-      y: 400 + r.fixedElements.length * 30,
+      id: Oe(),
+      name: `${s.charAt(0).toUpperCase() + s.slice(1)} ${a.fixedElements.length + 1}`,
+      type: s,
+      x: 400 + a.fixedElements.length * 30,
+      y: 400 + a.fixedElements.length * 30,
       width: 60,
       height: 60,
       rotation: 0
     };
-    d((h) => h.map(
-      (y) => y.id === m ? { ...y, fixedElements: [...y.fixedElements, l] } : y
+    p((c) => c.map(
+      (y) => y.id === f ? { ...y, fixedElements: [...y.fixedElements, l] } : y
     )), v({ type: "fixedElement", id: l.id });
   }, ce = () => {
-    const a = {
+    const s = {
       floors: o,
       timestamp: (/* @__PURE__ */ new Date()).toISOString()
     };
-    console.log("Saving floor plan:", a), alert("Floor plan saved! (Check console for data)");
-  }, he = () => {
-    d([
-      {
-        id: "floor-sample",
-        name: "Sample Floor",
-        isActive: !0,
-        tables: [
-          {
-            id: "table-1",
-            name: "Table 1",
-            shape: "circle",
-            size: "medium",
-            x: 200,
-            y: 200,
-            width: 120,
-            height: 120,
-            rotation: 0
-          }
-        ],
-        chairs: [
-          {
-            id: "chair-1",
-            tableId: "table-1",
-            position: "top",
-            index: 0,
-            x: 0,
-            y: 0
-          }
-        ],
-        objects: [],
-        walls: [],
-        fixedElements: []
-      }
-    ]), C("floor-sample"), v(null), alert("Sample floor plan loaded!");
+    console.log("Saving floor plan:", s), alert("Floor plan saved! (Check console for data)");
   };
-  Ve(() => {
-    const a = (l) => f(l), r = () => pe();
-    return (q || le) && (document.addEventListener("mousemove", a), document.addEventListener("mouseup", r)), () => {
-      document.removeEventListener("mousemove", a), document.removeEventListener("mouseup", r);
+  _e(() => {
+    const s = (l) => u(l), a = () => ue();
+    return (V || de) && (document.addEventListener("mousemove", s), document.addEventListener("mouseup", a)), () => {
+      document.removeEventListener("mousemove", s), document.removeEventListener("mouseup", a);
     };
-  }, [q, le, f]);
-  const Fe = (a) => {
-    var r;
-    if (K && g && te.current) {
-      const l = te.current.getBoundingClientRect(), h = Math.round((a.clientX - l.left) / U / Y) * Y, y = Math.round((a.clientY - l.top) / U / Y) * Y, k = Je(g, { x: h, y });
-      ye(k);
-    } else if (le && ((r = Q.current) == null ? void 0 : r.type) === "wall" && te.current) {
-      const l = te.current.getBoundingClientRect(), h = Math.round((a.clientX - l.left) / U / Y) * Y, y = Math.round((a.clientY - l.top) / U / Y) * Y, k = n(), B = k == null ? void 0 : k.walls.find((ee) => {
-        var V;
-        return ee.id === ((V = Q.current) == null ? void 0 : V.id);
+  }, [V, de, u]);
+  const fe = (s) => {
+    var a;
+    if (J && h && j.current) {
+      const l = j.current.getBoundingClientRect(), c = Math.round((s.clientX - l.left) / q / Y) * Y, y = Math.round((s.clientY - l.top) / q / Y) * Y, G = Ue(h, { x: c, y });
+      ye(G);
+    } else if (de && ((a = K.current) == null ? void 0 : a.type) === "wall" && j.current) {
+      const l = j.current.getBoundingClientRect(), c = Math.round((s.clientX - l.left) / q / Y) * Y, y = Math.round((s.clientY - l.top) / q / Y) * Y, G = r(), W = G == null ? void 0 : G.walls.find((te) => {
+        var se;
+        return te.id === ((se = K.current) == null ? void 0 : se.id);
       });
-      if (B) {
-        const ee = xe === "start" ? { x: B.endX, y: B.endY } : { x: B.startX, y: B.startY }, V = Je(ee, { x: h, y });
-        Ne(
-          xe === "start" ? { startX: V.x, startY: V.y, endX: B.endX, endY: B.endY } : { startX: B.startX, startY: B.startY, endX: V.x, endY: V.y }
+      if (W) {
+        const te = we === "start" ? { x: W.endX, y: W.endY } : { x: W.startX, y: W.startY }, se = Ue(te, { x: c, y });
+        Me(
+          we === "start" ? { startX: se.x, startY: se.y, endX: W.endX, endY: W.endY } : { startX: W.startX, startY: W.startY, endX: se.x, endY: se.y }
         );
       }
     }
   };
-  Ve(() => {
-    const a = (r) => {
-      r.key === "Escape" && K && ($e(!1), be(null), I(null), ye(null));
+  _e(() => {
+    const s = (a) => {
+      a.key === "Escape" && J && ($e(!1), be(null), I(null), ye(null));
     };
-    return document.addEventListener("keydown", a), () => document.removeEventListener("keydown", a);
-  }, [K]);
-  const x = n(), fe = x == null ? void 0 : x.tables.find((a) => (i == null ? void 0 : i.type) === "table" && a.id === i.id), He = x == null ? void 0 : x.objects.find((a) => (i == null ? void 0 : i.type) === "object" && a.id === i.id), ue = x == null ? void 0 : x.walls.find((a) => (i == null ? void 0 : i.type) === "wall" && a.id === i.id), Se = x == null ? void 0 : x.fixedElements.find((a) => (i == null ? void 0 : i.type) === "fixedElement" && a.id === i.id), we = fe ? (x == null ? void 0 : x.chairs.filter((a) => a.tableId === fe.id)) ?? [] : [], Ae = et(() => _((a) => !a), []);
-  return /* @__PURE__ */ s("div", { className: "flex h-screen bg-gray-50", children: [
-    /* @__PURE__ */ e("style", { dangerouslySetInnerHTML: { __html: Ht } }),
+    return document.addEventListener("keydown", s), () => document.removeEventListener("keydown", s);
+  }, [J]);
+  const w = r(), ne = w == null ? void 0 : w.tables.find((s) => (i == null ? void 0 : i.type) === "table" && s.id === i.id), Fe = w == null ? void 0 : w.objects.find((s) => (i == null ? void 0 : i.type) === "object" && s.id === i.id), Ye = w == null ? void 0 : w.walls.find((s) => (i == null ? void 0 : i.type) === "wall" && s.id === i.id), xe = w == null ? void 0 : w.fixedElements.find((s) => (i == null ? void 0 : i.type) === "fixedElement" && s.id === i.id), Se = ne ? (w == null ? void 0 : w.chairs.filter((s) => s.tableId === ne.id)) ?? [] : [], ve = je(() => _((s) => !s), []);
+  return /* @__PURE__ */ n("div", { className: "restaurant-floor-planner rfp-flex rfp-h-screen rfp-bg-gray-50", children: [
+    /* @__PURE__ */ e("style", { dangerouslySetInnerHTML: { __html: Yt } }),
     /* @__PURE__ */ e(
-      jt,
+      Qt,
       {
         floors: o,
-        currentFloor: x,
+        currentFloor: w,
         onAddFloor: N,
-        onRemoveFloor: Me,
-        onSwitchFloor: W,
-        onRenameFloor: w,
+        onRemoveFloor: Ce,
+        onSwitchFloor: B,
+        onRenameFloor: x,
         onAddTable: Z,
         onAddObject: H,
-        onStartWallDrawing: Ee,
-        onAddFixedElement: ke,
-        onRotateTable: re,
+        onStartWallDrawing: Ge,
+        onAddFixedElement: Ee,
+        onRotateTable: ie,
         onDuplicateTable: O,
         onRemoveTable: T,
         onSave: ce,
-        onLoad: he,
-        selectedTable: fe ?? null,
-        selectedTableChairs: we
+        selectedTable: ne ?? null,
+        selectedTableChairs: Se
       }
     ),
-    /* @__PURE__ */ s("div", { className: "flex-1 flex flex-col", children: [
+    /* @__PURE__ */ n("div", { className: "flex-1 flex flex-col", children: [
       /* @__PURE__ */ e(
-        nn,
+        tr,
         {
           showGrid: A,
-          selectedTable: fe ?? null,
-          selectedObject: He ?? null,
-          selectedWall: ue ?? null,
-          selectedFixedElement: Se ?? null,
-          selectedTableChairs: we,
-          tableCount: (x == null ? void 0 : x.tables.length) ?? 0,
-          chairCount: (x == null ? void 0 : x.chairs.length) ?? 0,
-          objectCount: (x == null ? void 0 : x.objects.length) ?? 0,
-          wallCount: (x == null ? void 0 : x.walls.length) ?? 0,
-          fixedElementCount: (x == null ? void 0 : x.fixedElements.length) ?? 0,
+          selectedTable: ne ?? null,
+          selectedObject: Fe ?? null,
+          selectedWall: Ye ?? null,
+          selectedFixedElement: xe ?? null,
+          selectedTableChairs: Se,
+          tableCount: (w == null ? void 0 : w.tables.length) ?? 0,
+          chairCount: (w == null ? void 0 : w.chairs.length) ?? 0,
+          objectCount: (w == null ? void 0 : w.objects.length) ?? 0,
+          wallCount: (w == null ? void 0 : w.walls.length) ?? 0,
+          fixedElementCount: (w == null ? void 0 : w.fixedElements.length) ?? 0,
           selectedElementType: (i == null ? void 0 : i.type) ?? null,
-          onToggleGrid: Ae,
-          onAddChair: E,
-          onRemoveChair: c,
-          onChangeTableSize: ne,
+          onToggleGrid: ve,
+          onAddChair: k,
+          onRemoveChair: d,
+          onChangeTableSize: ee,
           onCustomTableSize: L,
-          onTableNameChange: j,
-          onObjectNameChange: G,
+          onTableNameChange: Q,
+          onObjectNameChange: E,
           onObjectResize: $,
           onObjectRotate: b,
           onRemoveObject: T,
@@ -3098,79 +3063,79 @@ const Ht = `
           onRemoveFixedElement: T,
           onChangeWallThickness: D,
           onConvertWallType: z,
-          onFixedElementResize: se,
+          onFixedElementResize: re,
           onChairSizeChange: R,
-          onResetChairSizes: p,
-          on3DPreview: () => Ye(!0)
+          onResetChairSizes: m,
+          on3DPreview: () => Ae(!0)
         }
       ),
-      /* @__PURE__ */ s("div", { className: "flex-1 overflow-hidden bg-gray-100 relative", children: [
-        /* @__PURE__ */ s(
+      /* @__PURE__ */ n("div", { className: "flex-1 overflow-hidden bg-gray-100 relative", children: [
+        /* @__PURE__ */ n(
           "div",
           {
-            ref: te,
-            className: `w-full h-full relative ${K ? "cursor-crosshair" : le ? "cursor-grabbing" : "cursor-default"}`,
+            ref: j,
+            className: `w-full h-full relative ${J ? "cursor-crosshair" : de ? "cursor-grabbing" : "cursor-default"}`,
             style: {
-              transform: `scale(${U})`,
+              transform: `scale(${q})`,
               transformOrigin: "top left",
               background: A ? "radial-gradient(circle, #d1d5db 1px, transparent 1px)" : "white",
-              backgroundSize: `${Y * U}px ${Y * U}px`
+              backgroundSize: `${Y * q}px ${Y * q}px`
             },
-            onClick: Ce,
-            onMouseMove: Fe,
+            onClick: ke,
+            onMouseMove: fe,
             children: [
-              (x == null ? void 0 : x.tables.length) === 0 && /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none", children: /* @__PURE__ */ s("div", { className: "text-center text-gray-400", children: [
+              (w == null ? void 0 : w.tables.length) === 0 && /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none", children: /* @__PURE__ */ n("div", { className: "text-center text-gray-400", children: [
                 /* @__PURE__ */ e("div", { className: "text-6xl mb-4", children: "🏪" }),
                 /* @__PURE__ */ e("div", { className: "text-xl font-medium mb-2", children: "Welcome to Your Restaurant Designer" }),
                 /* @__PURE__ */ e("div", { className: "text-lg", children: 'Click "Add Tables" in the sidebar to start designing your floor plan' }),
-                /* @__PURE__ */ s("div", { className: "mt-4 space-y-1 text-sm", children: [
+                /* @__PURE__ */ n("div", { className: "mt-4 space-y-1 text-sm", children: [
                   /* @__PURE__ */ e("div", { children: "• Drag tables to move them around" }),
                   /* @__PURE__ */ e("div", { children: "• Click tables to select and edit properties" }),
                   /* @__PURE__ */ e("div", { children: "• Add chairs from the top toolbar or the table properties panel" }),
                   /* @__PURE__ */ e("div", { children: "• Use multiple floors for complex layouts" })
                 ] })
               ] }) }),
-              x == null ? void 0 : x.tables.map((a) => /* @__PURE__ */ e(
+              w == null ? void 0 : w.tables.map((s) => /* @__PURE__ */ e(
+                qt,
+                {
+                  table: s,
+                  isSelected: (i == null ? void 0 : i.type) === "table" && i.id === s.id,
+                  chairs: w.chairs.filter((a) => a.tableId === s.id),
+                  onSelect: () => X("table", s.id),
+                  onDrag: S,
+                  onDragEnd: ue
+                },
+                s.id
+              )),
+              w == null ? void 0 : w.objects.map((s) => /* @__PURE__ */ e(
                 Ut,
                 {
-                  table: a,
-                  isSelected: (i == null ? void 0 : i.type) === "table" && i.id === a.id,
-                  chairs: x.chairs.filter((r) => r.tableId === a.id),
-                  onSelect: () => X("table", a.id),
-                  onDrag: S,
-                  onDragEnd: pe
+                  object: s,
+                  isSelected: (i == null ? void 0 : i.type) === "object" && i.id === s.id,
+                  onSelect: () => X("object", s.id),
+                  onDragStart: (a) => S(a, s.id)
                 },
-                a.id
+                s.id
               )),
-              x == null ? void 0 : x.objects.map((a) => /* @__PURE__ */ e(
-                Jt,
+              w == null ? void 0 : w.walls.map((s) => /* @__PURE__ */ e(
+                ct,
                 {
-                  object: a,
-                  isSelected: (i == null ? void 0 : i.type) === "object" && i.id === a.id,
-                  onSelect: () => X("object", a.id),
-                  onDragStart: (r) => S(r, a.id)
+                  wall: s,
+                  isSelected: (i == null ? void 0 : i.type) === "wall" && i.id === s.id,
+                  onSelect: () => X("wall", s.id),
+                  onDragHandle: (a, l) => g(a, s.id, l),
+                  onDragStart: (a) => S(a, s.id)
                 },
-                a.id
+                s.id
               )),
-              x == null ? void 0 : x.walls.map((a) => /* @__PURE__ */ e(
-                mt,
-                {
-                  wall: a,
-                  isSelected: (i == null ? void 0 : i.type) === "wall" && i.id === a.id,
-                  onSelect: () => X("wall", a.id),
-                  onDragHandle: (r, l) => u(r, a.id, l),
-                  onDragStart: (r) => S(r, a.id)
-                },
-                a.id
-              )),
-              K && g && F && ge && /* @__PURE__ */ e(
-                mt,
+              J && h && F && ge && /* @__PURE__ */ e(
+                ct,
                 {
                   wall: {
                     id: "temp-wall",
                     type: ge,
-                    startX: g.x,
-                    startY: g.y,
+                    startX: h.x,
+                    startY: h.y,
                     endX: F.x,
                     endY: F.y,
                     thickness: 8
@@ -3201,28 +3166,28 @@ const Ht = `
                   children: /* @__PURE__ */ e("div", { className: "w-full h-full border-2 border-blue-400 border-dashed opacity-70 bg-blue-100 rounded-sm" })
                 }
               ),
-              x == null ? void 0 : x.fixedElements.map((a) => /* @__PURE__ */ e(
-                Kt,
+              w == null ? void 0 : w.fixedElements.map((s) => /* @__PURE__ */ e(
+                Jt,
                 {
-                  element: a,
-                  isSelected: (i == null ? void 0 : i.type) === "fixedElement" && i.id === a.id,
-                  onSelect: () => X("fixedElement", a.id),
-                  onDragStart: (r) => S(r, a.id)
+                  element: s,
+                  isSelected: (i == null ? void 0 : i.type) === "fixedElement" && i.id === s.id,
+                  onSelect: () => X("fixedElement", s.id),
+                  onDragStart: (a) => S(a, s.id)
                 },
-                a.id
+                s.id
               )),
-              x == null ? void 0 : x.chairs.map((a) => {
-                const r = x.tables.find((h) => h.id === a.tableId);
-                if (!r)
+              w == null ? void 0 : w.chairs.map((s) => {
+                const a = w.tables.find((c) => c.id === s.tableId);
+                if (!a)
                   return null;
-                const l = x.chairs.filter(
-                  (h) => h.tableId === a.tableId && h.position === a.position
+                const l = w.chairs.filter(
+                  (c) => c.tableId === s.tableId && c.position === s.position
                 ).length;
                 return /* @__PURE__ */ e(
-                  qt,
+                  Vt,
                   {
-                    chair: a,
-                    table: r,
+                    chair: s,
+                    table: a,
                     totalChairsOnSide: l,
                     isSelected: !1,
                     onSelect: () => {
@@ -3232,63 +3197,63 @@ const Ht = `
                     onDragEnd: () => {
                     }
                   },
-                  a.id
+                  s.id
                 );
               }),
-              i && i.type === "table" && fe && /* @__PURE__ */ e(
+              i && i.type === "table" && ne && /* @__PURE__ */ e(
                 "div",
                 {
                   className: "absolute border-2 border-blue-500 border-dashed rounded pointer-events-none",
                   style: {
-                    left: fe.x - 10,
-                    top: fe.y - 10,
-                    width: (fe.shape === "rectangle" ? fe.width * 1.5 : fe.width) + 20,
-                    height: fe.height + 20,
-                    transform: `rotate(${fe.rotation || 0}deg)`
+                    left: ne.x - 10,
+                    top: ne.y - 10,
+                    width: (ne.shape === "rectangle" ? ne.width * 1.5 : ne.width) + 20,
+                    height: ne.height + 20,
+                    transform: `rotate(${ne.rotation || 0}deg)`
                   }
                 }
               )
             ]
           }
         ),
-        /* @__PURE__ */ e("div", { className: "absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 border-t border-gray-200 p-3", children: /* @__PURE__ */ s("div", { className: "flex items-center justify-between text-sm", children: [
-          /* @__PURE__ */ s("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ s("div", { className: "flex items-center gap-2 text-gray-600", children: [
+        /* @__PURE__ */ e("div", { className: "absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 border-t border-gray-200 p-3", children: /* @__PURE__ */ n("div", { className: "flex items-center justify-between text-sm", children: [
+          /* @__PURE__ */ n("div", { className: "flex items-center gap-4", children: [
+            /* @__PURE__ */ n("div", { className: "flex items-center gap-2 text-gray-600", children: [
               /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-green-500 rounded-full" }),
-              /* @__PURE__ */ s("span", { children: [
+              /* @__PURE__ */ n("span", { children: [
                 "Floor: ",
-                x == null ? void 0 : x.name
+                w == null ? void 0 : w.name
               ] })
             ] }),
-            q && /* @__PURE__ */ s("div", { className: "flex items-center gap-2 text-blue-600", children: [
+            V && /* @__PURE__ */ n("div", { className: "flex items-center gap-2 text-blue-600", children: [
               /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-blue-500 rounded-full animate-pulse" }),
               /* @__PURE__ */ e("span", { children: "Dragging..." })
             ] })
           ] }),
-          /* @__PURE__ */ s("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ s("div", { className: "text-gray-500", children: [
+          /* @__PURE__ */ n("div", { className: "flex items-center gap-4", children: [
+            /* @__PURE__ */ n("div", { className: "text-gray-500", children: [
               "Zoom: ",
-              Math.round(U * 100),
+              Math.round(q * 100),
               "% | Grid: ",
               A ? "On" : "Off"
             ] }),
-            i && /* @__PURE__ */ e("div", { className: "text-blue-600 font-medium", children: i.type === "table" && fe ? `${fe.name} (${fe.shape})` : "Element Selected" })
+            i && /* @__PURE__ */ e("div", { className: "text-blue-600 font-medium", children: i.type === "table" && ne ? `${ne.name} (${ne.shape})` : "Element Selected" })
           ] })
         ] }) })
       ] })
     ] }),
-    x && /* @__PURE__ */ e(
-      sn,
+    w && /* @__PURE__ */ e(
+      rr,
       {
-        floor: x,
-        isOpen: ve,
-        onClose: () => Ye(!1)
+        floor: w,
+        isOpen: Ne,
+        onClose: () => Ae(!1)
       }
     )
   ] });
 };
 export {
-  sn as Preview3DModal,
-  ln as RestaurantFloorPlanner
+  rr as Preview3DModal,
+  ir as RestaurantFloorPlanner
 };
 //# sourceMappingURL=restaurant-floor-planner.es.js.map

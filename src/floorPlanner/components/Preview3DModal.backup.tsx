@@ -1573,43 +1573,43 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-[200] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
+    <div className="rfp-fixed rfp-inset-0 rfp-bg-black rfp-bg-opacity-50 z-[200] rfp-flex rfp-items-center rfp-justify-center rfp-p-4">
+      <div className="rfp-bg-white rounded-2xl shadow-2xl rfp-w-full max-w-6xl h-[90vh] rfp-flex rfp-flex-col rfp-overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rfp-text-white rfp-p-4 rfp-flex rfp-items-center rfp-justify-between">
           <div>
-            <h2 className="text-2xl font-bold">3D Floor Plan Preview</h2>
-            <p className="text-blue-100 text-sm">Interactive 3D Visualization</p>
+            <h2 className="rfp-text-2xl rfp-font-bold">3D Floor Plan Preview</h2>
+            <p className="rfp-text-blue-100 rfp-text-sm">Interactive 3D Visualization</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
-            <X className="w-6 h-6" />
+          <button onClick={onClose} className="rfp-p-2 hover:bg-white/20 rfp-rounded-lg transition-colors">
+            <X className="rfp-w-6 rfp-h-6" />
           </button>
         </div>
 
-        <div ref={containerRef} className="flex-1 relative bg-gradient-to-br from-gray-100 to-gray-200" />
+        <div ref={containerRef} className="rfp-flex-1 rfp-relative bg-gradient-to-br from-gray-100 to-gray-200" />
 
-        <div className="bg-gray-50 border-t border-gray-200 p-4 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex gap-2 flex-wrap">
+        <div className="rfp-bg-gray-50 rfp-border-t rfp-border-gray-200 rfp-p-4 rfp-flex rfp-items-center rfp-justify-between rfp-flex-wrap rfp-gap-2">
+          <div className="rfp-flex rfp-gap-2 rfp-flex-wrap">
             <button
               onClick={() => setAutoRotate(!autoRotate)}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all ${
                 autoRotate ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="rfp-w-4 rfp-h-4" />
               Auto Rotate
             </button>
             <button
               onClick={() => cameraRef.current?.position.multiplyScalar(0.9)}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+              className="rfp-px-4 rfp-py-2 rfp-bg-gray-200 hover:bg-gray-300 rfp-rounded-lg rfp-flex rfp-items-center rfp-gap-2 rfp-font-medium rfp-transition-all"
             >
-              <ZoomIn className="w-4 h-4" />
+              <ZoomIn className="rfp-w-4 rfp-h-4" />
               Zoom In
             </button>
             <button
               onClick={() => cameraRef.current?.position.multiplyScalar(1.1)}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+              className="rfp-px-4 rfp-py-2 rfp-bg-gray-200 hover:bg-gray-300 rfp-rounded-lg rfp-flex rfp-items-center rfp-gap-2 rfp-font-medium rfp-transition-all"
             >
-              <ZoomOut className="w-4 h-4" />
+              <ZoomOut className="rfp-w-4 rfp-h-4" />
               Zoom Out
             </button>
             <button
@@ -1619,17 +1619,17 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
                   cameraRef.current.lookAt(0, 0, 0);
                 }
               }}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2 font-medium transition-all"
+              className="rfp-px-4 rfp-py-2 rfp-bg-gray-200 hover:bg-gray-300 rfp-rounded-lg rfp-flex rfp-items-center rfp-gap-2 rfp-font-medium rfp-transition-all"
             >
-              <Maximize2 className="w-4 h-4" />
+              <Maximize2 className="rfp-w-4 rfp-h-4" />
               Reset View
             </button>
           </div>
           
-          <div className="text-sm text-gray-600">
-            <span className="font-semibold">{floor.tables.length}</span> tables • 
-            <span className="font-semibold ml-1">{floor.chairs.length}</span> chairs • 
-            <span className="font-semibold ml-1">{floor.objects.length}</span> objects
+          <div className="rfp-text-sm rfp-text-gray-600">
+            <span className="rfp-font-semibold">{floor.tables.length}</span> tables • 
+            <span className="rfp-font-semibold rfp-ml-1">{floor.chairs.length}</span> chairs • 
+            <span className="rfp-font-semibold rfp-ml-1">{floor.objects.length}</span> objects
           </div>
         </div>
       </div>

@@ -1699,93 +1699,93 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-2">
-      <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl w-full h-full max-w-[98vw] max-h-[98vh] flex flex-col overflow-hidden border border-gray-800">
+    <div className="rfp-fixed rfp-inset-0 bg-black/60 backdrop-blur-sm z-[200] rfp-flex rfp-items-center rfp-justify-center rfp-p-2">
+      <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl rfp-w-full rfp-h-full max-w-[98vw] max-h-[98vh] rfp-flex rfp-flex-col rfp-overflow-hidden rfp-border rfp-border-gray-800">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-1">
-          <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rfp-p-1">
+          <div className="rfp-bg-gray-900 rfp-px-6 rfp-py-4 rfp-flex rfp-items-center rfp-justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
-                  <Move3d className="w-5 h-5" />
+              <h2 className="rfp-text-2xl rfp-font-bold rfp-text-white rfp-flex rfp-items-center rfp-gap-3">
+                <div className="rfp-p-2 bg-gradient-to-br from-blue-500 to-purple-600 rfp-rounded-lg">
+                  <Move3d className="rfp-w-5 rfp-h-5" />
                 </div>
                 3D Floor Plan Visualization
               </h2>
-              <p className="text-gray-400 text-sm mt-1">Professional Camera Controls • {floor.name}</p>
+              <p className="rfp-text-gray-400 rfp-text-sm rfp-mt-1">Professional Camera Controls • {floor.name}</p>
             </div>
             <button 
               onClick={onClose} 
-              className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all hover:scale-110"
+              className="p-2.5 bg-red-500/20 hover:bg-red-500/30 rfp-text-red-400 rfp-rounded-xl rfp-transition-all hover:scale-110"
             >
-              <X className="w-5 h-5" />
+              <X className="rfp-w-5 rfp-h-5" />
             </button>
           </div>
         </div>
 
         {/* Main Content Area with Sidebar */}
-        <div className="flex-1 flex gap-3 p-3 min-h-0">
+        <div className="rfp-flex-1 rfp-flex rfp-gap-3 rfp-p-3 rfp-min-h-0">
           {/* Smart Sidebar - Left */}
-          <div className="w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700 p-5 flex flex-col gap-5 overflow-y-auto flex-shrink-0">
+          <div className="rfp-w-80 bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl rfp-border rfp-border-gray-700 rfp-p-5 rfp-flex rfp-flex-col rfp-gap-5 overflow-y-auto flex-shrink-0">
             {/* Default View Button */}
             <button
               onClick={() => smoothCameraTransition('default')}
-              className="px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+              className="rfp-px-4 rfp-py-3 bg-gradient-to-r from-blue-500 to-purple-600 rfp-text-white rfp-rounded-xl rfp-font-semibold rfp-transition-all hover:scale-105 hover:shadow-lg rfp-flex rfp-items-center rfp-justify-center rfp-gap-2"
             >
               🏠 Default View
             </button>
 
             {/* Manual Controls Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <Move3d className="w-5 h-5 text-purple-400" />
+            <div className="rfp-flex rfp-flex-col rfp-gap-3">
+              <div className="rfp-text-white rfp-text-sm rfp-font-bold rfp-uppercase rfp-tracking-wider rfp-flex rfp-items-center rfp-gap-2 rfp-pb-2 rfp-border-b rfp-border-gray-700">
+                <Move3d className="rfp-w-5 rfp-h-5 rfp-text-purple-400" />
                 Manual Control
               </div>
               
               {/* Directional Controls */}
-              <div className="flex justify-center">
-                <div className="flex flex-col gap-1">
+              <div className="rfp-flex rfp-justify-center">
+                <div className="rfp-flex rfp-flex-col rfp-gap-1">
                   <button
                     onClick={() => rotateCamera('up')}
-                    className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto"
+                    className="rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30 mx-auto"
                     disabled={isTransitioning}
                     title="Rotate Up"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="rfp-w-6 rfp-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                     </svg>
                   </button>
-                  <div className="flex gap-1 justify-center">
+                  <div className="rfp-flex rfp-gap-1 rfp-justify-center">
                     <button
                       onClick={() => rotateCamera('left')}
-                      className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30"
+                      className="rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30"
                       disabled={isTransitioning}
                       title="Rotate Left"
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="rfp-w-6 rfp-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                       </svg>
                     </button>
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                      <Move3d className="w-6 h-6 text-white" />
+                    <div className="rfp-w-12 rfp-h-12 bg-gradient-to-br from-blue-600 to-purple-600 rfp-rounded-lg rfp-flex rfp-items-center rfp-justify-center">
+                      <Move3d className="rfp-w-6 rfp-h-6 rfp-text-white" />
                     </div>
                     <button
                       onClick={() => rotateCamera('right')}
-                      className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30"
+                      className="rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30"
                       disabled={isTransitioning}
                       title="Rotate Right"
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="rfp-w-6 rfp-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
                   </div>
                   <button
                     onClick={() => rotateCamera('down')}
-                    className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all hover:scale-110 flex items-center justify-center disabled:opacity-30 mx-auto"
+                    className="rfp-w-12 rfp-h-12 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-lg rfp-transition-all hover:scale-110 rfp-flex rfp-items-center rfp-justify-center disabled:opacity-30 mx-auto"
                     disabled={isTransitioning}
                     title="Rotate Down"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="rfp-w-6 rfp-h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -1794,27 +1794,27 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
             </div>
 
             {/* Zoom Controls Section */}
-            <div className="flex flex-col gap-3">
-              <div className="text-white text-sm font-bold uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-gray-700">
-                <ZoomIn className="w-5 h-5 text-green-400" />
+            <div className="rfp-flex rfp-flex-col rfp-gap-3">
+              <div className="rfp-text-white rfp-text-sm rfp-font-bold rfp-uppercase rfp-tracking-wider rfp-flex rfp-items-center rfp-gap-2 rfp-pb-2 rfp-border-b rfp-border-gray-700">
+                <ZoomIn className="rfp-w-5 rfp-h-5 rfp-text-green-400" />
                 Zoom & Rotation
               </div>
               
-              <div className="flex flex-col gap-2">
+              <div className="rfp-flex rfp-flex-col rfp-gap-2">
                 <button
                   onClick={() => zoomCamera(0.85)}
-                  className="px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30"
+                  className="rfp-px-4 rfp-py-3 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-semibold disabled:opacity-30"
                   disabled={isTransitioning}
                 >
-                  <ZoomIn className="w-5 h-5" />
+                  <ZoomIn className="rfp-w-5 rfp-h-5" />
                   Zoom In
                 </button>
                 <button
                   onClick={() => zoomCamera(1.15)}
-                  className="px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 font-semibold disabled:opacity-30"
+                  className="rfp-px-4 rfp-py-3 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-semibold disabled:opacity-30"
                   disabled={isTransitioning}
                 >
-                  <ZoomOut className="w-5 h-5" />
+                  <ZoomOut className="rfp-w-5 rfp-h-5" />
                   Zoom Out
                 </button>
                 <button
@@ -1832,37 +1832,37 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
             </div>
 
             {/* Reset & Stats Section */}
-            <div className="flex flex-col gap-3 mt-auto">
+            <div className="rfp-flex rfp-flex-col rfp-gap-3 mt-auto">
               <button
                 onClick={() => smoothCameraTransition('default')}
-                className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl transition-all hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2 font-bold"
+                className="rfp-px-4 rfp-py-3 bg-gradient-to-r from-orange-500 to-red-600 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 hover:shadow-lg rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-bold"
               >
-                <Maximize2 className="w-5 h-5" />
+                <Maximize2 className="rfp-w-5 rfp-h-5" />
                 Reset View
               </button>
 
               {/* Scene Stats */}
-              <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                <div className="flex items-center gap-2 text-gray-400 mb-3">
-                  <Grid className="w-4 h-4" />
-                  <span className="font-medium text-sm">Scene Statistics</span>
+              <div className="bg-gray-800/50 rfp-rounded-xl rfp-p-4 rfp-border rfp-border-gray-700">
+                <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-text-gray-400 rfp-mb-3">
+                  <Grid className="rfp-w-4 rfp-h-4" />
+                  <span className="rfp-font-medium rfp-text-sm">Scene Statistics</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.tables.length} Tables</span>
+                <div className="rfp-grid grid-cols-2 rfp-gap-2 rfp-text-sm">
+                  <div className="rfp-flex rfp-items-center rfp-gap-2">
+                    <div className="rfp-w-2 rfp-h-2 bg-emerald-500 rfp-rounded-full rfp-animate-pulse" />
+                    <span className="rfp-text-gray-300">{floor.tables.length} Tables</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.chairs.length} Chairs</span>
+                  <div className="rfp-flex rfp-items-center rfp-gap-2">
+                    <div className="rfp-w-2 rfp-h-2 bg-amber-500 rfp-rounded-full rfp-animate-pulse" />
+                    <span className="rfp-text-gray-300">{floor.chairs.length} Chairs</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.objects.length} Objects</span>
+                  <div className="rfp-flex rfp-items-center rfp-gap-2">
+                    <div className="rfp-w-2 rfp-h-2 rfp-bg-purple-500 rfp-rounded-full rfp-animate-pulse" />
+                    <span className="rfp-text-gray-300">{floor.objects.length} Objects</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-gray-300">{floor.walls.length} Walls</span>
+                  <div className="rfp-flex rfp-items-center rfp-gap-2">
+                    <div className="rfp-w-2 rfp-h-2 rfp-bg-blue-500 rfp-rounded-full rfp-animate-pulse" />
+                    <span className="rfp-text-gray-300">{floor.walls.length} Walls</span>
                   </div>
                 </div>
               </div>
@@ -1870,16 +1870,16 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
           </div>
 
           {/* 3D Viewport - Right */}
-          <div className="flex-1 relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl overflow-hidden shadow-2xl border border-gray-300">
-            <div ref={containerRef} className="w-full h-full" />
+          <div className="rfp-flex-1 rfp-relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl rfp-overflow-hidden shadow-2xl rfp-border rfp-border-gray-300">
+            <div ref={containerRef} className="rfp-w-full rfp-h-full" />
 
             {/* Transition Indicator */}
             {isTransitioning && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="bg-black/80 backdrop-blur-xl rounded-xl px-6 py-3 shadow-2xl border border-gray-700">
-                  <div className="flex items-center gap-3">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-500 border-t-white" />
-                    <span className="text-white text-sm font-medium">Transitioning Camera...</span>
+              <div className="rfp-absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-black/80 backdrop-blur-xl rfp-rounded-xl rfp-px-6 rfp-py-3 shadow-2xl rfp-border rfp-border-gray-700">
+                  <div className="rfp-flex rfp-items-center rfp-gap-3">
+                    <div className="rfp-animate-spin rfp-rounded-full rfp-h-5 rfp-w-5 rfp-border-2 rfp-border-gray-500 border-t-white" />
+                    <span className="rfp-text-white rfp-text-sm rfp-font-medium">Transitioning Camera...</span>
                   </div>
                 </div>
               </div>
@@ -1888,22 +1888,22 @@ export const Preview3DModal: React.FC<Preview3DModalProps> = ({ floor, isOpen, o
         </div>
 
         {/* Bottom Status Bar */}
-        <div className="bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 px-6 py-3 border-t border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-400">
-                  Viewing: <span className="text-white font-semibold">{floor.name}</span>
+        <div className="bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 rfp-px-6 rfp-py-3 rfp-border-t rfp-border-gray-800">
+          <div className="rfp-flex rfp-items-center rfp-justify-between">
+            <div className="rfp-flex rfp-items-center rfp-gap-4">
+              <div className="rfp-flex rfp-items-center rfp-gap-2">
+                <Layers className="rfp-w-4 rfp-h-4 rfp-text-gray-400" />
+                <span className="rfp-text-sm rfp-text-gray-400">
+                  Viewing: <span className="rfp-text-white rfp-font-semibold">{floor.name}</span>
                 </span>
               </div>
-              <div className="text-sm text-gray-400">
-                Camera: <span className="text-white font-semibold">{CAMERA_VIEWS[currentView].name}</span>
+              <div className="rfp-text-sm rfp-text-gray-400">
+                Camera: <span className="rfp-text-white rfp-font-semibold">{CAMERA_VIEWS[currentView].name}</span>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
+            <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-text-xs rfp-text-gray-500">
               <span>High Performance Mode</span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <div className="rfp-w-2 rfp-h-2 rfp-bg-green-500 rfp-rounded-full rfp-animate-pulse" />
             </div>
           </div>
         </div>

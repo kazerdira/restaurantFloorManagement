@@ -124,7 +124,7 @@ export const ChairComponent: React.FC<ChairComponentProps> = ({
       }}
       onMouseUp={onDragEnd}
     >
-      <div className="w-full h-full bg-gradient-to-br from-amber-500 to-amber-700 rounded-lg border-4 border-amber-800 flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
+      <div className="rfp-w-full rfp-h-full bg-gradient-to-br from-amber-500 to-amber-700 rfp-rounded-lg rfp-border-4 border-amber-800 rfp-flex rfp-items-center rfp-justify-center rfp-shadow-xl hover:shadow-2xl hover:scale-105 rfp-transition-all">
         <Armchair size={iconSize} strokeWidth={3.5} className="text-amber-50" />
       </div>
     </div>
