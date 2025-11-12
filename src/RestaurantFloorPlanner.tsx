@@ -29,7 +29,11 @@ import type {
   WallType
 } from './floorPlanner/types';
 
-const RestaurantFloorPlanner: React.FC = () => {
+interface RestaurantFloorPlannerProps {
+  fullScreen?: boolean;
+}
+
+const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScreen = false }) => {
   const [floors, setFloors] = useState<Floor[]>([
     { 
       id: 'floor-1', 
@@ -953,7 +957,7 @@ const RestaurantFloorPlanner: React.FC = () => {
   const toggleGrid = useCallback(() => setShowGrid((prev) => !prev), []);
 
   return (
-    <div className="restaurant-floor-planner rfp-flex rfp-h-screen rfp-bg-gray-50">
+    <div className={`restaurant-floor-planner rfp-flex ${fullScreen ? 'rfp-h-screen' : 'rfp-h-full'} rfp-bg-gray-50`}>
       <style dangerouslySetInnerHTML={{ __html: hexagonStyle }} />
       
       <Sidebar
