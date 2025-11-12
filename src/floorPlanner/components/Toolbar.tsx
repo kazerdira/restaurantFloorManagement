@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Armchair, Box, ChevronRight, Eye, EyeOff, Minus, Plus, RotateCcw, Square, Trash2 } from 'lucide-react';
+import { Armchair, Box, ChevronDown, ChevronRight, DoorOpen, Eye, EyeOff, Minus, Plus, RectangleVertical, RotateCcw, Square, Trash2 } from 'lucide-react';
 
 import type { Chair, ChairPosition, Table, TableSize, FloorObject, Wall, FixedElement } from '../types';
 import { SIZE_LABELS, OBJECT_ICONS, OBJECT_LABELS, WALL_LABELS, FIXED_ELEMENT_LABELS } from '../constants';
@@ -582,42 +582,76 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             <>
               <div className="w-px h-8 bg-gray-300" />
 
-              {/* Wall Type Converter */}
+              {/* Wall Type Converter Dropdown */}
               {onConvertWallType && (
-                <div className="flex items-center gap-1 bg-gray-50 border border-gray-300 rounded-lg p-1">
+                <div className="relative">
                   <button
-                    onClick={() => onConvertWallType('wall')}
-                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
-                      selectedWall.type === 'wall'
-                        ? 'bg-gray-600 text-white shadow-md'
-                        : 'text-gray-600 hover:bg-gray-200'
+                    onClick={() => {
+                      const dropdown = document.getElementById('wall-type-dropdown');
+                      if (dropdown) {
+                        dropdown.classList.toggle('hidden');
+                      }
+                    }}
+                    className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all ${
+                      selectedWall.type === 'wall' 
+                        ? 'bg-gray-600 text-white border-gray-700'
+                        : selectedWall.type === 'door'
+                        ? 'bg-amber-600 text-white border-amber-700'
+                        : 'bg-blue-600 text-white border-blue-700'
                     }`}
-                    title="Convert to Wall"
+                    title="Change wall type"
                   >
-                    Wall
+                    {selectedWall.type === 'wall' && <Square size={18} />}
+                    {selectedWall.type === 'door' && <DoorOpen size={18} />}
+                    {selectedWall.type === 'window' && <RectangleVertical size={18} />}
+                    <ChevronDown size={14} />
                   </button>
-                  <button
-                    onClick={() => onConvertWallType('door')}
-                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
-                      selectedWall.type === 'door'
-                        ? 'bg-amber-600 text-white shadow-md'
-                        : 'text-gray-600 hover:bg-gray-200'
-                    }`}
-                    title="Convert to Door"
+                  
+                  <div
+                    id="wall-type-dropdown"
+                    className="hidden absolute top-full mt-1 left-0 bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[140px]"
+                    onMouseLeave={(e) => {
+                      const dropdown = e.currentTarget;
+                      dropdown.classList.add('hidden');
+                    }}
                   >
-                    Door
-                  </button>
-                  <button
-                    onClick={() => onConvertWallType('window')}
-                    className={`px-3 py-1.5 rounded text-xs font-semibold transition-all ${
-                      selectedWall.type === 'window'
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'text-gray-600 hover:bg-gray-200'
-                    }`}
-                    title="Convert to Window"
-                  >
-                    Window
-                  </button>
+                    <button
+                      onClick={() => {
+                        onConvertWallType('wall');
+                        document.getElementById('wall-type-dropdown')?.classList.add('hidden');
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                        selectedWall.type === 'wall' ? 'bg-gray-50 font-semibold' : ''
+                      }`}
+                    >
+                      <Square size={16} className="text-gray-600" />
+                      <span>Wall</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        onConvertWallType('door');
+                        document.getElementById('wall-type-dropdown')?.classList.add('hidden');
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                        selectedWall.type === 'door' ? 'bg-amber-50 font-semibold' : ''
+                      }`}
+                    >
+                      <DoorOpen size={16} className="text-amber-600" />
+                      <span>Door</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        onConvertWallType('window');
+                        document.getElementById('wall-type-dropdown')?.classList.add('hidden');
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100 transition-colors rounded-b-lg ${
+                        selectedWall.type === 'window' ? 'bg-blue-50 font-semibold' : ''
+                      }`}
+                    >
+                      <RectangleVertical size={16} className="text-blue-600" />
+                      <span>Window</span>
+                    </button>
+                  </div>
                 </div>
               )}
 
