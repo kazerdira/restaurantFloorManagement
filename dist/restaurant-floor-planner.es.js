@@ -1,6 +1,6 @@
 import { jsx as e, jsxs as n, Fragment as _e } from "react/jsx-runtime";
 import qe, { useState as J, useRef as Le, useEffect as Ve, useCallback as et } from "react";
-import { Square as Ue, Circle as vt, Wine as Nt, ChefHat as Mt, Bath as St, RectangleVertical as lt, DoorOpen as Ct, Columns as dt, Rows as kt, Armchair as rt, Layers as gt, Plus as nt, Minus as ut, LayoutGrid as Et, Package as Gt, Home as zt, RotateCw as Pt, Trash2 as Ke, Save as It, Upload as Rt, Eye as Tt, EyeOff as $t, RotateCcw as st, ChevronRight as Lt, Box as Wt, Move3d as tt, X as Bt, ZoomIn as pt, ZoomOut as Xt, Maximize2 as At, Grid as Yt } from "lucide-react";
+import { Square as Ue, Circle as vt, Wine as Nt, ChefHat as Mt, Bath as St, RectangleVertical as lt, DoorOpen as Ct, Columns as pt, Rows as kt, Armchair as rt, Layers as gt, Plus as nt, Minus as ut, LayoutGrid as Et, Package as Gt, Home as zt, RotateCw as Pt, Trash2 as Ke, Save as It, Upload as Rt, Eye as Tt, EyeOff as $t, RotateCcw as st, ChevronRight as Lt, Box as Wt, Move3d as tt, X as Bt, ZoomIn as dt, ZoomOut as Xt, Maximize2 as At, Grid as Yt } from "lucide-react";
 import * as t from "three";
 const Ht = `
   .hexagon-shape {
@@ -56,8 +56,8 @@ const Ht = `
   column: "Column",
   stairs: "Stairs"
 }, Zt = {
-  pillar: dt,
-  column: dt,
+  pillar: pt,
+  column: pt,
   stairs: kt
 }, _t = {
   pillar: {
@@ -76,22 +76,22 @@ const Ht = `
     text: "text-stone-100"
   }
 }, Ze = () => Math.random().toString(36).slice(2, 11), Vt = (l) => {
-  const x = l.shape === "rectangle" ? l.width * 1.5 : l.width, c = Math.min(x, l.height), f = Math.round(c * 0.35);
-  return Math.max(18, Math.min(48, f));
-}, yt = (l) => l.shape === "rectangle" ? l.width * 1.5 : l.width, ct = (l, x) => {
-  const { width: c, height: f } = Dt[x];
+  const x = l.shape === "rectangle" ? l.width * 1.5 : l.width, f = Math.min(x, l.height), c = Math.round(f * 0.35);
+  return Math.max(18, Math.min(48, c));
+}, yt = (l) => l.shape === "rectangle" ? l.width * 1.5 : l.width, ft = (l, x) => {
+  const { width: f, height: c } = Dt[x];
   return {
-    width: l === "rectangle" ? c * 1.5 : c,
-    height: f
+    width: l === "rectangle" ? f * 1.5 : f,
+    height: c
   };
 }, Je = (l, x) => {
-  const c = Math.abs(x.x - l.x), f = Math.abs(x.y - l.y);
-  return c > f ? { x: x.x, y: l.y } : { x: l.x, y: x.y };
+  const f = Math.abs(x.x - l.x), c = Math.abs(x.y - l.y);
+  return f > c ? { x: x.x, y: l.y } : { x: l.x, y: x.y };
 }, qt = ({
   chair: l,
   table: x,
-  isSelected: c,
-  onSelect: f,
+  isSelected: f,
+  onSelect: c,
   onDrag: ne,
   onDragEnd: a,
   totalChairsOnSide: Y
@@ -113,10 +113,10 @@ const Ht = `
         w = z / 2 + V + $ / 2, E = ue - x.height / 2;
         break;
     }
-    const F = w * Math.cos(O) - E * Math.sin(O), ye = w * Math.sin(O) + E * Math.cos(O), ve = x.x + z / 2, ce = x.y + x.height / 2;
+    const F = w * Math.cos(O) - E * Math.sin(O), ye = w * Math.sin(O) + E * Math.cos(O), ve = x.x + z / 2, fe = x.y + x.height / 2;
     return {
       x: ve + F - $ / 2,
-      y: ce + ye - $ / 2
+      y: fe + ye - $ / 2
     };
   })(), De = () => {
     let se = 0;
@@ -139,18 +139,18 @@ const Ht = `
   return /* @__PURE__ */ e(
     "div",
     {
-      className: `absolute cursor-move transition-all duration-150 ${c ? "ring-4 ring-amber-400 ring-offset-2" : ""}`,
+      className: `absolute cursor-move transition-all duration-150 ${f ? "ring-4 ring-amber-400 ring-offset-2" : ""}`,
       style: {
         left: be.x,
         top: be.y,
         width: $,
         height: $,
         transform: `rotate(${De()}deg)`,
-        zIndex: c ? 100 : 50,
+        zIndex: f ? 100 : 50,
         filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2))"
       },
       onMouseDown: (se) => {
-        se.stopPropagation(), f(), ne(se, l.id);
+        se.stopPropagation(), c(), ne(se, l.id);
       },
       onMouseUp: a,
       children: /* @__PURE__ */ e("div", { className: "rfp-w-full rfp-h-full bg-gradient-to-br from-amber-500 to-amber-700 rfp-rounded-lg rfp-border-4 border-amber-800 rfp-flex rfp-items-center rfp-justify-center rfp-shadow-xl hover:shadow-2xl hover:scale-105 rfp-transition-all", children: /* @__PURE__ */ e(rt, { size: ke, strokeWidth: 3.5, className: "text-amber-50" }) })
@@ -159,8 +159,8 @@ const Ht = `
 }, Ut = ({
   table: l,
   chairs: x,
-  isSelected: c,
-  onSelect: f,
+  isSelected: f,
+  onSelect: c,
   onDrag: ne,
   onDragEnd: a
 }) => {
@@ -169,19 +169,19 @@ const Ht = `
     top: l.y,
     width: yt(l),
     height: l.height,
-    zIndex: c ? 100 : 50,
+    zIndex: f ? 100 : 50,
     transform: `rotate(${l.rotation || 0}deg)`
   }, ee = "w-full h-full flex items-center justify-center relative", $ = l.shape === "circle" ? `${ee} rounded-full` : l.shape === "hexagon" ? `${ee} hexagon-shape` : ee, ke = x.filter((be) => be.tableId === l.id).length, z = l.name.match(/\d+/), O = z ? z[0] : l.name;
   return /* @__PURE__ */ e(
     "div",
     {
-      className: `absolute cursor-move transition-all duration-150 ${c ? "ring-2 ring-emerald-500 ring-offset-2" : ""}`,
+      className: `absolute cursor-move transition-all duration-150 ${f ? "ring-2 ring-emerald-500 ring-offset-2" : ""}`,
       style: Y,
       onMouseDown: (be) => {
-        be.stopPropagation(), f(), ne(be, l.id);
+        be.stopPropagation(), c(), ne(be, l.id);
       },
       onClick: (be) => {
-        be.stopPropagation(), f();
+        be.stopPropagation(), c();
       },
       onMouseUp: a,
       children: /* @__PURE__ */ n("div", { className: $, children: [
@@ -244,11 +244,11 @@ const Ht = `
 }, Jt = ({
   object: l,
   isSelected: x,
-  onSelect: c,
-  onDragStart: f
+  onSelect: f,
+  onDragStart: c
 }) => {
   const ne = at[l.type], a = wt[l.type], [Y, ee] = J(!1), $ = (V) => {
-    ee(!0), f(V);
+    ee(!0), c(V);
     const ke = () => {
       ee(!1), document.removeEventListener("mouseup", ke);
     };
@@ -268,7 +268,7 @@ const Ht = `
         willChange: Y ? "transform" : "auto"
       },
       onClick: (V) => {
-        V.stopPropagation(), c();
+        V.stopPropagation(), f();
       },
       onMouseDown: $,
       children: [
@@ -285,11 +285,11 @@ const Ht = `
       ]
     }
   );
-}, ft = ({
+}, ct = ({
   wall: l,
   isSelected: x,
-  onSelect: c,
-  onDragHandle: f,
+  onSelect: f,
+  onDragHandle: c,
   onDragStart: ne
 }) => {
   const a = Math.sqrt(
@@ -366,7 +366,7 @@ const Ht = `
     "div",
     {
       onClick: (z) => {
-        z.stopPropagation(), c();
+        z.stopPropagation(), f();
       },
       onMouseDown: (z) => {
         x && ne && (z.stopPropagation(), ne(z));
@@ -403,7 +403,7 @@ const Ht = `
               className: "rfp-absolute -left-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30",
               style: { cursor: ee() },
               onMouseDown: (z) => {
-                z.stopPropagation(), f == null || f(z, "start");
+                z.stopPropagation(), c == null || c(z, "start");
               },
               title: "Drag to resize"
             }
@@ -414,7 +414,7 @@ const Ht = `
               className: "rfp-absolute -right-2 top-1/2 transform -translate-y-1/2 rfp-w-5 rfp-h-5 rfp-bg-blue-500 rfp-rounded-full rfp-border-2 border-white hover:bg-blue-600 hover:scale-125 rfp-transition-all rfp-shadow-xl z-30",
               style: { cursor: ee() },
               onMouseDown: (z) => {
-                z.stopPropagation(), f == null || f(z, "end");
+                z.stopPropagation(), c == null || c(z, "end");
               },
               title: "Drag to resize"
             }
@@ -426,11 +426,11 @@ const Ht = `
 }, Kt = ({
   element: l,
   isSelected: x,
-  onSelect: c,
-  onDragStart: f
+  onSelect: f,
+  onDragStart: c
 }) => {
   const [ne, a] = J(!1), Y = ($) => {
-    a(!0), f($);
+    a(!0), c($);
     const V = () => {
       a(!1), document.removeEventListener("mouseup", V);
     };
@@ -483,7 +483,7 @@ const Ht = `
         zIndex: 20
       },
       onClick: ($) => {
-        $.stopPropagation(), c();
+        $.stopPropagation(), f();
       },
       onMouseDown: Y,
       children: [
@@ -501,8 +501,8 @@ const Ht = `
 }, Qt = xt, jt = ({
   floors: l,
   currentFloor: x,
-  onAddFloor: c,
-  onRemoveFloor: f,
+  onAddFloor: f,
+  onRemoveFloor: c,
   onSwitchFloor: ne,
   onRenameFloor: a,
   onAddTable: Y,
@@ -521,7 +521,7 @@ const Ht = `
   qe.useEffect(() => {
     ge && ve.current && (ve.current.focus(), ve.current.select());
   }, [ge]);
-  const ce = (P) => {
+  const fe = (P) => {
     ue(P.id), E(P.name);
   }, Ne = () => {
     ge && w.trim() && a(ge, w.trim()), ue(null), E("");
@@ -529,7 +529,7 @@ const Ht = `
     P.key === "Enter" ? Ne() : P.key === "Escape" && (ue(null), E(""));
   };
   return /* @__PURE__ */ n("div", { className: "rfp-w-80 rfp-bg-white rfp-shadow-lg rfp-border-r rfp-border-gray-200 rfp-flex rfp-flex-col", children: [
-    /* @__PURE__ */ n("div", { className: "rfp-p-4 bg-gradient-to-r from-blue-600 to-purple-600 rfp-text-white", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-bg-gradient-to-r rfp-from-blue-600 rfp-to-purple-600 rfp-text-white", children: [
       /* @__PURE__ */ e("h1", { className: "rfp-text-xl rfp-font-bold", children: "Restaurant Designer" }),
       /* @__PURE__ */ e("p", { className: "rfp-text-blue-100 rfp-text-sm", children: "Professional Floor Planner" })
     ] }),
@@ -545,8 +545,8 @@ const Ht = `
           /* @__PURE__ */ e(
             "button",
             {
-              onClick: c,
-              className: "rfp-p-2 rfp-text-gray-600 hover:text-green-600 hover:bg-green-50 rfp-rounded-lg transition-colors",
+              onClick: f,
+              className: "rfp-p-2 rfp-text-gray-600 hover:rfp-text-green-600 hover:rfp-bg-green-50 rfp-rounded-lg rfp-transition-colors",
               title: "Add New Floor",
               children: /* @__PURE__ */ e(nt, { className: "rfp-w-4 rfp-h-4" })
             }
@@ -554,23 +554,23 @@ const Ht = `
           /* @__PURE__ */ e(
             "button",
             {
-              onClick: f,
+              onClick: c,
               disabled: l.length <= 1,
-              className: "rfp-p-2 rfp-text-gray-600 hover:text-red-600 hover:bg-red-50 rfp-rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+              className: "rfp-p-2 rfp-text-gray-600 hover:rfp-text-red-600 hover:rfp-bg-red-50 rfp-rounded-lg rfp-transition-colors disabled:rfp-opacity-50 disabled:rfp-cursor-not-allowed",
               title: "Remove Current Floor",
               children: /* @__PURE__ */ e(ut, { className: "rfp-w-4 rfp-h-4" })
             }
           )
         ] })
       ] }),
-      /* @__PURE__ */ e("div", { className: "rfp-space-y-2 rfp-max-h-32 overflow-y-auto", children: l.map((P) => /* @__PURE__ */ n(
+      /* @__PURE__ */ e("div", { className: "rfp-space-y-2 rfp-max-h-32 rfp-overflow-y-auto", children: l.map((P) => /* @__PURE__ */ n(
         "div",
         {
           className: `w-full p-3 rounded-lg transition-all flex items-center justify-between ${P.isActive ? "bg-blue-100 text-blue-800 border border-blue-200 shadow-sm" : "text-gray-600 hover:bg-gray-100 border border-transparent"}`,
           onClick: () => {
             ge !== P.id && ne(P.id);
           },
-          onDoubleClick: () => ce(P),
+          onDoubleClick: () => fe(P),
           children: [
             /* @__PURE__ */ n("div", { className: "rfp-flex-1", children: [
               ge === P.id ? /* @__PURE__ */ e(
@@ -652,7 +652,7 @@ const Ht = `
     F === "objects" && /* @__PURE__ */ n("div", { className: "rfp-p-4 rfp-border-b rfp-border-gray-200", children: [
       /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Add Objects" }),
       /* @__PURE__ */ e("div", { className: "rfp-space-y-3", children: Object.keys(Qe).map((P) => {
-        const j = at[P], Me = wt[P], pe = Qe[P];
+        const j = at[P], Me = wt[P], de = Qe[P];
         return /* @__PURE__ */ n(
           "button",
           {
@@ -661,7 +661,7 @@ const Ht = `
             children: [
               /* @__PURE__ */ e("div", { className: "bg-white/20 rfp-p-2 rfp-rounded-lg", children: /* @__PURE__ */ e(j, { className: `w-6 h-6 ${Me.text}`, strokeWidth: 2.5 }) }),
               /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-text-left", children: [
-                /* @__PURE__ */ e("span", { className: `text-base font-bold ${Me.text}`, children: pe }),
+                /* @__PURE__ */ e("span", { className: `text-base font-bold ${Me.text}`, children: de }),
                 /* @__PURE__ */ e("div", { className: "rfp-text-xs text-white/80 mt-0.5", children: "Click to add to floor" })
               ] })
             ]
@@ -696,7 +696,7 @@ const Ht = `
       /* @__PURE__ */ n("div", { children: [
         /* @__PURE__ */ e("h3", { className: "text-md rfp-font-semibold rfp-text-gray-800 rfp-mb-3", children: "Add Elements" }),
         /* @__PURE__ */ e("div", { className: "rfp-space-y-2", children: ["pillar", "column", "stairs"].map((P) => {
-          const j = Zt[P], Me = _t[P], pe = bt[P];
+          const j = Zt[P], Me = _t[P], de = bt[P];
           return /* @__PURE__ */ n(
             "button",
             {
@@ -704,7 +704,7 @@ const Ht = `
               className: `w-full p-3 ${Me.bg} border-2 ${Me.border} rounded-lg hover:scale-105 transition-all flex items-center gap-3 shadow-md hover:shadow-lg`,
               children: [
                 /* @__PURE__ */ e("div", { className: "bg-white/10 p-1.5 rfp-rounded", children: /* @__PURE__ */ e(j, { className: `w-5 h-5 ${Me.text}`, strokeWidth: 2.5 }) }),
-                /* @__PURE__ */ e("span", { className: `text-sm font-semibold ${Me.text}`, children: pe })
+                /* @__PURE__ */ e("span", { className: `text-sm font-semibold ${Me.text}`, children: de })
               ]
             },
             P
@@ -816,8 +816,8 @@ const Ht = `
 }, ht = xt, er = ["top", "right", "bottom", "left"], tr = ["small", "medium", "large"], rr = ({
   showGrid: l,
   selectedTable: x,
-  selectedObject: c,
-  selectedWall: f,
+  selectedObject: f,
+  selectedWall: c,
   selectedFixedElement: ne,
   selectedTableChairs: a,
   onToggleGrid: Y,
@@ -838,23 +838,23 @@ const Ht = `
   onChairSizeChange: F,
   onResetChairSizes: ye,
   on3DPreview: ve,
-  onObjectRotate: ce,
+  onObjectRotate: fe,
   tableCount: Ne,
   chairCount: Ae,
   objectCount: P,
   wallCount: j,
   fixedElementCount: Me,
-  selectedElementType: pe
+  selectedElementType: de
 }) => {
-  const ae = Le(null), r = Le(null), R = Le(null), Z = Le(null), [C, d] = J(!1), [I, h] = J(!1), [W, A] = J(!1), [G, ie] = J(!1), [_, fe] = J(!1), [U, L] = J(90), [k, T] = J(90), [y, te] = J(120), [K, Ee] = J(80), [H, M] = J(60), [g, he] = J(60);
+  const ae = Le(null), r = Le(null), R = Le(null), Z = Le(null), [C, p] = J(!1), [I, h] = J(!1), [W, A] = J(!1), [G, ie] = J(!1), [_, ce] = J(!1), [U, L] = J(90), [k, T] = J(90), [y, te] = J(120), [K, Ee] = J(80), [H, M] = J(60), [g, he] = J(60);
   return Ve(() => {
     const m = (N) => {
-      ae.current && !ae.current.contains(N.target) && d(!1), r.current && !r.current.contains(N.target) && h(!1), R.current && !R.current.contains(N.target) && A(!1), Z.current && !Z.current.contains(N.target) && ie(!1);
+      ae.current && !ae.current.contains(N.target) && p(!1), r.current && !r.current.contains(N.target) && h(!1), R.current && !R.current.contains(N.target) && A(!1), Z.current && !Z.current.contains(N.target) && ie(!1);
     };
     return document.addEventListener("mousedown", m), () => document.removeEventListener("mousedown", m);
   }, []), Ve(() => {
-    x ? (L(x.width), T(x.height)) : (d(!1), h(!1), fe(!1)), c ? (te(c.width), Ee(c.height)) : A(!1), ne ? (M(ne.width), he(ne.height)) : ie(!1);
-  }, [x, c, ne]), /* @__PURE__ */ e("div", { className: "rfp-bg-white rfp-border-b rfp-border-gray-200 rfp-shadow-sm min-h-[72px]", children: /* @__PURE__ */ n("div", { className: "rfp-px-4 rfp-py-3 rfp-flex rfp-items-center rfp-justify-between min-h-[72px]", children: [
+    x ? (L(x.width), T(x.height)) : (p(!1), h(!1), ce(!1)), f ? (te(f.width), Ee(f.height)) : A(!1), ne ? (M(ne.width), he(ne.height)) : ie(!1);
+  }, [x, f, ne]), /* @__PURE__ */ e("div", { className: "rfp-bg-white rfp-border-b rfp-border-gray-200 rfp-shadow-sm min-h-[72px]", children: /* @__PURE__ */ n("div", { className: "rfp-px-4 rfp-py-3 rfp-flex rfp-items-center rfp-justify-between min-h-[72px]", children: [
     /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3 rfp-flex-wrap", children: [
       /* @__PURE__ */ n(
         "button",
@@ -875,7 +875,7 @@ const Ht = `
             "button",
             {
               onClick: () => {
-                d(!C), h(!1);
+                p(!C), h(!1);
               },
               className: "rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
               children: [
@@ -985,7 +985,7 @@ const Ht = `
             "button",
             {
               onClick: () => {
-                h(!I), d(!1);
+                h(!I), p(!1);
               },
               className: "rfp-px-3 rfp-py-2 rfp-rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 rfp-text-white rfp-shadow-md hover:shadow-lg rfp-transition-all rfp-flex rfp-items-center rfp-gap-2 rfp-text-sm rfp-font-semibold",
               children: [
@@ -1006,7 +1006,7 @@ const Ht = `
                   "button",
                   {
                     onClick: () => {
-                      V(m), fe(!1);
+                      V(m), ce(!1);
                     },
                     className: `flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all ${N && !_ ? "bg-emerald-500 text-white shadow-sm" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
                     children: ht[m]
@@ -1017,7 +1017,7 @@ const Ht = `
               /* @__PURE__ */ n(
                 "button",
                 {
-                  onClick: () => fe(!_),
+                  onClick: () => ce(!_),
                   className: `w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all ${_ ? "bg-purple-500 text-white shadow-sm" : "bg-gradient-to-r from-purple-100 to-purple-50 text-purple-700 hover:from-purple-200 hover:to-purple-100"}`,
                   children: [
                     /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2", children: [
@@ -1102,33 +1102,33 @@ const Ht = `
           )
         ] })
       ] }),
-      c && /* @__PURE__ */ n(_e, { children: [
+      f && /* @__PURE__ */ n(_e, { children: [
         /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
         /* @__PURE__ */ n("div", { ref: R, className: "rfp-relative", children: [
           /* @__PURE__ */ n(
             "button",
             {
               onClick: () => A(!W),
-              className: `px-3 py-2 rounded-lg ${c.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : c.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
+              className: `px-3 py-2 rounded-lg ${f.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
               children: [
                 (() => {
-                  const m = at[c.type];
+                  const m = at[f.type];
                   return /* @__PURE__ */ e(m, { className: "rfp-w-4 rfp-h-4" });
                 })(),
                 /* @__PURE__ */ n("span", { children: [
                   "Resize ",
-                  Qe[c.type]
+                  Qe[f.type]
                 ] })
               ]
             }
           ),
           W && /* @__PURE__ */ n("div", { className: "rfp-absolute top-full rfp-left-0 rfp-mt-2 rfp-w-64 rfp-bg-white rfp-border rfp-border-gray-200 rfp-rounded-xl shadow-2xl z-50 rfp-overflow-hidden", children: [
-            /* @__PURE__ */ e("div", { className: `${c.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : c.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} px-4 py-2 text-white`, children: /* @__PURE__ */ e("span", { className: "rfp-font-semibold rfp-text-sm", children: "Custom Size" }) }),
+            /* @__PURE__ */ e("div", { className: `${f.type === "bar" ? "bg-gradient-to-r from-purple-500 to-purple-600" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-500 to-orange-600" : "bg-gradient-to-r from-cyan-500 to-cyan-600"} px-4 py-2 text-white`, children: /* @__PURE__ */ e("span", { className: "rfp-font-semibold rfp-text-sm", children: "Custom Size" }) }),
             /* @__PURE__ */ n("div", { className: "rfp-p-3 rfp-space-y-3", children: [
               /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
                 /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
                   /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Width" }),
-                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${c.type === "bar" ? "bg-purple-100 text-purple-700" : c.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
+                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${f.type === "bar" ? "bg-purple-100 text-purple-700" : f.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
                     y,
                     "px"
                   ] })
@@ -1147,7 +1147,7 @@ const Ht = `
                     },
                     className: "rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                     style: {
-                      background: `linear-gradient(to right, ${c.type === "bar" ? "rgb(168, 85, 247)" : c.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${c.type === "bar" ? "rgb(168, 85, 247)" : c.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(y - 60) / 940 * 100}%, rgb(229, 231, 235) ${(y - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
+                      background: `linear-gradient(to right, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(y - 60) / 940 * 100}%, rgb(229, 231, 235) ${(y - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
                     }
                   }
                 )
@@ -1155,7 +1155,7 @@ const Ht = `
               /* @__PURE__ */ n("div", { className: "rfp-space-y-1", children: [
                 /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between", children: [
                   /* @__PURE__ */ e("label", { className: "rfp-text-xs rfp-font-semibold rfp-text-gray-600 rfp-uppercase rfp-tracking-wide", children: "Height" }),
-                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${c.type === "bar" ? "bg-purple-100 text-purple-700" : c.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
+                  /* @__PURE__ */ n("span", { className: `text-xs font-mono px-2 py-0.5 rounded ${f.type === "bar" ? "bg-purple-100 text-purple-700" : f.type === "kitchen" ? "bg-orange-100 text-orange-700" : "bg-cyan-100 text-cyan-700"}`, children: [
                     K,
                     "px"
                   ] })
@@ -1174,7 +1174,7 @@ const Ht = `
                     },
                     className: "rfp-w-full rfp-h-2 rfp-bg-gray-200 rfp-rounded-lg appearance-none rfp-cursor-pointer slider-thumb",
                     style: {
-                      background: `linear-gradient(to right, ${c.type === "bar" ? "rgb(168, 85, 247)" : c.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${c.type === "bar" ? "rgb(168, 85, 247)" : c.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(K - 60) / 940 * 100}%, rgb(229, 231, 235) ${(K - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
+                      background: `linear-gradient(to right, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} 0%, ${f.type === "bar" ? "rgb(168, 85, 247)" : f.type === "kitchen" ? "rgb(249, 115, 22)" : "rgb(6, 182, 212)"} ${(K - 60) / 940 * 100}%, rgb(229, 231, 235) ${(K - 60) / 940 * 100}%, rgb(229, 231, 235) 100%)`
                     }
                   }
                 )
@@ -1187,10 +1187,10 @@ const Ht = `
           "button",
           {
             onClick: () => {
-              const m = ((c.rotation || 0) + 90) % 360;
-              ce == null || ce(m);
+              const m = ((f.rotation || 0) + 90) % 360;
+              fe == null || fe(m);
             },
-            className: `px-3 py-2 rounded-lg ${c.type === "bar" ? "bg-gradient-to-r from-purple-600 to-purple-700" : c.type === "kitchen" ? "bg-gradient-to-r from-orange-600 to-orange-700" : "bg-gradient-to-r from-cyan-600 to-cyan-700"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
+            className: `px-3 py-2 rounded-lg ${f.type === "bar" ? "bg-gradient-to-r from-purple-600 to-purple-700" : f.type === "kitchen" ? "bg-gradient-to-r from-orange-600 to-orange-700" : "bg-gradient-to-r from-cyan-600 to-cyan-700"} text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm font-semibold`,
             title: "Rotate 90°",
             children: [
               /* @__PURE__ */ e(st, { className: "rfp-w-4 rfp-h-4" }),
@@ -1216,7 +1216,7 @@ const Ht = `
             "input",
             {
               type: "text",
-              value: c.name,
+              value: f.name,
               onChange: (m) => O(m.target.value),
               className: "rfp-bg-transparent rfp-text-sm rfp-text-gray-800 rfp-font-medium focus:outline-none rfp-w-32",
               placeholder: "Object name"
@@ -1224,14 +1224,14 @@ const Ht = `
           )
         ] })
       ] }),
-      f && /* @__PURE__ */ n(_e, { children: [
+      c && /* @__PURE__ */ n(_e, { children: [
         /* @__PURE__ */ e("div", { className: "w-px rfp-h-8 rfp-bg-gray-300" }),
         ue && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-1 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-p-1", children: [
           /* @__PURE__ */ e(
             "button",
             {
               onClick: () => ue("wall"),
-              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${f.type === "wall" ? "bg-gray-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
+              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${c.type === "wall" ? "bg-gray-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
               title: "Convert to Wall",
               children: "Wall"
             }
@@ -1240,7 +1240,7 @@ const Ht = `
             "button",
             {
               onClick: () => ue("door"),
-              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${f.type === "door" ? "bg-amber-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
+              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${c.type === "door" ? "bg-amber-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
               title: "Convert to Door",
               children: "Door"
             }
@@ -1249,7 +1249,7 @@ const Ht = `
             "button",
             {
               onClick: () => ue("window"),
-              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${f.type === "window" ? "bg-blue-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
+              className: `px-3 py-1.5 rounded text-xs font-semibold transition-all ${c.type === "window" ? "bg-blue-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-200"}`,
               title: "Convert to Window",
               children: "Window"
             }
@@ -1260,7 +1260,7 @@ const Ht = `
           /* @__PURE__ */ n(
             "select",
             {
-              value: f.thickness,
+              value: c.thickness,
               onChange: (m) => ge(Number(m.target.value)),
               className: "rfp-px-2 rfp-py-1 rfp-text-sm rfp-border rfp-border-gray-300 rfp-rounded rfp-bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
               children: [
@@ -1273,10 +1273,10 @@ const Ht = `
           )
         ] }),
         /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-bg-gray-50 rfp-border rfp-border-gray-300 rfp-rounded-lg rfp-px-3 rfp-py-2", children: [
-          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: je[f.type] }),
+          /* @__PURE__ */ e("span", { className: "rfp-text-xs rfp-font-semibold rfp-uppercase rfp-tracking-wide rfp-text-gray-500", children: je[c.type] }),
           /* @__PURE__ */ n("span", { className: "rfp-text-sm rfp-text-gray-600", children: [
             Math.round(Math.sqrt(
-              Math.pow(f.endX - f.startX, 2) + Math.pow(f.endY - f.startY, 2)
+              Math.pow(c.endX - c.startX, 2) + Math.pow(c.endY - c.startY, 2)
             )),
             "px"
           ] })
@@ -1422,11 +1422,11 @@ const Ht = `
           P
         ] })
       ] }),
-      pe && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-blue-50 rfp-rounded rfp-text-xs", children: [
+      de && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center gap-1.5 rfp-px-2 rfp-py-1 rfp-bg-blue-50 rfp-rounded rfp-text-xs", children: [
         /* @__PURE__ */ e("div", { className: "w-1.5 h-1.5 rfp-bg-blue-600 rfp-rounded-full rfp-animate-pulse" }),
         /* @__PURE__ */ n("span", { className: "rfp-font-medium rfp-text-blue-800 rfp-capitalize", children: [
           "Selected: ",
-          pe
+          de
         ] })
       ] })
     ] })
@@ -1467,8 +1467,8 @@ const Ht = `
     name: "Corner",
     icon: "↖"
   }
-}, nr = ({ floor: l, isOpen: x, onClose: c }) => {
-  const f = Le(null), ne = Le(null), a = Le(null), Y = Le(null), ee = Le(null), [$, V] = J(!1), [ke, z] = J("default"), [O, be] = J(!1), De = Le(3e-3), se = Le(null), ze = (w) => {
+}, nr = ({ floor: l, isOpen: x, onClose: f }) => {
+  const c = Le(null), ne = Le(null), a = Le(null), Y = Le(null), ee = Le(null), [$, V] = J(!1), [ke, z] = J("default"), [O, be] = J(!1), De = Le(3e-3), se = Le(null), ze = (w) => {
     if (!a.current || O)
       return;
     const E = mt[w], F = a.current;
@@ -1489,8 +1489,8 @@ const Ht = `
         E.position.x = F * Math.cos(ve), E.position.z = F * Math.sin(ve);
         break;
       case "right":
-        const ce = ye - 0.2;
-        E.position.x = F * Math.cos(ce), E.position.z = F * Math.sin(ce);
+        const fe = ye - 0.2;
+        E.position.x = F * Math.cos(fe), E.position.z = F * Math.sin(fe);
         break;
       case "up":
         E.position.y = Math.min(E.position.y + 50, 900);
@@ -1504,23 +1504,23 @@ const Ht = `
     !a.current || O || (a.current.position.multiplyScalar(w), a.current.lookAt(0, 100, 0));
   };
   return Ve(() => {
-    if (!x || !f.current)
+    if (!x || !c.current)
       return;
     const w = new t.Scene();
     w.background = new t.Color(14608111), ne.current = w;
     const E = new t.PerspectiveCamera(
       45,
-      f.current.clientWidth / f.current.clientHeight,
+      c.current.clientWidth / c.current.clientHeight,
       0.1,
       1e4
     );
     E.position.set(1050, 800, 1050), E.lookAt(0, 100, 0), a.current = E;
     const F = new t.WebGLRenderer({ antialias: !0, alpha: !0 });
-    F.setSize(f.current.clientWidth, f.current.clientHeight), F.shadowMap.enabled = !0, F.shadowMap.type = t.PCFSoftShadowMap, F.toneMapping = t.ACESFilmicToneMapping, F.toneMappingExposure = 1.2, f.current.appendChild(F.domElement), Y.current = F;
+    F.setSize(c.current.clientWidth, c.current.clientHeight), F.shadowMap.enabled = !0, F.shadowMap.type = t.PCFSoftShadowMap, F.toneMapping = t.ACESFilmicToneMapping, F.toneMappingExposure = 1.2, c.current.appendChild(F.domElement), Y.current = F;
     const ye = new t.PMREMGenerator(F), ve = new t.Scene();
     ve.background = new t.Color(16777215);
-    const ce = ye.fromScene(ve).texture;
-    w.environment = ce, ye.dispose(), w.add(new t.AmbientLight(16777215, 0.6));
+    const fe = ye.fromScene(ve).texture;
+    w.environment = fe, ye.dispose(), w.add(new t.AmbientLight(16777215, 0.6));
     const Ne = new t.DirectionalLight(16777215, 0.8);
     Ne.position.set(400, 600, 300), Ne.castShadow = !0, Ne.shadow.mapSize.width = 4096, Ne.shadow.mapSize.height = 4096, Ne.shadow.camera.left = Ne.shadow.camera.bottom = -700, Ne.shadow.camera.right = Ne.shadow.camera.top = 700, Ne.shadow.bias = -1e-4, w.add(Ne);
     const Ae = new t.DirectionalLight(16777215, 0.3);
@@ -1535,18 +1535,18 @@ const Ht = `
     j.rotation.x = -Math.PI / 2, j.receiveShadow = !0, w.add(j);
     const Me = new t.GridHelper(3e3, 150, 10526888, 12105920);
     Me.position.y = 1, w.add(Me), l.walls.forEach((r) => {
-      const R = Math.sqrt(Math.pow(r.endX - r.startX, 2) + Math.pow(r.endY - r.startY, 2)), Z = Math.atan2(r.endY - r.startY, r.endX - r.startX), C = r.type === "window" ? 80 : 120, d = r.startX + (r.endX - r.startX) / 2 - 400, I = -(r.startY + (r.endY - r.startY) / 2 - 400);
+      const R = Math.sqrt(Math.pow(r.endX - r.startX, 2) + Math.pow(r.endY - r.startY, 2)), Z = Math.atan2(r.endY - r.startY, r.endX - r.startX), C = r.type === "window" ? 80 : 120, p = r.startX + (r.endX - r.startX) / 2 - 400, I = -(r.startY + (r.endY - r.startY) / 2 - 400);
       if (r.type === "door") {
         const h = new t.Group(), W = R, A = C, G = r.thickness * 0.8, ie = new t.MeshStandardMaterial({
           color: 3812901,
           // dark stained wood
           roughness: 0.9,
           metalness: 0
-        }), _ = 8, fe = new t.Mesh(
+        }), _ = 8, ce = new t.Mesh(
           new t.BoxGeometry(W, _, r.thickness + 4),
           ie
         );
-        fe.position.y = A / 2 - _ / 2, h.add(fe);
+        ce.position.y = A / 2 - _ / 2, h.add(ce);
         const U = new t.Mesh(
           new t.BoxGeometry(W, _, r.thickness + 4),
           ie
@@ -1605,9 +1605,9 @@ const Ht = `
           roughness: 0.8,
           metalness: 0.1
         }), b = new t.Mesh(he, X);
-        b.position.set(0, A / 2 - _ - g / 2 - 4, r.thickness / 2 + 2), h.add(b), h.position.set(d, A / 2, I), h.rotation.y = -Z, h.castShadow = !0, h.receiveShadow = !0, w.add(h);
+        b.position.set(0, A / 2 - _ - g / 2 - 4, r.thickness / 2 + 2), h.add(b), h.position.set(p, A / 2, I), h.rotation.y = -Z, h.castShadow = !0, h.receiveShadow = !0, w.add(h);
       } else if (r.type === "window") {
-        const h = R > 20 ? R : 120, W = C, A = W * 0.45, G = W * 0.65, ie = W * 0.1, _ = W * 0.3, fe = new t.MeshStandardMaterial({
+        const h = R > 20 ? R : 120, W = C, A = W * 0.45, G = W * 0.65, ie = W * 0.1, _ = W * 0.3, ce = new t.MeshStandardMaterial({
           color: 13158608,
           // Grey-blue for window sills and wall sections
           roughness: 0.85,
@@ -1633,17 +1633,17 @@ const Ht = `
           reflectivity: 0.5
         }), k = new t.Mesh(
           new t.BoxGeometry(h, A, r.thickness),
-          fe
+          ce
         );
-        k.position.set(d, A / 2, I), k.rotation.y = -Z, k.receiveShadow = !0, k.castShadow = !0, w.add(k);
+        k.position.set(p, A / 2, I), k.rotation.y = -Z, k.receiveShadow = !0, k.castShadow = !0, w.add(k);
         const T = A + G / 2, y = 4, te = Math.max(2, Math.floor(h / 80)), K = (h - y * (te + 1)) / te;
         for (let m = 0; m < te; m++) {
-          const N = -h / 2 + y + K / 2 + m * (K + y), Se = d + N * Math.cos(-Z), X = I + N * Math.sin(-Z), b = new t.Mesh(
+          const N = -h / 2 + y + K / 2 + m * (K + y), Se = p + N * Math.cos(-Z), X = I + N * Math.sin(-Z), b = new t.Mesh(
             new t.BoxGeometry(K - 2, G - y * 2, 1),
             L
           );
           if (b.position.set(Se, T, X), b.rotation.y = -Z, b.castShadow = !1, b.receiveShadow = !1, w.add(b), m < te - 1) {
-            const Pe = -h / 2 + y + (m + 1) * K + (m + 0.5) * y, Ge = d + Pe * Math.cos(-Z), oe = I + Pe * Math.sin(-Z), le = new t.Mesh(
+            const Pe = -h / 2 + y + (m + 1) * K + (m + 0.5) * y, Ge = p + Pe * Math.cos(-Z), oe = I + Pe * Math.sin(-Z), le = new t.Mesh(
               new t.BoxGeometry(y, G, r.thickness + 3),
               U
             );
@@ -1654,37 +1654,37 @@ const Ht = `
           new t.BoxGeometry(h - y * 2, ie - y, 1),
           L
         );
-        H.position.set(d, Ee, I), H.rotation.y = -Z, H.castShadow = !1, w.add(H);
+        H.position.set(p, Ee, I), H.rotation.y = -Z, H.castShadow = !1, w.add(H);
         const M = new t.Mesh(
           new t.BoxGeometry(h, y, r.thickness + 2),
           U
         );
-        M.position.set(d, A + G + y / 2, I), M.rotation.y = -Z, M.castShadow = !0, w.add(M);
+        M.position.set(p, A + G + y / 2, I), M.rotation.y = -Z, M.castShadow = !0, w.add(M);
         const g = new t.Mesh(
           new t.BoxGeometry(h, y, r.thickness + 2),
           U
         );
-        g.position.set(d, A + G + ie + y / 2, I), g.rotation.y = -Z, g.castShadow = !0, w.add(g);
+        g.position.set(p, A + G + ie + y / 2, I), g.rotation.y = -Z, g.castShadow = !0, w.add(g);
         const he = new t.Mesh(
           new t.BoxGeometry(h, _, r.thickness),
-          fe
+          ce
         );
-        he.position.set(d, A + G + ie + _ / 2, I), he.rotation.y = -Z, he.castShadow = !0, he.receiveShadow = !0, w.add(he);
+        he.position.set(p, A + G + ie + _ / 2, I), he.rotation.y = -Z, he.castShadow = !0, he.receiveShadow = !0, w.add(he);
       } else {
         const h = new t.Mesh(
           new t.BoxGeometry(R, C, r.thickness),
           new t.MeshStandardMaterial({ color: 12105920, roughness: 0.9, metalness: 0.05 })
         );
-        h.position.set(d, C / 2, I), h.rotation.y = -Z, h.castShadow = !0, h.receiveShadow = !0, w.add(h);
+        h.position.set(p, C / 2, I), h.rotation.y = -Z, h.castShadow = !0, h.receiveShadow = !0, w.add(h);
       }
     }), l.fixedElements.forEach((r) => {
       const R = r.x - 400 + r.width / 2, Z = -(r.y - 400 + r.height / 2);
       if (r.type === "pillar") {
-        const C = Math.min(r.width, r.height) / 2, d = new t.Mesh(
+        const C = Math.min(r.width, r.height) / 2, p = new t.Mesh(
           new t.CylinderGeometry(C, C * 1.1, 140, 32),
           new t.MeshStandardMaterial({ color: 4868698, roughness: 0.6, metalness: 0.4 })
         );
-        d.position.set(R, 70, Z), d.castShadow = !0, w.add(d);
+        p.position.set(R, 70, Z), p.castShadow = !0, w.add(p);
         const I = new t.Mesh(
           new t.CylinderGeometry(C * 1.3, C * 1.1, 10, 32),
           new t.MeshStandardMaterial({ color: 5921386, roughness: 0.5, metalness: 0.5 })
@@ -1701,11 +1701,11 @@ const Ht = `
           new t.MeshStandardMaterial({ color: 3816010, roughness: 0.7, metalness: 0.3 })
         );
         C.position.set(R, 70, Z), C.castShadow = !0, w.add(C);
-        const d = new t.LineSegments(
+        const p = new t.LineSegments(
           new t.EdgesGeometry(C.geometry),
           new t.LineBasicMaterial({ color: 6974074 })
         );
-        d.position.copy(C.position), w.add(d);
+        p.position.copy(C.position), w.add(p);
       } else {
         const I = r.height / 8;
         for (let h = 0; h < 8; h++) {
@@ -1724,7 +1724,7 @@ const Ht = `
     }), l.objects.forEach((r) => {
       const R = r.x - 400 + r.width / 2, Z = -(r.y - 400 + r.height / 2), C = -(r.rotation * Math.PI / 180);
       if (r.type === "bar") {
-        const d = r.x - 400 + r.width / 2, I = -(r.y - 400 + r.height / 2), h = -(r.rotation * Math.PI / 180), W = 50, A = new t.MeshPhysicalMaterial({
+        const p = r.x - 400 + r.width / 2, I = -(r.y - 400 + r.height / 2), h = -(r.rotation * Math.PI / 180), W = 50, A = new t.MeshPhysicalMaterial({
           color: 1710618,
           roughness: 0.5,
           metalness: 0.8,
@@ -1734,8 +1734,8 @@ const Ht = `
           new t.BoxGeometry(r.width, W, r.height),
           A
         );
-        G.position.set(d, W / 2, I), G.rotation.y = h, G.castShadow = !0, G.receiveShadow = !0, w.add(G);
-        const ie = [8323072, 10770944, 6691328, 9109504, 8930304], _ = ie[Math.floor(Math.random() * ie.length)], fe = new t.MeshPhysicalMaterial({
+        G.position.set(p, W / 2, I), G.rotation.y = h, G.castShadow = !0, G.receiveShadow = !0, w.add(G);
+        const ie = [8323072, 10770944, 6691328, 9109504, 8930304], _ = ie[Math.floor(Math.random() * ie.length)], ce = new t.MeshPhysicalMaterial({
           color: _,
           metalness: 0.1,
           roughness: 0.05,
@@ -1748,9 +1748,9 @@ const Ht = `
           clearcoatRoughness: 0.05
         }), U = new t.Mesh(
           new t.BoxGeometry(r.width + 6, 6, r.height + 6),
-          fe
+          ce
         );
-        U.position.set(d, W + 3, I), U.rotation.y = h, U.castShadow = !0, w.add(U);
+        U.position.set(p, W + 3, I), U.rotation.y = h, U.castShadow = !0, w.add(U);
         const L = new t.MeshStandardMaterial({
           emissive: 16711799,
           // pinkish-red glow
@@ -1760,7 +1760,7 @@ const Ht = `
           new t.BoxGeometry(r.width + 6, 0.5, r.height + 6),
           L
         );
-        k.position.set(d, W + 1, I), k.rotation.y = h, w.add(k);
+        k.position.set(p, W + 1, I), k.rotation.y = h, w.add(k);
         const T = _ === 8323072 ? 13938487 : 11579568, y = new t.Mesh(
           new t.BoxGeometry(r.width + 8, 0.6, r.height + 8),
           new t.MeshStandardMaterial({
@@ -1769,7 +1769,7 @@ const Ht = `
             roughness: 0.2
           })
         );
-        y.position.set(d, W + 6.5, I), y.rotation.y = h, w.add(y);
+        y.position.set(p, W + 6.5, I), y.rotation.y = h, w.add(y);
         const te = new t.MeshStandardMaterial({
           color: 13421772,
           metalness: 1,
@@ -1783,13 +1783,13 @@ const Ht = `
         ].forEach(([me, Ce]) => {
           const we = new t.Mesh(K, te);
           we.position.set(
-            d + me * Math.cos(h) - Ce * Math.sin(h),
+            p + me * Math.cos(h) - Ce * Math.sin(h),
             W / 2,
             I + me * Math.sin(h) + Ce * Math.cos(h)
           ), we.castShadow = !0, w.add(we);
         });
         const H = new t.PointLight(_, 0.4, 600);
-        H.position.set(d, W + 70, I), w.add(H);
+        H.position.set(p, W + 70, I), w.add(H);
         const M = 120, g = new t.Group(), he = new t.MeshPhysicalMaterial({
           color: 2105376,
           metalness: 1,
@@ -1872,11 +1872,11 @@ const Ht = `
         ].forEach(([me, Ce]) => {
           const we = new t.Mesh(xe, u);
           we.position.set(me, -(M - 80) / 2, Ce), we.rotation.x = Math.PI / 2, g.add(we);
-        }), g.position.set(d, M, I), g.rotation.y = h, w.add(g);
+        }), g.position.set(p, M, I), g.rotation.y = h, w.add(g);
         const He = new t.PointLight(16755285, 0.8, 600);
-        He.position.set(d, M - 20, I), w.add(He);
+        He.position.set(p, M - 20, I), w.add(He);
       } else if (r.type === "kitchen") {
-        const d = new t.Group(), I = new t.MeshPhysicalMaterial({
+        const p = new t.Group(), I = new t.MeshPhysicalMaterial({
           color: 11579568,
           metalness: 1,
           roughness: 0.25,
@@ -1894,17 +1894,17 @@ const Ht = `
           new t.BoxGeometry(r.width, 50, r.height),
           I
         );
-        W.position.set(0, 25, 0), W.castShadow = !0, W.receiveShadow = !0, d.add(W);
+        W.position.set(0, 25, 0), W.castShadow = !0, W.receiveShadow = !0, p.add(W);
         const A = new t.Mesh(
           new t.BoxGeometry(r.width, 4, r.height),
           h
         );
-        A.position.set(0, 52, 0), d.add(A);
+        A.position.set(0, 52, 0), p.add(A);
         const G = new t.Mesh(
           new t.BoxGeometry(r.width * 0.4, 10, r.height * 0.6),
           new t.MeshStandardMaterial({ color: 2236962, roughness: 0.4 })
         );
-        G.position.set(-r.width * 0.2, 55, 0), d.add(G);
+        G.position.set(-r.width * 0.2, 55, 0), p.add(G);
         const ie = new t.MeshStandardMaterial({
           color: 3355443,
           metalness: 0.8,
@@ -1920,9 +1920,9 @@ const Ht = `
             new t.CylinderGeometry(6, 6, 2, 32),
             ie
           );
-          g.rotation.x = Math.PI / 2, g.position.set(H, 61, M), d.add(g);
+          g.rotation.x = Math.PI / 2, g.position.set(H, 61, M), p.add(g);
         });
-        const fe = new t.Mesh(
+        const ce = new t.Mesh(
           new t.BoxGeometry(r.width * 0.5, 35, r.height * 0.65),
           new t.MeshPhysicalMaterial({
             color: 12632256,
@@ -1931,7 +1931,7 @@ const Ht = `
             envMapIntensity: 1.1
           })
         );
-        fe.position.set(-r.width * 0.2, 95, 0), fe.castShadow = !0, d.add(fe);
+        ce.position.set(-r.width * 0.2, 95, 0), ce.castShadow = !0, p.add(ce);
         const U = new t.MeshPhysicalMaterial({
           color: 14540253,
           roughness: 0.3,
@@ -1942,7 +1942,7 @@ const Ht = `
             new t.BoxGeometry(r.width * 0.7, 4, r.height * 0.2),
             U
           );
-          M.position.set(r.width * 0.15, 75 + H * 22, r.height * 0.35), M.castShadow = !0, d.add(M);
+          M.position.set(r.width * 0.15, 75 + H * 22, r.height * 0.35), M.castShadow = !0, p.add(M);
         }
         const L = new t.MeshStandardMaterial({
           color: 8947848,
@@ -1954,10 +1954,10 @@ const Ht = `
             new t.CylinderGeometry(1.5, 1.5, 15, 16),
             L
           );
-          M.rotation.z = Math.PI / 2, M.position.set(H * r.width * 0.2, 35, r.height * 0.45), d.add(M);
+          M.rotation.z = Math.PI / 2, M.position.set(H * r.width * 0.2, 35, r.height * 0.45), p.add(M);
         }
         const k = new t.PointLight(16777215, 1.5, 400);
-        k.position.set(0, 140, 0), k.castShadow = !0, d.add(k);
+        k.position.set(0, 140, 0), k.castShadow = !0, p.add(k);
         const T = document.createElement("canvas");
         T.width = 1024, T.height = 768;
         const y = T.getContext("2d");
@@ -1972,7 +1972,7 @@ const Ht = `
             emissiveIntensity: 0.3
           })
         );
-        K.position.set(-r.width / 2 + 3, 50, 0), K.rotation.y = Math.PI / 2, d.add(K);
+        K.position.set(-r.width / 2 + 3, 50, 0), K.rotation.y = Math.PI / 2, p.add(K);
         const Ee = new t.Mesh(
           new t.PlaneGeometry(r.height * 0.6, r.height * 0.45),
           new t.MeshStandardMaterial({
@@ -1983,9 +1983,9 @@ const Ht = `
             emissiveIntensity: 0.3
           })
         );
-        Ee.position.set(r.width / 2 - 3, 50, 0), Ee.rotation.y = -Math.PI / 2, d.add(Ee), d.position.set(R, 0, Z), d.rotation.y = C, w.add(d);
+        Ee.position.set(r.width / 2 - 3, 50, 0), Ee.rotation.y = -Math.PI / 2, p.add(Ee), p.position.set(R, 0, Z), p.rotation.y = C, w.add(p);
       } else if (r.type === "toilet") {
-        const d = new t.Group(), I = new t.MeshStandardMaterial({
+        const p = new t.Group(), I = new t.MeshStandardMaterial({
           color: 14013914,
           roughness: 0.7,
           metalness: 0.05
@@ -2005,52 +2005,52 @@ const Ht = `
           new t.BoxGeometry(r.width, 4, r.height),
           A
         );
-        ie.position.y = 2, ie.receiveShadow = !0, d.add(ie);
+        ie.position.y = 2, ie.receiveShadow = !0, p.add(ie);
         const _ = new t.Mesh(
           new t.BoxGeometry(r.width, G, 6),
           I
         );
-        _.position.set(0, G / 2, -r.height / 2), _.castShadow = !0, d.add(_);
-        const fe = new t.Mesh(
+        _.position.set(0, G / 2, -r.height / 2), _.castShadow = !0, p.add(_);
+        const ce = new t.Mesh(
           new t.BoxGeometry(6, G, r.height),
           I
         );
-        fe.position.set(-r.width / 2, G / 2, 0), fe.castShadow = !0, d.add(fe);
+        ce.position.set(-r.width / 2, G / 2, 0), ce.castShadow = !0, p.add(ce);
         const U = new t.Mesh(
           new t.BoxGeometry(6, G, r.height),
           I
         );
-        U.position.set(r.width / 2, G / 2, 0), U.castShadow = !0, d.add(U);
+        U.position.set(r.width / 2, G / 2, 0), U.castShadow = !0, p.add(U);
         const L = new t.Mesh(
           new t.BoxGeometry(r.width * 0.24, G, 6),
           I
         );
-        L.position.set(0, G / 2, r.height / 2), L.castShadow = !0, d.add(L);
+        L.position.set(0, G / 2, r.height / 2), L.castShadow = !0, p.add(L);
         const k = new t.Mesh(
           new t.BoxGeometry(r.width * 0.055, G, 6),
           I
         );
-        k.position.set(-r.width * 0.4725, G / 2, r.height / 2), k.castShadow = !0, d.add(k);
+        k.position.set(-r.width * 0.4725, G / 2, r.height / 2), k.castShadow = !0, p.add(k);
         const T = new t.Mesh(
           new t.BoxGeometry(r.width * 0.055, G, 6),
           I
         );
-        T.position.set(r.width * 0.4725, G / 2, r.height / 2), T.castShadow = !0, d.add(T);
+        T.position.set(r.width * 0.4725, G / 2, r.height / 2), T.castShadow = !0, p.add(T);
         const y = new t.Mesh(
           new t.BoxGeometry(r.width * 0.33, G - 95, 6),
           I
         );
-        y.position.set(r.width * 0.285, 95 + (G - 95) / 2, r.height / 2), y.castShadow = !0, d.add(y);
+        y.position.set(r.width * 0.285, 95 + (G - 95) / 2, r.height / 2), y.castShadow = !0, p.add(y);
         const te = new t.Mesh(
           new t.BoxGeometry(r.width * 0.33, G - 95, 6),
           I
         );
-        te.position.set(-r.width * 0.285, 95 + (G - 95) / 2, r.height / 2), te.castShadow = !0, d.add(te);
+        te.position.set(-r.width * 0.285, 95 + (G - 95) / 2, r.height / 2), te.castShadow = !0, p.add(te);
         const K = new t.Mesh(
           new t.BoxGeometry(r.width * 0.33, 95, 4),
           h
         );
-        K.position.set(r.width * 0.285, 47.5, r.height / 2 - 2), K.castShadow = !0, d.add(K);
+        K.position.set(r.width * 0.285, 47.5, r.height / 2 - 2), K.castShadow = !0, p.add(K);
         const Ee = new t.MeshStandardMaterial({
           color: 13938487,
           metalness: 0.1,
@@ -2059,7 +2059,7 @@ const Ht = `
           new t.CylinderGeometry(1.5, 1.5, 12, 16),
           Ee
         );
-        H.rotation.z = Math.PI / 2, H.position.set(r.width * 0.285 - r.width * 0.132, 47.5, r.height / 2 + 1), d.add(H);
+        H.rotation.z = Math.PI / 2, H.position.set(r.width * 0.285 - r.width * 0.132, 47.5, r.height / 2 + 1), p.add(H);
         const M = document.createElement("canvas");
         M.width = 512, M.height = 768;
         const g = M.getContext("2d");
@@ -2079,14 +2079,14 @@ const Ht = `
             emissiveIntensity: 0.1
           })
         );
-        m.position.set(r.width * 0.285, 47.5, r.height / 2 + 2.5), d.add(m);
+        m.position.set(r.width * 0.285, 47.5, r.height / 2 + 2.5), p.add(m);
         const N = new t.Mesh(
           new t.BoxGeometry(r.width * 0.33, 95, 4),
           W
         );
-        N.position.set(-r.width * 0.285, 47.5, r.height / 2 - 2), N.castShadow = !0, d.add(N);
+        N.position.set(-r.width * 0.285, 47.5, r.height / 2 - 2), N.castShadow = !0, p.add(N);
         const Se = H.clone();
-        Se.position.set(-r.width * 0.285 + r.width * 0.132, 47.5, r.height / 2 + 1), d.add(Se);
+        Se.position.set(-r.width * 0.285 + r.width * 0.132, 47.5, r.height / 2 + 1), p.add(Se);
         const X = document.createElement("canvas");
         X.width = 512, X.height = 768;
         const b = X.getContext("2d");
@@ -2106,7 +2106,7 @@ const Ht = `
             emissiveIntensity: 0.1
           })
         );
-        Ge.position.set(-r.width * 0.285, 47.5, r.height / 2 + 2.5), d.add(Ge);
+        Ge.position.set(-r.width * 0.285, 47.5, r.height / 2 + 2.5), p.add(Ge);
         const oe = document.createElement("canvas");
         oe.width = 512, oe.height = 256;
         const le = oe.getContext("2d");
@@ -2119,7 +2119,7 @@ const Ht = `
             metalness: 0.05
           })
         );
-        u.position.set(0, 100, -r.height / 2 + 3.5), d.add(u);
+        u.position.set(0, 100, -r.height / 2 + 3.5), p.add(u);
         const xe = new t.MeshStandardMaterial({
           color: 16119285,
           metalness: 0.1,
@@ -2128,7 +2128,7 @@ const Ht = `
           new t.BoxGeometry(r.width * 0.5, 12, r.height * 0.25),
           xe
         );
-        He.position.set(0, 32, -r.height * 0.3), He.castShadow = !0, d.add(He);
+        He.position.set(0, 32, -r.height * 0.3), He.castShadow = !0, p.add(He);
         const me = new t.MeshStandardMaterial({
           color: 16777215,
           roughness: 0.3,
@@ -2137,7 +2137,7 @@ const Ht = `
           new t.CylinderGeometry(12, 12, 6, 32),
           me
         );
-        Ce.position.set(0, 40, -r.height * 0.3), d.add(Ce);
+        Ce.position.set(0, 40, -r.height * 0.3), p.add(Ce);
         const we = new t.MeshStandardMaterial({
           color: 12632256,
           metalness: 0.1,
@@ -2146,7 +2146,7 @@ const Ht = `
           new t.TorusGeometry(4, 1, 8, 24, Math.PI),
           we
         );
-        Ye.rotation.z = Math.PI / 2, Ye.position.set(0, 48, -r.height * 0.35), d.add(Ye);
+        Ye.rotation.z = Math.PI / 2, Ye.position.set(0, 48, -r.height * 0.35), p.add(Ye);
         const s = new t.MeshStandardMaterial({
           color: 16777215,
           roughness: 0.25,
@@ -2155,37 +2155,37 @@ const Ht = `
           new t.CylinderGeometry(10, 8, 12, 32),
           s
         );
-        i.position.set(-r.width * 0.25, 6, r.height * 0.25), d.add(i);
+        i.position.set(-r.width * 0.25, 6, r.height * 0.25), p.add(i);
         const o = new t.Mesh(
           new t.TorusGeometry(9, 2, 16, 32),
           s
         );
-        o.rotation.x = Math.PI / 2, o.position.set(-r.width * 0.25, 13, r.height * 0.25), d.add(o);
-        const p = new t.Mesh(
+        o.rotation.x = Math.PI / 2, o.position.set(-r.width * 0.25, 13, r.height * 0.25), p.add(o);
+        const d = new t.Mesh(
           new t.BoxGeometry(14, 20, 8),
           s
         );
-        p.position.set(-r.width * 0.25, 22, r.height * 0.25 - 10), d.add(p);
+        d.position.set(-r.width * 0.25, 22, r.height * 0.25 - 10), p.add(d);
         const v = new t.Mesh(
           new t.BoxGeometry(2, 6, 1),
           we
         );
-        v.position.set(-r.width * 0.25 + 8, 25, r.height * 0.25 - 10), d.add(v);
+        v.position.set(-r.width * 0.25 + 8, 25, r.height * 0.25 - 10), p.add(v);
         const S = new t.Mesh(
           new t.SphereGeometry(7, 32, 32, 0, Math.PI * 2, 0, Math.PI / 1.5),
           s
         );
-        S.position.set(r.width * 0.25, 25, r.height * 0.25), S.rotation.x = Math.PI / 6, d.add(S);
+        S.position.set(r.width * 0.25, 25, r.height * 0.25), S.rotation.x = Math.PI / 6, p.add(S);
         const B = new t.Mesh(
           new t.CylinderGeometry(1.5, 1.5, 8, 16),
           we
         );
-        B.position.set(r.width * 0.25, 35, r.height * 0.25 - 5), d.add(B);
+        B.position.set(r.width * 0.25, 35, r.height * 0.25 - 5), p.add(B);
         const Q = new t.PointLight(16777215, 0.5, 280);
-        Q.position.set(0, G - 15, 0), Q.castShadow = !1, d.add(Q), d.position.set(R, 0, Z), d.rotation.y = C, w.add(d);
+        Q.position.set(0, G - 15, 0), Q.castShadow = !1, p.add(Q), p.position.set(R, 0, Z), p.rotation.y = C, w.add(p);
       }
     }), l.tables.forEach((r) => {
-      const C = r.shape === "rectangle" ? r.width * 1.5 : r.width, d = r.x - 400 + C / 2, I = -(r.y - 400 + r.height / 2), h = -(r.rotation * Math.PI / 180), W = new t.MeshPhysicalMaterial({
+      const C = r.shape === "rectangle" ? r.width * 1.5 : r.width, p = r.x - 400 + C / 2, I = -(r.y - 400 + r.height / 2), h = -(r.rotation * Math.PI / 180), W = new t.MeshPhysicalMaterial({
         color: 7294519,
         // rich brown wood tone
         roughness: 0.35,
@@ -2197,7 +2197,7 @@ const Ht = `
         // subtle velvet-like reflection
         sheenColor: new t.Color(10251068)
       }), A = r.shape === "circle" ? new t.CylinderGeometry(C / 2, C / 2, 4, 64) : new t.BoxGeometry(C, 4, r.height), G = new t.Mesh(A, W);
-      if (G.position.set(d, 33 + 4 / 2, I), G.rotation.y = h, G.castShadow = !0, G.receiveShadow = !0, w.add(G), r.shape === "circle") {
+      if (G.position.set(p, 33 + 4 / 2, I), G.rotation.y = h, G.castShadow = !0, G.receiveShadow = !0, w.add(G), r.shape === "circle") {
         const L = new t.Mesh(
           new t.TorusGeometry(C / 2 + 1, 1.2, 16, 64),
           new t.MeshStandardMaterial({
@@ -2207,7 +2207,7 @@ const Ht = `
             roughness: 0.3
           })
         );
-        L.position.set(d, 33 + 4 / 2 + 0.5, I), L.rotation.x = Math.PI / 2, w.add(L);
+        L.position.set(p, 33 + 4 / 2 + 0.5, I), L.rotation.x = Math.PI / 2, w.add(L);
       } else {
         const L = new t.LineSegments(
           new t.EdgesGeometry(A),
@@ -2236,7 +2236,7 @@ const Ht = `
           ie
         );
         T.position.set(
-          d + L * Math.cos(h) - k * Math.sin(h),
+          p + L * Math.cos(h) - k * Math.sin(h),
           33 / 2,
           I + L * Math.sin(h) + k * Math.cos(h)
         ), T.castShadow = !0, w.add(T);
@@ -2250,7 +2250,7 @@ const Ht = `
           new t.BoxGeometry(k * 0.75, 4, k * 0.75),
           te
         ), Pe = T * 0.4;
-        b.position.set(d + Se, Pe, I - X);
+        b.position.set(p + Se, Pe, I - X);
         const Ge = {
           top: 0,
           bottom: Math.PI,
@@ -2284,16 +2284,16 @@ const Ht = `
         });
       });
     });
-    const pe = () => {
+    const de = () => {
       var r;
-      if (ee.current = requestAnimationFrame(pe), se.current && se.current.progress < 1) {
+      if (ee.current = requestAnimationFrame(de), se.current && se.current.progress < 1) {
         const R = se.current;
         R.progress += 0.05, R.progress >= 1 && (R.progress = 1, be(!1), se.current = null);
-        const C = ((d) => d < 0.5 ? 4 * d * d * d : 1 - Math.pow(-2 * d + 2, 3) / 2)(R.progress);
+        const C = ((p) => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2)(R.progress);
         if (a.current) {
           a.current.position.lerpVectors(R.startPos, R.endPos, C);
-          const d = new t.Vector3();
-          d.lerpVectors(R.startTarget, R.endTarget, C), a.current.lookAt(d);
+          const p = new t.Vector3();
+          p.lerpVectors(R.startTarget, R.endTarget, C), a.current.lookAt(p);
         }
       }
       if ($ && a.current && !O) {
@@ -2302,12 +2302,12 @@ const Ht = `
       }
       (r = Y.current) == null || r.render(w, E);
     };
-    pe();
+    de();
     const ae = () => {
-      f.current && a.current && Y.current && (a.current.aspect = f.current.clientWidth / f.current.clientHeight, a.current.updateProjectionMatrix(), Y.current.setSize(f.current.clientWidth, f.current.clientHeight));
+      c.current && a.current && Y.current && (a.current.aspect = c.current.clientWidth / c.current.clientHeight, a.current.updateProjectionMatrix(), Y.current.setSize(c.current.clientWidth, c.current.clientHeight));
     };
     return window.addEventListener("resize", ae), () => {
-      window.removeEventListener("resize", ae), ee.current && cancelAnimationFrame(ee.current), Y.current && f.current && (f.current.removeChild(Y.current.domElement), Y.current.dispose());
+      window.removeEventListener("resize", ae), ee.current && cancelAnimationFrame(ee.current), Y.current && c.current && (c.current.removeChild(Y.current.domElement), Y.current.dispose());
     };
   }, [x, l, $, O]), x ? /* @__PURE__ */ e("div", { className: "rfp-fixed rfp-inset-0 bg-black/60 backdrop-blur-sm z-[200] rfp-flex rfp-items-center rfp-justify-center rfp-p-2", children: /* @__PURE__ */ n("div", { className: "bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-3xl shadow-2xl rfp-w-full rfp-h-full max-w-[98vw] max-h-[98vh] rfp-flex rfp-flex-col rfp-overflow-hidden rfp-border rfp-border-gray-800", children: [
     /* @__PURE__ */ e("div", { className: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rfp-p-1", children: /* @__PURE__ */ n("div", { className: "rfp-bg-gray-900 rfp-px-6 rfp-py-4 rfp-flex rfp-items-center rfp-justify-between", children: [
@@ -2324,7 +2324,7 @@ const Ht = `
       /* @__PURE__ */ e(
         "button",
         {
-          onClick: c,
+          onClick: f,
           className: "p-2.5 bg-red-500/20 hover:bg-red-500/30 rfp-text-red-400 rfp-rounded-xl rfp-transition-all hover:scale-110",
           children: /* @__PURE__ */ e(Bt, { className: "rfp-w-5 rfp-h-5" })
         }
@@ -2393,7 +2393,7 @@ const Ht = `
         ] }),
         /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-3", children: [
           /* @__PURE__ */ n("div", { className: "rfp-text-white rfp-text-sm rfp-font-bold rfp-uppercase rfp-tracking-wider rfp-flex rfp-items-center rfp-gap-2 rfp-pb-2 rfp-border-b rfp-border-gray-700", children: [
-            /* @__PURE__ */ e(pt, { className: "rfp-w-5 rfp-h-5 rfp-text-green-400" }),
+            /* @__PURE__ */ e(dt, { className: "rfp-w-5 rfp-h-5 rfp-text-green-400" }),
             "Zoom & Rotation"
           ] }),
           /* @__PURE__ */ n("div", { className: "rfp-flex rfp-flex-col rfp-gap-2", children: [
@@ -2404,7 +2404,7 @@ const Ht = `
                 className: "rfp-px-4 rfp-py-3 rfp-bg-gray-800 hover:bg-gray-700 rfp-text-white rfp-rounded-xl rfp-transition-all hover:scale-105 rfp-flex rfp-items-center rfp-justify-center rfp-gap-2 rfp-font-semibold disabled:opacity-30",
                 disabled: O,
                 children: [
-                  /* @__PURE__ */ e(pt, { className: "rfp-w-5 rfp-h-5" }),
+                  /* @__PURE__ */ e(dt, { className: "rfp-w-5 rfp-h-5" }),
                   "Zoom In"
                 ]
               }
@@ -2485,7 +2485,7 @@ const Ht = `
         ] })
       ] }),
       /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-relative bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 rounded-2xl rfp-overflow-hidden shadow-2xl rfp-border rfp-border-gray-300", children: [
-        /* @__PURE__ */ e("div", { ref: f, className: "rfp-w-full rfp-h-full" }),
+        /* @__PURE__ */ e("div", { ref: c, className: "rfp-w-full rfp-h-full" }),
         O && /* @__PURE__ */ e("div", { className: "rfp-absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2", children: /* @__PURE__ */ e("div", { className: "bg-black/80 backdrop-blur-xl rfp-rounded-xl rfp-px-6 rfp-py-3 shadow-2xl rfp-border rfp-border-gray-700", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-3", children: [
           /* @__PURE__ */ e("div", { className: "rfp-animate-spin rfp-rounded-full rfp-h-5 rfp-w-5 rfp-border-2 rfp-border-gray-500 border-t-white" }),
           /* @__PURE__ */ e("span", { className: "rfp-text-white rfp-text-sm rfp-font-medium", children: "Transitioning Camera..." })
@@ -2513,7 +2513,7 @@ const Ht = `
     ] }) })
   ] }) }) : null;
 }, or = ({ fullScreen: l = !1 }) => {
-  const [x, c] = J([
+  const [x, f] = J([
     {
       id: "floor-1",
       name: "Ground Floor",
@@ -2524,23 +2524,23 @@ const Ht = `
       walls: [],
       fixedElements: []
     }
-  ]), [f, ne] = J("floor-1"), [a, Y] = J(null), [ee, $] = J(!1), [V, ke] = J({ x: 0, y: 0 }), z = 1, [O, be] = J(!0), [De, se] = J(!1), [ze, ge] = J(!1), [ue, w] = J(null), [E, F] = J(null), [ye, ve] = J(null), [ce, Ne] = J(!1), [Ae, P] = J(null), [j, Me] = J(null), pe = Le(null), ae = Le(null), r = Le(null);
+  ]), [c, ne] = J("floor-1"), [a, Y] = J(null), [ee, $] = J(!1), [V, ke] = J({ x: 0, y: 0 }), z = 1, [O, be] = J(!0), [De, se] = J(!1), [ze, ge] = J(!1), [ue, w] = J(null), [E, F] = J(null), [ye, ve] = J(null), [fe, Ne] = J(!1), [Ae, P] = J(null), [j, Me] = J(null), de = Le(null), ae = Le(null), r = Le(null);
   Ve(() => {
     if ((a == null ? void 0 : a.type) === "table") {
       const s = R();
       if (!s)
         return;
-      const i = s.chairs.filter((p) => p.tableId === a.id);
-      if (i.filter((p) => p.size === void 0).length > 0) {
-        const p = {};
+      const i = s.chairs.filter((d) => d.tableId === a.id);
+      if (i.filter((d) => d.size === void 0).length > 0) {
+        const d = {};
         i.forEach((v) => {
-          v.size !== void 0 && !p[v.position] && (p[v.position] = v.size);
-        }), c((v) => v.map(
-          (S) => S.id === f ? {
+          v.size !== void 0 && !d[v.position] && (d[v.position] = v.size);
+        }), f((v) => v.map(
+          (S) => S.id === c ? {
             ...S,
             chairs: S.chairs.map((B) => {
               if (B.tableId === a.id && B.size === void 0) {
-                const Q = p[B.position] ?? 40;
+                const Q = d[B.position] ?? 40;
                 return { ...B, size: Q };
               }
               return B;
@@ -2550,23 +2550,23 @@ const Ht = `
       }
     }
   }, [a]);
-  const R = () => x.find((s) => s.id === f), Z = (s, i = "medium") => {
+  const R = () => x.find((s) => s.id === c), Z = (s, i = "medium") => {
     const o = R();
     if (!o)
       return;
-    const { width: p, height: v } = ct(s, i), S = {
+    const { width: d, height: v } = ft(s, i), S = {
       id: Ze(),
       name: `Table ${o.tables.length + 1}`,
       shape: s,
       size: i,
       x: 200 + o.tables.length * 20,
       y: 200 + o.tables.length * 20,
-      width: p,
+      width: d,
       height: v,
       rotation: 0
     };
-    c((B) => B.map(
-      (Q) => Q.id === f ? { ...Q, tables: [...Q.tables, S] } : Q
+    f((B) => B.map(
+      (Q) => Q.id === c ? { ...Q, tables: [...Q.tables, S] } : Q
     )), Y({ type: "table", id: S.id });
   }, C = (s) => {
     const i = R();
@@ -2582,10 +2582,10 @@ const Ht = `
       height: 80,
       rotation: 0
     };
-    c((p) => p.map(
-      (v) => v.id === f ? { ...v, objects: [...v.objects, o] } : v
+    f((d) => d.map(
+      (v) => v.id === c ? { ...v, objects: [...v.objects, o] } : v
     )), Y({ type: "object", id: o.id });
-  }, d = (s) => {
+  }, p = (s) => {
     if (!a || a.type !== "table")
       return;
     const i = R();
@@ -2593,18 +2593,18 @@ const Ht = `
       return;
     const o = i.chairs.filter(
       (Q) => Q.tableId === a.id && Q.position === s
-    ), p = o.length, v = o.find((Q) => Q.size !== void 0), S = (v == null ? void 0 : v.size) ?? 40, B = {
+    ), d = o.length, v = o.find((Q) => Q.size !== void 0), S = (v == null ? void 0 : v.size) ?? 40, B = {
       id: Ze(),
       tableId: a.id,
       position: s,
-      index: p,
+      index: d,
       x: 0,
       y: 0,
       size: S
       // Always set a size to prevent recalculation on table resize
     };
-    c((Q) => Q.map(
-      (q) => q.id === f ? { ...q, chairs: [...q.chairs, B] } : q
+    f((Q) => Q.map(
+      (q) => q.id === c ? { ...q, chairs: [...q.chairs, B] } : q
     ));
   }, I = (s) => {
     if (!a || a.type !== "table")
@@ -2617,18 +2617,18 @@ const Ht = `
     );
     if (o.length === 0)
       return;
-    const p = o.reduce(
+    const d = o.reduce(
       (v, S) => S.index > v.index ? S : v
     );
-    c((v) => v.map(
-      (S) => S.id === f ? {
+    f((v) => v.map(
+      (S) => S.id === c ? {
         ...S,
-        chairs: S.chairs.filter((B) => B.id !== p.id)
+        chairs: S.chairs.filter((B) => B.id !== d.id)
       } : S
     ));
   }, h = (s, i) => {
-    !a || a.type !== "table" || !R() || c((p) => p.map(
-      (v) => v.id === f ? {
+    !a || a.type !== "table" || !R() || f((d) => d.map(
+      (v) => v.id === c ? {
         ...v,
         chairs: v.chairs.map(
           (S) => S.tableId === a.id && S.position === s ? { ...S, size: i } : S
@@ -2636,69 +2636,69 @@ const Ht = `
       } : v
     ));
   }, W = () => {
-    !a || a.type !== "table" || !R() || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "table" || !R() || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
-        chairs: o.chairs.map((p) => {
-          if (p.tableId === a.id) {
-            const { size: v, ...S } = p;
+        chairs: o.chairs.map((d) => {
+          if (d.tableId === a.id) {
+            const { size: v, ...S } = d;
             return S;
           }
-          return p;
+          return d;
         })
       } : o
     ));
   }, A = () => {
-    a && (a.type === "table" ? c((s) => s.map(
-      (i) => i.id === f ? {
+    a && (a.type === "table" ? f((s) => s.map(
+      (i) => i.id === c ? {
         ...i,
         tables: i.tables.filter((o) => o.id !== a.id),
         chairs: i.chairs.filter((o) => o.tableId !== a.id)
       } : i
-    )) : a.type === "object" ? c((s) => s.map(
-      (i) => i.id === f ? {
+    )) : a.type === "object" ? f((s) => s.map(
+      (i) => i.id === c ? {
         ...i,
         objects: i.objects.filter((o) => o.id !== a.id)
       } : i
-    )) : a.type === "wall" ? c((s) => s.map(
-      (i) => i.id === f ? {
+    )) : a.type === "wall" ? f((s) => s.map(
+      (i) => i.id === c ? {
         ...i,
         walls: i.walls.filter((o) => o.id !== a.id)
       } : i
-    )) : a.type === "fixedElement" && c((s) => s.map(
-      (i) => i.id === f ? {
+    )) : a.type === "fixedElement" && f((s) => s.map(
+      (i) => i.id === c ? {
         ...i,
         fixedElements: i.fixedElements.filter((o) => o.id !== a.id)
       } : i
     )), Y(null));
   }, G = (s) => {
-    !a || a.type !== "wall" || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "wall" || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
         walls: o.walls.map(
-          (p) => p.id === a.id ? { ...p, thickness: s } : p
+          (d) => d.id === a.id ? { ...d, thickness: s } : d
         )
       } : o
     ));
   }, ie = (s) => {
-    !a || a.type !== "wall" || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "wall" || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
         walls: o.walls.map(
-          (p) => p.id === a.id ? { ...p, type: s } : p
+          (d) => d.id === a.id ? { ...d, type: s } : d
         )
       } : o
     ));
   }, _ = () => {
-    !a || a.type !== "table" || c((s) => s.map(
-      (i) => i.id === f ? {
+    !a || a.type !== "table" || f((s) => s.map(
+      (i) => i.id === c ? {
         ...i,
         tables: i.tables.map(
           (o) => o.id === a.id ? { ...o, rotation: (o.rotation || 0) + 45 } : o
         )
       } : i
     ));
-  }, fe = () => {
+  }, ce = () => {
     if (!a || a.type !== "table")
       return;
     const s = R();
@@ -2718,26 +2718,26 @@ const Ht = `
       id: Ze(),
       tableId: o.id
     }));
-    c((S) => S.map(
-      (B) => B.id === f ? {
+    f((S) => S.map(
+      (B) => B.id === c ? {
         ...B,
         tables: [...B.tables, o],
         chairs: [...B.chairs, ...v]
       } : B
     )), Y({ type: "table", id: o.id });
   }, U = et((s) => {
-    !a || a.type !== "table" || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "table" || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
         tables: o.tables.map(
-          (p) => p.id === a.id ? s(p) : p
+          (d) => d.id === a.id ? s(d) : d
         )
       } : o
     ));
-  }, [a, f]), L = (s) => {
+  }, [a, c]), L = (s) => {
     U((i) => {
-      const { width: o, height: p } = ct(i.shape, s);
-      return { ...i, size: s, width: o, height: p };
+      const { width: o, height: d } = ft(i.shape, s);
+      return { ...i, size: s, width: o, height: d };
     });
   }, k = (s, i) => {
     U((o) => ({
@@ -2749,53 +2749,53 @@ const Ht = `
       // Keep a valid size for the interface
     }));
   }, T = (s) => {
-    !a || a.type !== "object" || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "object" || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
         objects: o.objects.map(
-          (p) => p.id === a.id ? { ...p, name: s } : p
+          (d) => d.id === a.id ? { ...d, name: s } : d
         )
       } : o
     ));
   }, y = (s, i) => {
-    !a || a.type !== "object" || c((o) => o.map(
-      (p) => p.id === f ? {
-        ...p,
-        objects: p.objects.map(
+    !a || a.type !== "object" || f((o) => o.map(
+      (d) => d.id === c ? {
+        ...d,
+        objects: d.objects.map(
           (v) => v.id === a.id ? { ...v, width: s, height: i } : v
         )
-      } : p
+      } : d
     ));
   }, te = (s) => {
-    !a || a.type !== "object" || c((i) => i.map(
-      (o) => o.id === f ? {
+    !a || a.type !== "object" || f((i) => i.map(
+      (o) => o.id === c ? {
         ...o,
         objects: o.objects.map(
-          (p) => p.id === a.id ? { ...p, rotation: s } : p
+          (d) => d.id === a.id ? { ...d, rotation: s } : d
         )
       } : o
     ));
   }, K = (s, i) => {
-    !a || a.type !== "fixedElement" || c((o) => o.map(
-      (p) => p.id === f ? {
-        ...p,
-        fixedElements: p.fixedElements.map(
+    !a || a.type !== "fixedElement" || f((o) => o.map(
+      (d) => d.id === c ? {
+        ...d,
+        fixedElements: d.fixedElements.map(
           (v) => v.id === a.id ? { ...v, width: s, height: i } : v
         )
-      } : p
+      } : d
     ));
   }, Ee = (s) => {
     U((i) => ({ ...i, name: s }));
   }, H = (s) => {
-    if (pe.current && !ce) {
+    if (de.current && !fe) {
       if (ze && ue) {
-        const i = pe.current.getBoundingClientRect(), o = Math.round((s.clientX - i.left) / z / D) * D, p = Math.round((s.clientY - i.top) / z / D) * D;
+        const i = de.current.getBoundingClientRect(), o = Math.round((s.clientX - i.left) / z / D) * D, d = Math.round((s.clientY - i.top) / z / D) * D;
         if (!E)
-          F({ x: o, y: p });
+          F({ x: o, y: d });
         else {
           if (!R())
             return;
-          const S = Je(E, { x: o, y: p }), B = {
+          const S = Je(E, { x: o, y: d }), B = {
             id: Ze(),
             type: ue,
             startX: E.x,
@@ -2804,8 +2804,8 @@ const Ht = `
             endY: S.y,
             thickness: 8
           };
-          c((Q) => Q.map(
-            (q) => q.id === f ? { ...q, walls: [...q.walls, B] } : q
+          f((Q) => Q.map(
+            (q) => q.id === c ? { ...q, walls: [...q.walls, B] } : q
           )), F(null), ve(null), ge(!1), w(null);
         }
         return;
@@ -2815,22 +2815,22 @@ const Ht = `
   }, M = (s, i) => {
     Y({ type: s, id: i });
   }, g = (s, i) => {
-    if (!pe.current)
+    if (!de.current)
       return;
     s.preventDefault(), s.stopPropagation();
-    const o = pe.current.getBoundingClientRect(), p = (s.clientX - o.left) / z, v = (s.clientY - o.top) / z, S = R();
+    const o = de.current.getBoundingClientRect(), d = (s.clientX - o.left) / z, v = (s.clientY - o.top) / z, S = R();
     if (!S)
       return;
     const B = S.tables.find((Te) => Te.id === i), Q = S.objects.find((Te) => Te.id === i), q = S.fixedElements.find((Te) => Te.id === i), Ie = S.walls.find((Te) => Te.id === i);
     if (Ie)
       ke({
-        x: p - Ie.startX,
+        x: d - Ie.startX,
         y: v - Ie.startY
       }), ae.current = { id: i, type: "wall" };
     else {
       const Te = B || Q || q;
       Te && ke({
-        x: p - Te.x,
+        x: d - Te.x,
         y: v - Te.y
       });
       const We = B ? "table" : Q ? "object" : q ? "fixedElement" : "table";
@@ -2838,75 +2838,75 @@ const Ht = `
     }
     $(!0);
   }, he = et((s) => {
-    !ee && !ce || !ae.current || !pe.current || (r.current && cancelAnimationFrame(r.current), r.current = requestAnimationFrame(() => {
+    !ee && !fe || !ae.current || !de.current || (r.current && cancelAnimationFrame(r.current), r.current = requestAnimationFrame(() => {
       var B, Q, q, Ie, Te;
-      if (!pe.current)
+      if (!de.current)
         return;
-      const i = pe.current.getBoundingClientRect(), o = (s.clientX - i.left) / z, p = (s.clientY - i.top) / z, v = Math.round(o / D) * D, S = Math.round(p / D) * D;
-      if (ce && ((B = ae.current) == null ? void 0 : B.type) === "wall") {
-        const We = x.find((Xe) => Xe.id === f), Be = We == null ? void 0 : We.walls.find((Xe) => {
+      const i = de.current.getBoundingClientRect(), o = (s.clientX - i.left) / z, d = (s.clientY - i.top) / z, v = Math.round(o / D) * D, S = Math.round(d / D) * D;
+      if (fe && ((B = ae.current) == null ? void 0 : B.type) === "wall") {
+        const We = x.find((Xe) => Xe.id === c), Be = We == null ? void 0 : We.walls.find((Xe) => {
           var Re;
           return Xe.id === ((Re = ae.current) == null ? void 0 : Re.id);
         });
         if (Be) {
           const Xe = Ae === "start" ? { x: Be.endX, y: Be.endY } : { x: Be.startX, y: Be.startY }, Re = Je(Xe, { x: v, y: S });
-          c((Oe) => Oe.map(
-            (de) => de.id === f ? {
-              ...de,
-              walls: de.walls.map(
+          f((Oe) => Oe.map(
+            (pe) => pe.id === c ? {
+              ...pe,
+              walls: pe.walls.map(
                 (re) => {
                   var $e;
                   return re.id === (($e = ae.current) == null ? void 0 : $e.id) ? Ae === "start" ? { ...re, startX: Re.x, startY: Re.y } : { ...re, endX: Re.x, endY: Re.y } : re;
                 }
               )
-            } : de
+            } : pe
           ));
         }
       } else if (((Q = ae.current) == null ? void 0 : Q.type) === "table") {
-        const We = o - V.x, Be = p - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
-        c((Oe) => Oe.map(
-          (de) => de.id === f ? {
-            ...de,
-            tables: de.tables.map(
+        const We = o - V.x, Be = d - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
+        f((Oe) => Oe.map(
+          (pe) => pe.id === c ? {
+            ...pe,
+            tables: pe.tables.map(
               (re) => {
                 var $e;
                 return re.id === (($e = ae.current) == null ? void 0 : $e.id) ? { ...re, x: Xe, y: Re } : re;
               }
             )
-          } : de
+          } : pe
         ));
       } else if (((q = ae.current) == null ? void 0 : q.type) === "object") {
-        const We = o - V.x, Be = p - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
-        c((Oe) => Oe.map(
-          (de) => de.id === f ? {
-            ...de,
-            objects: de.objects.map(
+        const We = o - V.x, Be = d - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
+        f((Oe) => Oe.map(
+          (pe) => pe.id === c ? {
+            ...pe,
+            objects: pe.objects.map(
               (re) => {
                 var $e;
                 return re.id === (($e = ae.current) == null ? void 0 : $e.id) ? { ...re, x: Xe, y: Re } : re;
               }
             )
-          } : de
+          } : pe
         ));
       } else if (((Ie = ae.current) == null ? void 0 : Ie.type) === "fixedElement") {
-        const We = o - V.x, Be = p - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
-        c((Oe) => Oe.map(
-          (de) => de.id === f ? {
-            ...de,
-            fixedElements: de.fixedElements.map(
+        const We = o - V.x, Be = d - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
+        f((Oe) => Oe.map(
+          (pe) => pe.id === c ? {
+            ...pe,
+            fixedElements: pe.fixedElements.map(
               (re) => {
                 var $e;
                 return re.id === (($e = ae.current) == null ? void 0 : $e.id) ? { ...re, x: Xe, y: Re } : re;
               }
             )
-          } : de
+          } : pe
         ));
-      } else if (((Te = ae.current) == null ? void 0 : Te.type) === "wall" && !ce) {
-        const We = o - V.x, Be = p - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
-        c((Oe) => Oe.map(
-          (de) => de.id === f ? {
-            ...de,
-            walls: de.walls.map((re) => {
+      } else if (((Te = ae.current) == null ? void 0 : Te.type) === "wall" && !fe) {
+        const We = o - V.x, Be = d - V.y, Xe = Math.round(We / D) * D, Re = Math.round(Be / D) * D;
+        f((Oe) => Oe.map(
+          (pe) => pe.id === c ? {
+            ...pe,
+            walls: pe.walls.map((re) => {
               var ot;
               if (re.id !== ((ot = ae.current) == null ? void 0 : ot.id))
                 return re;
@@ -2919,11 +2919,11 @@ const Ht = `
                 endY: re.endY + it
               };
             })
-          } : de
+          } : pe
         ));
       }
     }));
-  }, [ee, ce, Ae, V, f, z, x]), m = () => {
+  }, [ee, fe, Ae, V, c, z, x]), m = () => {
     r.current && (cancelAnimationFrame(r.current), r.current = null), $(!1), ae.current = null, Ne(!1), P(null), Me(null);
   }, N = (s, i, o) => {
     s.preventDefault(), s.stopPropagation(), Ne(!0), P(o), ae.current = { id: i, type: "wall" };
@@ -2938,20 +2938,20 @@ const Ht = `
       walls: [],
       fixedElements: []
     };
-    c((i) => [...i, s]), b(s.id);
+    f((i) => [...i, s]), b(s.id);
   }, X = () => {
     if (x.length <= 1)
       return;
-    const s = x.filter((i) => i.id !== f);
-    c(s), ne(s[0].id);
+    const s = x.filter((i) => i.id !== c);
+    f(s), ne(s[0].id);
   }, b = (s) => {
-    c((i) => i.map((o) => ({
+    f((i) => i.map((o) => ({
       ...o,
       isActive: o.id === s
     }))), ne(s), Y(null);
   }, Pe = (s, i) => {
-    c((o) => o.map(
-      (p) => p.id === s ? { ...p, name: i } : p
+    f((o) => o.map(
+      (d) => d.id === s ? { ...d, name: i } : d
     ));
   }, Ge = (s) => {
     ge(!0), w(s), F(null), ve(null), Y(null);
@@ -2969,8 +2969,8 @@ const Ht = `
       height: 60,
       rotation: 0
     };
-    c((p) => p.map(
-      (v) => v.id === f ? { ...v, fixedElements: [...v.fixedElements, o] } : v
+    f((d) => d.map(
+      (v) => v.id === c ? { ...v, fixedElements: [...v.fixedElements, o] } : v
     )), Y({ type: "fixedElement", id: o.id });
   }, le = () => {
     const s = {
@@ -2981,22 +2981,22 @@ const Ht = `
   };
   Ve(() => {
     const s = (o) => he(o), i = () => m();
-    return (ee || ce) && (document.addEventListener("mousemove", s), document.addEventListener("mouseup", i)), () => {
+    return (ee || fe) && (document.addEventListener("mousemove", s), document.addEventListener("mouseup", i)), () => {
       document.removeEventListener("mousemove", s), document.removeEventListener("mouseup", i);
     };
-  }, [ee, ce, he]);
+  }, [ee, fe, he]);
   const Fe = (s) => {
     var i;
-    if (ze && E && pe.current) {
-      const o = pe.current.getBoundingClientRect(), p = Math.round((s.clientX - o.left) / z / D) * D, v = Math.round((s.clientY - o.top) / z / D) * D, S = Je(E, { x: p, y: v });
+    if (ze && E && de.current) {
+      const o = de.current.getBoundingClientRect(), d = Math.round((s.clientX - o.left) / z / D) * D, v = Math.round((s.clientY - o.top) / z / D) * D, S = Je(E, { x: d, y: v });
       ve(S);
-    } else if (ce && ((i = ae.current) == null ? void 0 : i.type) === "wall" && pe.current) {
-      const o = pe.current.getBoundingClientRect(), p = Math.round((s.clientX - o.left) / z / D) * D, v = Math.round((s.clientY - o.top) / z / D) * D, S = R(), B = S == null ? void 0 : S.walls.find((Q) => {
+    } else if (fe && ((i = ae.current) == null ? void 0 : i.type) === "wall" && de.current) {
+      const o = de.current.getBoundingClientRect(), d = Math.round((s.clientX - o.left) / z / D) * D, v = Math.round((s.clientY - o.top) / z / D) * D, S = R(), B = S == null ? void 0 : S.walls.find((Q) => {
         var q;
         return Q.id === ((q = ae.current) == null ? void 0 : q.id);
       });
       if (B) {
-        const Q = Ae === "start" ? { x: B.endX, y: B.endY } : { x: B.startX, y: B.startY }, q = Je(Q, { x: p, y: v });
+        const Q = Ae === "start" ? { x: B.endX, y: B.endY } : { x: B.startX, y: B.startY }, q = Je(Q, { x: d, y: v });
         Me(
           Ae === "start" ? { startX: q.x, startY: q.y, endX: B.endX, endY: B.endY } : { startX: B.startX, startY: B.startY, endX: q.x, endY: q.y }
         );
@@ -3026,14 +3026,14 @@ const Ht = `
         onStartWallDrawing: Ge,
         onAddFixedElement: oe,
         onRotateTable: _,
-        onDuplicateTable: fe,
+        onDuplicateTable: ce,
         onRemoveTable: A,
         onSave: le,
         selectedTable: xe ?? null,
         selectedTableChairs: we
       }
     ),
-    /* @__PURE__ */ n("div", { className: "flex-1 flex flex-col", children: [
+    /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-flex rfp-flex-col", children: [
       /* @__PURE__ */ e(
         rr,
         {
@@ -3050,7 +3050,7 @@ const Ht = `
           fixedElementCount: (u == null ? void 0 : u.fixedElements.length) ?? 0,
           selectedElementType: (a == null ? void 0 : a.type) ?? null,
           onToggleGrid: Ye,
-          onAddChair: d,
+          onAddChair: p,
           onRemoveChair: I,
           onChangeTableSize: L,
           onCustomTableSize: k,
@@ -3069,12 +3069,12 @@ const Ht = `
           on3DPreview: () => se(!0)
         }
       ),
-      /* @__PURE__ */ n("div", { className: "flex-1 overflow-hidden bg-gray-100 relative", children: [
+      /* @__PURE__ */ n("div", { className: "rfp-flex-1 rfp-overflow-auto rfp-bg-gray-100 rfp-relative", children: [
         /* @__PURE__ */ n(
           "div",
           {
-            ref: pe,
-            className: `w-full h-full relative ${ze ? "cursor-crosshair" : ce ? "cursor-grabbing" : "cursor-default"}`,
+            ref: de,
+            className: `rfp-w-full rfp-h-full rfp-relative ${ze ? "rfp-cursor-crosshair" : fe ? "rfp-cursor-grabbing" : "rfp-cursor-default"}`,
             style: {
               transform: `scale(${z})`,
               transformOrigin: "top left",
@@ -3084,11 +3084,11 @@ const Ht = `
             onClick: H,
             onMouseMove: Fe,
             children: [
-              (u == null ? void 0 : u.tables.length) === 0 && /* @__PURE__ */ e("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none", children: /* @__PURE__ */ n("div", { className: "text-center text-gray-400", children: [
-                /* @__PURE__ */ e("div", { className: "text-6xl mb-4", children: "🏪" }),
-                /* @__PURE__ */ e("div", { className: "text-xl font-medium mb-2", children: "Welcome to Your Restaurant Designer" }),
-                /* @__PURE__ */ e("div", { className: "text-lg", children: 'Click "Add Tables" in the sidebar to start designing your floor plan' }),
-                /* @__PURE__ */ n("div", { className: "mt-4 space-y-1 text-sm", children: [
+              (u == null ? void 0 : u.tables.length) === 0 && /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-inset-0 rfp-flex rfp-items-center rfp-justify-center rfp-pointer-events-none", children: /* @__PURE__ */ n("div", { className: "rfp-text-center rfp-text-gray-400", children: [
+                /* @__PURE__ */ e("div", { className: "rfp-text-6xl rfp-mb-4", children: "🏪" }),
+                /* @__PURE__ */ e("div", { className: "rfp-text-xl rfp-font-medium rfp-mb-2", children: "Welcome to Your Restaurant Designer" }),
+                /* @__PURE__ */ e("div", { className: "rfp-text-lg", children: 'Click "Add Tables" in the sidebar to start designing your floor plan' }),
+                /* @__PURE__ */ n("div", { className: "rfp-mt-4 rfp-space-y-1 rfp-text-sm", children: [
                   /* @__PURE__ */ e("div", { children: "• Drag tables to move them around" }),
                   /* @__PURE__ */ e("div", { children: "• Click tables to select and edit properties" }),
                   /* @__PURE__ */ e("div", { children: "• Add chairs from the top toolbar or the table properties panel" }),
@@ -3118,7 +3118,7 @@ const Ht = `
                 s.id
               )),
               u == null ? void 0 : u.walls.map((s) => /* @__PURE__ */ e(
-                ft,
+                ct,
                 {
                   wall: s,
                   isSelected: (a == null ? void 0 : a.type) === "wall" && a.id === s.id,
@@ -3129,7 +3129,7 @@ const Ht = `
                 s.id
               )),
               ze && E && ye && ue && /* @__PURE__ */ e(
-                ft,
+                ct,
                 {
                   wall: {
                     id: "temp-wall",
@@ -3148,7 +3148,7 @@ const Ht = `
               j && /* @__PURE__ */ e(
                 "div",
                 {
-                  className: "absolute pointer-events-none",
+                  className: "rfp-absolute rfp-pointer-events-none",
                   style: {
                     left: `${j.startX}px`,
                     top: `${j.startY}px`,
@@ -3163,7 +3163,7 @@ const Ht = `
                     transformOrigin: "top left",
                     zIndex: 15
                   },
-                  children: /* @__PURE__ */ e("div", { className: "w-full h-full border-2 border-blue-400 border-dashed opacity-70 bg-blue-100 rounded-sm" })
+                  children: /* @__PURE__ */ e("div", { className: "rfp-w-full rfp-h-full rfp-border-2 rfp-border-blue-400 rfp-border-dashed rfp-opacity-70 rfp-bg-blue-100 rfp-rounded-sm" })
                 }
               ),
               u == null ? void 0 : u.fixedElements.map((s) => /* @__PURE__ */ e(
@@ -3177,11 +3177,11 @@ const Ht = `
                 s.id
               )),
               u == null ? void 0 : u.chairs.map((s) => {
-                const i = u.tables.find((p) => p.id === s.tableId);
+                const i = u.tables.find((d) => d.id === s.tableId);
                 if (!i)
                   return null;
                 const o = u.chairs.filter(
-                  (p) => p.tableId === s.tableId && p.position === s.position
+                  (d) => d.tableId === s.tableId && d.position === s.position
                 ).length;
                 return /* @__PURE__ */ e(
                   qt,
@@ -3203,7 +3203,7 @@ const Ht = `
               a && a.type === "table" && xe && /* @__PURE__ */ e(
                 "div",
                 {
-                  className: "absolute border-2 border-blue-500 border-dashed rounded pointer-events-none",
+                  className: "rfp-absolute rfp-border-2 rfp-border-blue-500 rfp-border-dashed rfp-rounded rfp-pointer-events-none",
                   style: {
                     left: xe.x - 10,
                     top: xe.y - 10,
@@ -3216,28 +3216,28 @@ const Ht = `
             ]
           }
         ),
-        /* @__PURE__ */ e("div", { className: "absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 border-t border-gray-200 p-3", children: /* @__PURE__ */ n("div", { className: "flex items-center justify-between text-sm", children: [
-          /* @__PURE__ */ n("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ n("div", { className: "flex items-center gap-2 text-gray-600", children: [
-              /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-green-500 rounded-full" }),
+        /* @__PURE__ */ e("div", { className: "rfp-absolute rfp-bottom-0 rfp-left-0 rfp-right-0 rfp-bg-white rfp-bg-opacity-95 rfp-border-t rfp-border-gray-200 rfp-p-3", children: /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-justify-between rfp-text-sm", children: [
+          /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-4", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-text-gray-600", children: [
+              /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-green-500 rfp-rounded-full" }),
               /* @__PURE__ */ n("span", { children: [
                 "Floor: ",
                 u == null ? void 0 : u.name
               ] })
             ] }),
-            ee && /* @__PURE__ */ n("div", { className: "flex items-center gap-2 text-blue-600", children: [
-              /* @__PURE__ */ e("div", { className: "w-2 h-2 bg-blue-500 rounded-full animate-pulse" }),
+            ee && /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-2 rfp-text-blue-600", children: [
+              /* @__PURE__ */ e("div", { className: "rfp-w-2 rfp-h-2 rfp-bg-blue-500 rfp-rounded-full rfp-animate-pulse" }),
               /* @__PURE__ */ e("span", { children: "Dragging..." })
             ] })
           ] }),
-          /* @__PURE__ */ n("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ n("div", { className: "text-gray-500", children: [
+          /* @__PURE__ */ n("div", { className: "rfp-flex rfp-items-center rfp-gap-4", children: [
+            /* @__PURE__ */ n("div", { className: "rfp-text-gray-500", children: [
               "Zoom: ",
               Math.round(z * 100),
               "% | Grid: ",
               O ? "On" : "Off"
             ] }),
-            a && /* @__PURE__ */ e("div", { className: "text-blue-600 font-medium", children: a.type === "table" && xe ? `${xe.name} (${xe.shape})` : "Element Selected" })
+            a && /* @__PURE__ */ e("div", { className: "rfp-text-blue-600 rfp-font-medium", children: a.type === "table" && xe ? `${xe.name} (${xe.shape})` : "Element Selected" })
           ] })
         ] }) })
       ] })

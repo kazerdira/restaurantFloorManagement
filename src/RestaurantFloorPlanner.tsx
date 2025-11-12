@@ -979,7 +979,7 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
         selectedTableChairs={selectedTableChairs}
       />
 
-      <div className="flex-1 flex flex-col">
+      <div className="rfp-flex-1 rfp-flex rfp-flex-col">
         {/* Wall Drawing Mode Banner - Removed for cleaner UX */}
         {/* Wall Resizing Mode Banner - Removed for cleaner UX */}
         
@@ -1016,13 +1016,13 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
           on3DPreview={() => setShow3DPreview(true)}
         />
 
-        <div className="flex-1 overflow-hidden bg-gray-100 relative">
+        <div className="rfp-flex-1 rfp-overflow-auto rfp-bg-gray-100 rfp-relative">
           <div
             ref={canvasRef}
-            className={`w-full h-full relative ${
-              isDrawingWall ? 'cursor-crosshair' : 
-              isResizingWall ? 'cursor-grabbing' : 
-              'cursor-default'
+            className={`rfp-w-full rfp-h-full rfp-relative ${
+              isDrawingWall ? 'rfp-cursor-crosshair' : 
+              isResizingWall ? 'rfp-cursor-grabbing' : 
+              'rfp-cursor-default'
             }`}
             style={{ 
               transform: `scale(${zoom})`,
@@ -1036,12 +1036,12 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
             onMouseMove={handleCanvasMouseMove}
           >
             {currentFloorData?.tables.length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center text-gray-400">
-                  <div className="text-6xl mb-4">🏪</div>
-                  <div className="text-xl font-medium mb-2">Welcome to Your Restaurant Designer</div>
-                  <div className="text-lg">Click "Add Tables" in the sidebar to start designing your floor plan</div>
-                  <div className="mt-4 space-y-1 text-sm">
+              <div className="rfp-absolute rfp-inset-0 rfp-flex rfp-items-center rfp-justify-center rfp-pointer-events-none">
+                <div className="rfp-text-center rfp-text-gray-400">
+                  <div className="rfp-text-6xl rfp-mb-4">🏪</div>
+                  <div className="rfp-text-xl rfp-font-medium rfp-mb-2">Welcome to Your Restaurant Designer</div>
+                  <div className="rfp-text-lg">Click "Add Tables" in the sidebar to start designing your floor plan</div>
+                  <div className="rfp-mt-4 rfp-space-y-1 rfp-text-sm">
                     <div>• Drag tables to move them around</div>
                     <div>• Click tables to select and edit properties</div>
                     <div>• Add chairs from the top toolbar or the table properties panel</div>
@@ -1106,7 +1106,7 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
             {/* Render wall resize preview */}
             {wallResizePreview && (
               <div
-                className="absolute pointer-events-none"
+                className="rfp-absolute rfp-pointer-events-none"
                 style={{
                   left: `${wallResizePreview.startX}px`,
                   top: `${wallResizePreview.startY}px`,
@@ -1123,7 +1123,7 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
                   zIndex: 15
                 }}
               >
-                <div className="w-full h-full border-2 border-blue-400 border-dashed opacity-70 bg-blue-100 rounded-sm" />
+                <div className="rfp-w-full rfp-h-full rfp-border-2 rfp-border-blue-400 rfp-border-dashed rfp-opacity-70 rfp-bg-blue-100 rfp-rounded-sm" />
               </div>
             )}
 
@@ -1164,7 +1164,7 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
 
             {selectedElement && selectedElement.type === 'table' && selectedTable && (
               <div
-                className="absolute border-2 border-blue-500 border-dashed rounded pointer-events-none"
+                className="rfp-absolute rfp-border-2 rfp-border-blue-500 rfp-border-dashed rfp-rounded rfp-pointer-events-none"
                 style={{
                   left: selectedTable.x - 10,
                   top: selectedTable.y - 10,
@@ -1176,27 +1176,27 @@ const RestaurantFloorPlanner: React.FC<RestaurantFloorPlannerProps> = ({ fullScr
             )}
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 border-t border-gray-200 p-3">
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <div className="rfp-absolute rfp-bottom-0 rfp-left-0 rfp-right-0 rfp-bg-white rfp-bg-opacity-95 rfp-border-t rfp-border-gray-200 rfp-p-3">
+            <div className="rfp-flex rfp-items-center rfp-justify-between rfp-text-sm">
+              <div className="rfp-flex rfp-items-center rfp-gap-4">
+                <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-text-gray-600">
+                  <div className="rfp-w-2 rfp-h-2 rfp-bg-green-500 rfp-rounded-full"></div>
                   <span>Floor: {currentFloorData?.name}</span>
                 </div>
                 {isDragging && (
-                  <div className="flex items-center gap-2 text-blue-600">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  <div className="rfp-flex rfp-items-center rfp-gap-2 rfp-text-blue-600">
+                    <div className="rfp-w-2 rfp-h-2 rfp-bg-blue-500 rfp-rounded-full rfp-animate-pulse"></div>
                     <span>Dragging...</span>
                   </div>
                 )}
               </div>
               
-              <div className="flex items-center gap-4">
-                <div className="text-gray-500">
+              <div className="rfp-flex rfp-items-center rfp-gap-4">
+                <div className="rfp-text-gray-500">
                   Zoom: {Math.round(zoom * 100)}% | Grid: {showGrid ? 'On' : 'Off'}
                 </div>
                 {selectedElement && (
-                  <div className="text-blue-600 font-medium">
+                  <div className="rfp-text-blue-600 rfp-font-medium">
                     {selectedElement.type === 'table' && selectedTable
                       ? `${selectedTable.name} (${selectedTable.shape})`
                       : 'Element Selected'

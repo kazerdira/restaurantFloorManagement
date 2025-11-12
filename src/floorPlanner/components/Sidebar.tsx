@@ -89,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="rfp-w-80 rfp-bg-white rfp-shadow-lg rfp-border-r rfp-border-gray-200 rfp-flex rfp-flex-col">
-      <div className="rfp-p-4 bg-gradient-to-r from-blue-600 to-purple-600 rfp-text-white">
+      <div className="rfp-p-4 rfp-bg-gradient-to-r rfp-from-blue-600 rfp-to-purple-600 rfp-text-white">
         <h1 className="rfp-text-xl rfp-font-bold">Restaurant Designer</h1>
         <p className="rfp-text-blue-100 rfp-text-sm">Professional Floor Planner</p>
       </div>
@@ -103,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="rfp-flex rfp-gap-1">
             <button
               onClick={onAddFloor}
-              className="rfp-p-2 rfp-text-gray-600 hover:text-green-600 hover:bg-green-50 rfp-rounded-lg transition-colors"
+              className="rfp-p-2 rfp-text-gray-600 hover:rfp-text-green-600 hover:rfp-bg-green-50 rfp-rounded-lg rfp-transition-colors"
               title="Add New Floor"
             >
               <Plus className="rfp-w-4 rfp-h-4" />
@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               onClick={onRemoveFloor}
               disabled={floors.length <= 1}
-              className="rfp-p-2 rfp-text-gray-600 hover:text-red-600 hover:bg-red-50 rfp-rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rfp-p-2 rfp-text-gray-600 hover:rfp-text-red-600 hover:rfp-bg-red-50 rfp-rounded-lg rfp-transition-colors disabled:rfp-opacity-50 disabled:rfp-cursor-not-allowed"
               title="Remove Current Floor"
             >
               <Minus className="rfp-w-4 rfp-h-4" />
@@ -119,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        <div className="rfp-space-y-2 rfp-max-h-32 overflow-y-auto">
+        <div className="rfp-space-y-2 rfp-max-h-32 rfp-overflow-y-auto">
           {floors.map((floor) => (
             <div
               key={floor.id}
